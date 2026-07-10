@@ -1,0 +1,42 @@
+# dependencies (installed inside the image)
+node_modules
+
+# build output (produced inside the image)
+.next
+out
+build
+
+# git
+.git
+.gitignore
+
+# env files — secrets are injected via Coolify, never baked into the image
+.env*
+!.env.example
+
+# local tooling / editor
+.claude
+.agents
+.mcp.json
+skills-lock.json
+.vscode
+.idea
+.vercel
+
+# docs & meta (not needed at build time)
+README.md
+DEPLOY.md
+CLAUDE.md
+AGENTS.md
+
+# logs & misc
+*.log
+npm-debug.log*
+coverage
+.DS_Store
+*.pem
+*.tsbuildinfo
+
+# docker itself
+Dockerfile
+.dockerignore

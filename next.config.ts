@@ -4,6 +4,8 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  // Emit a self-contained server bundle (.next/standalone) for the Docker image.
+  output: "standalone",
   images: {
     remotePatterns: [
       {
