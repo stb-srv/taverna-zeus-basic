@@ -1,0 +1,88 @@
+"use client";
+
+import { routing, localeNames, type Locale } from "@/i18n/routing";
+import { retranslate } from "../actions";
+import { inputCls, btnGhost } from "./ui";
+
+export type TranslField = {
+  /** Field base name, e.g. "name" → inputs are submitted as `name_<locale>`. */
+  name: string;
+  label: string;
+  multiline?: boolean;
+  /** Current per-locale values (`<field>_i18n` JSONB from the row). */
+  values: Record<string, string>;
+};
+
+/**
+ * Collapsible editor for the machine-translated locales (everything except the
+ * DE source and human-authored EN). Fields submit as `<field>_<locale>` and are
+ * picked up by the save action; values entered here are preserved (auto-fill
+ * only touches empty locales). The "re-translate" button regenerates them.
+ */
+export default function TranslationsPanel({
+  fields,
+  kind,
+  id,
+}: {
+  fields: TranslField[];
+  kind?: "item" | "category" | "page" | "settings";
+  id?: string;
+}) {
+  const langs = routing.locales.filter((l) => l !== "de" && l !== "en") as Locale[];
+
+  return (
+    <details className="card-soft p-6 hover:translate-y-0">
+      <summary className="cursor-pointer select-none font-display text-lg">
+        Weitere Sprachen <span className="text-sm text-muted">(automatisch übersetzt)</span>
+      </summary>
+      <p className="mt-2 text-sm text-muted">
+        Deutsch ist die Quelle. Leere Felder werden beim Speichern automatisch übersetzt; hier
+        eingetragene Werte bleiben erhalten.
+      </p>
+
+      <div className="mt-4 space-y-6">
+        {langs.map((loc) => (
+          <div key={loc}>
+            <h3 className="mb-2 text-sm font-semibold">
+              {localeNames[loc]} <span className="uppercase text-muted">· {loc}</span>
+            </h3>
+            <div
+              className="grid gap-3 sm:grid-cols-2"
+              dir={loc === "ar" ? "rtl" : undefined}
+            >
+              {fields.map((f) =>
+                f.multiline ? (
+                  <textarea
+                    key={f.name}
+                    name={`${f.name}_${loc}`}
+                    defaultValue={f.values[loc] ?? ""}
+                    rows={2}
+                    placeholder={f.label}
+                    className={inputCls}
+                  />
+                ) : (
+                  <input
+                    key={f.name}
+                    name={`${f.name}_${loc}`}
+                    defaultValue={f.values[loc] ?? ""}
+                    placeholder={f.label}
+                    className={inputCls}
+                  />
+                ),
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {kind && id && (
+        <div className="mt-5">
+          <input type="hidden" name="kind" value={kind} />
+          <button type="submit" formAction={retranslate} formNoValidate className={btnGhost}>
+            Alle neu übersetzen
+          </button>
+        </div>
+      )}
+    </details>
+  );
+}

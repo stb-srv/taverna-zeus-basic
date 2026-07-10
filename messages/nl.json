@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "home": "Home",
+    "menu": "Menu",
+    "location": "Locatie",
+    "impressum": "Colofon",
+    "datenschutz": "Privacy"
+  },
+  "home": {
+    "greeting": "Kalimera · Welkom",
+    "tagline": "Authentieke Griekse keuken",
+    "ctaMenu": "Naar het menu",
+    "openingHours": "Openingstijden",
+    "findUs": "Zo vindt u ons",
+    "contact": "Contact",
+    "viewLocation": "Locatie & route"
+  },
+  "menu": {
+    "title": "Menu",
+    "intro": "Alle prijzen in euro incl. btw.",
+    "allergensTitle": "Allergenen & additieven",
+    "allergensIntro": "Etikettering conform de voedselinformatieverordening.",
+    "noItems": "Voor deze categorie zijn momenteel geen gerechten beschikbaar.",
+    "searchPlaceholder": "Gerecht zoeken …",
+    "searchClear": "Zoekopdracht wissen",
+    "allCategories": "Alle",
+    "noResults": "Geen passende gerechten gevonden.",
+    "resultCount": "{count, plural, =0 {Geen gerechten} =1 {1 gerecht} other {# gerechten}}"
+  },
+  "location": {
+    "title": "Locatie",
+    "address": "Adres",
+    "openingHours": "Openingstijden",
+    "contact": "Contact",
+    "phone": "Telefoon",
+    "email": "E-mail",
+    "mapConsentTitle": "Google Maps",
+    "mapConsentText": "Ter bescherming van uw gegevens wordt de kaart pas geladen na uw toestemming. Daarbij worden gegevens naar Google verzonden.",
+    "mapConsentButton": "Kaart laden"
+  },
+  "hours": {
+    "closed": "Gesloten",
+    "days": {
+      "1": "Maandag",
+      "2": "Dinsdag",
+      "3": "Woensdag",
+      "4": "Donderdag",
+      "5": "Vrijdag",
+      "6": "Zaterdag",
+      "7": "Zondag"
+    }
+  },
+  "cookie": {
+    "text": "Wij gebruiken alleen technisch noodzakelijke cookies. Externe inhoud zoals kaarten wordt pas na uw toestemming geladen.",
+    "accept": "Akkoord",
+    "decline": "Alleen noodzakelijke",
+    "more": "Meer informatie"
+  },
+  "footer": {
+    "rights": "Alle rechten voorbehouden.",
+    "legal": "Juridisch"
+  }
+}

@@ -1,26 +1,260 @@
 @import "tailwindcss";
 
+/*
+  Self-hosted glyph coverage beyond Latin (EB Garamond latin comes via next/font).
+  Greek + Cyrillic reuse EB Garamond subsets; Arabic uses Amiri (both OFL, no Google).
+  unicode-range keeps each face scoped so it composes with the Latin face.
+*/
+@font-face {
+  font-family: "EB Garamond Ext";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("./fonts/eb-garamond-greek.woff2") format("woff2");
+  unicode-range: U+0370-03FF, U+1F00-1FFF;
+}
+@font-face {
+  font-family: "EB Garamond Ext";
+  font-style: italic;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("./fonts/eb-garamond-greek-italic.woff2") format("woff2");
+  unicode-range: U+0370-03FF, U+1F00-1FFF;
+}
+@font-face {
+  font-family: "EB Garamond Ext";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("./fonts/eb-garamond-cyrillic.woff2") format("woff2");
+  unicode-range: U+0400-052F;
+}
+@font-face {
+  font-family: "EB Garamond Ext";
+  font-style: italic;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("./fonts/eb-garamond-cyrillic-italic.woff2") format("woff2");
+  unicode-range: U+0400-052F;
+}
+@font-face {
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/amiri-arabic-400.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url("./fonts/amiri-arabic-700.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/*
+  Taverna Zeus — Thessaloniki sunset palette, arranged by the 60-30-10 rule:
+
+    60%  BASE       warm cream background + white cards  (--background / --card)
+    30%  SECONDARY  Aegean blue: nav, footer, headings, primary buttons (--primary)
+    10%  ACCENT     terracotta + ocher gold: CTAs, active states, highlights
+                    (--accent / --gold)  — used sparingly for punch.
+
+  Violet & rose stay decorative-only (hero/sunset gradient) so the 10% accent
+  reads consistently across the UI.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 60% — base */
+  --background: #fdf9f2;      /* warm cream */
+  --card: #ffffff;
+  --foreground: #2a2320;      /* warm near-black */
+  --muted: #8b7f72;           /* warm grey */
+  --border: #ecdfcd;
+
+  /* 30% — secondary */
+  --primary: #0f5c7d;         /* Aegean blue */
+  --primary-dark: #0b4056;
+  --footer: #0c4358;          /* deep Aegean — footer surface */
+  --footer-2: #08303f;        /* footer bottom */
+
+  /* 10% — accent */
+  --accent: #cf6a3a;          /* terracotta */
+  --accent-soft: #f5e7d4;     /* sand */
+  --gold: #e0a24e;            /* ocher / sunset gold */
+
+  /* decorative only (hero / sunset gradient) */
+  --rose: #dd8790;
+  --violet: #7f6499;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-gold: var(--gold);
+  --color-rose: var(--rose);
+  --color-violet: var(--violet);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  /*
+    One unified typeface everywhere — self-hosted EB Garamond (no Google).
+    "EB Garamond Ext" adds Greek/Cyrillic glyphs, "Amiri" adds Arabic; both are
+    unicode-range-scoped so the browser composes them with the Latin face.
+  */
+  --font-sans: var(--font-eb-garamond), "EB Garamond Ext", "Amiri", Georgia, "Times New Roman", serif;
+  --font-display: var(--font-eb-garamond), "EB Garamond Ext", "Amiri", Georgia, "Times New Roman", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+/* EB Garamond runs a touch small — nudge body up for comfortable reading. */
+body {
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--gold) 40%, transparent);
+}
+
+/* Thessaloniki sunset gradient — sky blue → violet → rose → gold */
+.bg-sunset {
+  background: linear-gradient(
+    155deg,
+    #0e5271 0%,
+    #3f4a7e 28%,
+    #7d5289 48%,
+    #c56d78 68%,
+    #e0975a 86%,
+    #edb861 100%
+  );
+}
+
+.text-gradient {
+  background: linear-gradient(100deg, var(--primary) 0%, var(--violet) 55%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Soft, layered elevation for cards */
+.card-soft {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 1px 2px rgba(43, 35, 30, 0.04),
+    0 10px 30px -12px rgba(15, 92, 125, 0.18);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-soft:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 2px 4px rgba(43, 35, 30, 0.05),
+    0 22px 45px -15px rgba(15, 92, 125, 0.28);
+}
+
+/*
+  Navigation surface — same deep Aegean tone as the footer so the top and
+  bottom of every page harmonise. A soft shadow (not a hard border) provides a
+  gentle transition into the content below.
+*/
+.nav-solid {
+  background-color: color-mix(in srgb, var(--footer) 82%, transparent);
+}
+
+/* Soft depth that fades in on scroll — a gentle transition, not a hard line. */
+.nav-lift {
+  box-shadow: 0 16px 40px -26px rgba(8, 48, 63, 0.75);
+}
+
+/*
+  Footer surface — blends from the page background straight into the deep
+  Aegean footer tone, so there is no hard horizontal edge where content meets
+  the footer. Text sits in the padded lower area where the colour is solid.
+*/
+.footer-blend {
+  background: linear-gradient(
+    180deg,
+    var(--background) 0%,
+    var(--footer) 16%,
+    var(--footer-2) 100%
+  );
+}
+
+/* Soft, centred accent glow instead of a hard divider line */
+.footer-glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(46rem, 80%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--gold) 55%, transparent),
+    transparent
+  );
+}
+
+/* Decorative gold underline used under section headings */
+.rule-gold {
+  position: relative;
+}
+.rule-gold::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.55rem;
+  height: 3px;
+  width: 3rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), var(--accent));
+}
+
+.prose-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin: 1.75rem 0 0.75rem;
+}
+.prose-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 1.25rem 0 0.5rem;
+}
+.prose-content p {
+  margin: 0.85rem 0;
+  line-height: 1.75;
+}
+.prose-content strong {
+  font-weight: 600;
+  color: var(--primary-dark);
 }

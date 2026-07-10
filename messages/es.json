@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "menu": "Carta",
+    "location": "Ubicación",
+    "impressum": "Aviso legal",
+    "datenschutz": "Privacidad"
+  },
+  "home": {
+    "greeting": "Kalimera · Bienvenidos",
+    "tagline": "Auténtica cocina griega",
+    "ctaMenu": "Ver la carta",
+    "openingHours": "Horario",
+    "findUs": "Cómo encontrarnos",
+    "contact": "Contacto",
+    "viewLocation": "Ubicación y cómo llegar"
+  },
+  "menu": {
+    "title": "Carta",
+    "intro": "Todos los precios en euros, IVA incluido.",
+    "allergensTitle": "Alérgenos y aditivos",
+    "allergensIntro": "Etiquetado conforme al reglamento de información alimentaria.",
+    "noItems": "Actualmente no hay platos en esta categoría.",
+    "searchPlaceholder": "Buscar plato …",
+    "searchClear": "Borrar búsqueda",
+    "allCategories": "Todos",
+    "noResults": "No se encontraron platos.",
+    "resultCount": "{count, plural, =0 {Ningún plato} =1 {1 plato} other {# platos}}"
+  },
+  "location": {
+    "title": "Ubicación",
+    "address": "Dirección",
+    "openingHours": "Horario",
+    "contact": "Contacto",
+    "phone": "Teléfono",
+    "email": "Correo electrónico",
+    "mapConsentTitle": "Google Maps",
+    "mapConsentText": "Para proteger sus datos, el mapa solo se carga tras su consentimiento. Durante este proceso se transfieren datos a Google.",
+    "mapConsentButton": "Cargar mapa"
+  },
+  "hours": {
+    "closed": "Cerrado",
+    "days": {
+      "1": "Lunes",
+      "2": "Martes",
+      "3": "Miércoles",
+      "4": "Jueves",
+      "5": "Viernes",
+      "6": "Sábado",
+      "7": "Domingo"
+    }
+  },
+  "cookie": {
+    "text": "Solo utilizamos cookies técnicamente necesarias. El contenido externo, como los mapas, solo se carga tras su consentimiento.",
+    "accept": "Aceptar",
+    "decline": "Solo necesarias",
+    "more": "Más información"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "legal": "Legal"
+  }
+}

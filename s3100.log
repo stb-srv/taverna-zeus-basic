@@ -1,0 +1,8 @@
+
+> meraki-cms-basic@0.1.0 start
+> next start -p 3100
+
+▲ Next.js 16.2.10
+- Local:         http://localhost:3100
+- Network:       http://100.73.199.82:3100
+✓ Ready in 289ms

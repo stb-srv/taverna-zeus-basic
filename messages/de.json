@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "menu": "Speisekarte",
+    "location": "Standort",
+    "impressum": "Impressum",
+    "datenschutz": "Datenschutz"
+  },
+  "home": {
+    "greeting": "Kalimera · Willkommen",
+    "tagline": "Authentische griechische Küche",
+    "ctaMenu": "Zur Speisekarte",
+    "openingHours": "Öffnungszeiten",
+    "findUs": "So finden Sie uns",
+    "contact": "Kontakt",
+    "viewLocation": "Standort & Anfahrt"
+  },
+  "menu": {
+    "title": "Speisekarte",
+    "intro": "Alle Preise in Euro inkl. MwSt.",
+    "allergensTitle": "Allergene & Zusatzstoffe",
+    "allergensIntro": "Kennzeichnung gemäß Lebensmittel-Informationsverordnung.",
+    "noItems": "Für diese Kategorie sind derzeit keine Gerichte hinterlegt.",
+    "searchPlaceholder": "Speise suchen …",
+    "searchClear": "Suche zurücksetzen",
+    "allCategories": "Alle",
+    "noResults": "Keine passenden Speisen gefunden.",
+    "resultCount": "{count, plural, =0 {Keine Speisen} =1 {1 Speise} other {# Speisen}}"
+  },
+  "location": {
+    "title": "Standort",
+    "address": "Adresse",
+    "openingHours": "Öffnungszeiten",
+    "contact": "Kontakt",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "mapConsentTitle": "Google Maps",
+    "mapConsentText": "Zum Schutz Ihrer Daten wird die Karte erst nach Ihrer Zustimmung geladen. Dabei werden Daten an Google übertragen.",
+    "mapConsentButton": "Karte laden"
+  },
+  "hours": {
+    "closed": "Geschlossen",
+    "days": {
+      "1": "Montag",
+      "2": "Dienstag",
+      "3": "Mittwoch",
+      "4": "Donnerstag",
+      "5": "Freitag",
+      "6": "Samstag",
+      "7": "Sonntag"
+    }
+  },
+  "cookie": {
+    "text": "Wir verwenden nur technisch notwendige Cookies. Externe Inhalte wie Karten werden erst nach Ihrer Einwilligung geladen.",
+    "accept": "Einverstanden",
+    "decline": "Nur notwendige",
+    "more": "Mehr erfahren"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten.",
+    "legal": "Rechtliches"
+  }
+}
