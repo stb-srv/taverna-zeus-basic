@@ -54,7 +54,15 @@
     "text": "Wij gebruiken alleen technisch noodzakelijke cookies. Externe inhoud zoals kaarten wordt pas na uw toestemming geladen.",
     "accept": "Akkoord",
     "decline": "Alleen noodzakelijke",
-    "more": "Meer informatie"
+    "more": "Meer informatie",
+    "manage": "Cookie-instellingen",
+    "statusAccepted": "Uw huidige keuze: externe inhoud toegestaan.",
+    "statusDeclined": "Uw huidige keuze: alleen noodzakelijke cookies.",
+    "close": "Sluiten"
+  },
+  "theme": {
+    "toDark": "Donkere modus inschakelen",
+    "toLight": "Lichte modus inschakelen"
   },
   "footer": {
     "rights": "Alle rechten voorbehouden.",

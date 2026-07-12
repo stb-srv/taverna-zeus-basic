@@ -7,6 +7,19 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1
 
 ### Hinzugefügt
 
+- **Schwebende Aktions-Icons** unten rechts (bei Arabisch automatisch links),
+  die beim Scrollen mitfahren: der Dark-Mode-Umschalter (jetzt dort statt in
+  der Navigationsleiste, auch im Admin) und auf der Website ein
+  **Fingerabdruck-Icon**, das nach der Cookie-Entscheidung die Einstellungen
+  jederzeit wieder öffnet
+- **DSGVO-konformer Cookie-Widerruf** (Art. 7 Abs. 3 DSGVO / §25 TTDSG):
+  Der Consent-Banner lässt sich über das Fingerabdruck-Icon jederzeit erneut
+  öffnen, zeigt die aktuelle Auswahl an und erlaubt das Umentscheiden mit
+  denselben gleichgewichtigen Buttons; ein Widerruf entlädt die
+  OpenStreetMap-Karte sofort. Einwilligungen werden mit Zeitstempel und
+  Textversion gespeichert (Rechenschaftspflicht, Art. 7 Abs. 1); ändert sich
+  der Einwilligungstext inhaltlich, fragt der Banner erneut. Neue Texte in
+  allen 8 Sprachdateien
 - **Globaler Dark Mode** als Addon: Alle Farben laufen über zentrale
   Design-Tokens in `globals.css`; der Dunkelmodus ist ein reines
   Variablen-Overlay (`<html data-theme="dark">`) — keine Seite musste

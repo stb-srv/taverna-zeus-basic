@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { fontVars } from "@/lib/fonts";
+import FloatingActions from "@/components/FloatingActions";
 import ThemeScript from "@/components/ThemeScript";
 import "../globals.css";
 
@@ -15,6 +16,7 @@ export default function AdminRootLayout({ children }: { children: React.ReactNod
       <body className="min-h-screen bg-background text-foreground">
         <ThemeScript />
         {children}
+        <FloatingActions />
       </body>
     </html>
   );

@@ -5,10 +5,6 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/routing";
 import LanguageSwitcher from "./LanguageSwitcher";
-import ThemeToggle from "./ThemeToggle";
-
-const navToggleCls =
-  "flex items-center rounded-lg border border-white/30 bg-white/10 p-1.5 text-white transition hover:bg-white/20";
 
 const links = [
   { href: "/", key: "home" },
@@ -84,12 +80,10 @@ export default function Nav({
             })}
           </ul>
           <LanguageSwitcher locales={locales} />
-          <ThemeToggle className={navToggleCls} />
         </div>
 
-        <div className="flex items-center gap-3 md:hidden">
+        <div className="flex items-center gap-4 md:hidden">
           <LanguageSwitcher locales={locales} />
-          <ThemeToggle className={navToggleCls} />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}

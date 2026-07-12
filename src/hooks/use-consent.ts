@@ -1,12 +1,14 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { effectiveConsent, serializeConsent, type ConsentValue } from "@/lib/consent";
 
 export const CONSENT_KEY = "tz-cookie-consent";
 const CONSENT_EVENT = "tz-consent-change";
+const DIALOG_EVENT = "tz-consent-dialog";
 
-/** `null` = no choice yet, `"unknown"` = server render / not yet hydrated. */
-export type Consent = "accepted" | "declined" | "unknown" | null;
+/** `null` = no (valid) choice yet, `"unknown"` = server render / not yet hydrated. */
+export type Consent = ConsentValue | "unknown" | null;
 
 function subscribe(onChange: () => void): () => void {
   window.addEventListener(CONSENT_EVENT, onChange);
@@ -19,7 +21,7 @@ function subscribe(onChange: () => void): () => void {
 }
 
 function getSnapshot(): Consent {
-  return window.localStorage.getItem(CONSENT_KEY) as Consent;
+  return effectiveConsent(window.localStorage.getItem(CONSENT_KEY));
 }
 
 function getServerSnapshot(): Consent {
@@ -31,8 +33,40 @@ export function useConsent(): Consent {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
-/** Stores the choice and notifies all `useConsent` subscribers. */
-export function setConsent(value: "accepted" | "declined"): void {
-  window.localStorage.setItem(CONSENT_KEY, value);
+/** Stores the choice with timestamp + text version and notifies all subscribers. */
+export function setConsent(value: ConsentValue): void {
+  window.localStorage.setItem(CONSENT_KEY, serializeConsent(value));
   window.dispatchEvent(new Event(CONSENT_EVENT));
+}
+
+/* ---- Banner dialog state (reopen via the fingerprint button) ---- */
+
+let dialogOpen = false;
+
+function subscribeDialog(onChange: () => void): () => void {
+  window.addEventListener(DIALOG_EVENT, onChange);
+  return () => window.removeEventListener(DIALOG_EVENT, onChange);
+}
+
+/**
+ * Whether the consent banner was reopened for review. Withdrawing consent must
+ * be as easy as giving it (Art. 7 Abs. 3 DSGVO) — the fingerprint button in
+ * FloatingActions opens this dialog at any time after a choice was made.
+ */
+export function useConsentDialog(): boolean {
+  return useSyncExternalStore(
+    subscribeDialog,
+    () => dialogOpen,
+    () => false,
+  );
+}
+
+export function openConsentDialog(): void {
+  dialogOpen = true;
+  window.dispatchEvent(new Event(DIALOG_EVENT));
+}
+
+export function closeConsentDialog(): void {
+  dialogOpen = false;
+  window.dispatchEvent(new Event(DIALOG_EVENT));
 }

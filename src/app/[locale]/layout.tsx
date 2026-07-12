@@ -10,6 +10,7 @@ import { fontVars } from "@/lib/fonts";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
+import FloatingActions from "@/components/FloatingActions";
 import ThemeScript from "@/components/ThemeScript";
 import "../globals.css";
 
@@ -64,6 +65,7 @@ export default async function LocaleLayout({
           <main className="flex-1">{children}</main>
           <Footer restaurantName={name} phone={settings?.phone ?? null} email={settings?.email ?? null} />
           <CookieBanner />
+          <FloatingActions withConsent />
         </NextIntlClientProvider>
       </body>
     </html>

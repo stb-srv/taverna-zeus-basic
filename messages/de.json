@@ -54,7 +54,15 @@
     "text": "Wir verwenden nur technisch notwendige Cookies. Externe Inhalte wie Karten werden erst nach Ihrer Einwilligung geladen.",
     "accept": "Einverstanden",
     "decline": "Nur notwendige",
-    "more": "Mehr erfahren"
+    "more": "Mehr erfahren",
+    "manage": "Cookie-Einstellungen",
+    "statusAccepted": "Ihre aktuelle Auswahl: externe Inhalte erlaubt.",
+    "statusDeclined": "Ihre aktuelle Auswahl: nur notwendige Cookies.",
+    "close": "Schließen"
+  },
+  "theme": {
+    "toDark": "Dunkles Design aktivieren",
+    "toLight": "Helles Design aktivieren"
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten.",

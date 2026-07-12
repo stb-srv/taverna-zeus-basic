@@ -54,7 +54,15 @@
     "text": "We only use technically necessary cookies. External content such as maps is only loaded after your consent.",
     "accept": "Accept",
     "decline": "Necessary only",
-    "more": "Learn more"
+    "more": "Learn more",
+    "manage": "Cookie settings",
+    "statusAccepted": "Your current choice: external content allowed.",
+    "statusDeclined": "Your current choice: necessary cookies only.",
+    "close": "Close"
+  },
+  "theme": {
+    "toDark": "Enable dark mode",
+    "toLight": "Enable light mode"
   },
   "footer": {
     "rights": "All rights reserved.",

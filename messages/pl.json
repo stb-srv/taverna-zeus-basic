@@ -54,7 +54,15 @@
     "text": "Używamy wyłącznie technicznie niezbędnych plików cookie. Treści zewnętrzne, takie jak mapy, są ładowane dopiero po Twojej zgodzie.",
     "accept": "Akceptuję",
     "decline": "Tylko niezbędne",
-    "more": "Dowiedz się więcej"
+    "more": "Dowiedz się więcej",
+    "manage": "Ustawienia cookies",
+    "statusAccepted": "Twój obecny wybór: treści zewnętrzne dozwolone.",
+    "statusDeclined": "Twój obecny wybór: tylko niezbędne pliki cookie.",
+    "close": "Zamknij"
+  },
+  "theme": {
+    "toDark": "Włącz tryb ciemny",
+    "toLight": "Włącz tryb jasny"
   },
   "footer": {
     "rights": "Wszelkie prawa zastrzeżone.",

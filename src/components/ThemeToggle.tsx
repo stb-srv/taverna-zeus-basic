@@ -5,9 +5,20 @@ import { setTheme, useTheme } from "@/hooks/use-theme";
 
 /**
  * Sun/moon button that flips the global theme. Styling comes entirely from
- * `className`, so the same component fits the public nav and the admin header.
+ * `className`; the labels default to German (admin) and can be passed
+ * localized for the public site.
  */
-export default function ThemeToggle({ className = "" }: { className?: string }) {
+export default function ThemeToggle({
+  className = "",
+  labelDark = "Dunkles Design aktivieren",
+  labelLight = "Helles Design aktivieren",
+}: {
+  className?: string;
+  /** Label for the action of switching TO dark mode. */
+  labelDark?: string;
+  /** Label for the action of switching TO light mode. */
+  labelLight?: string;
+}) {
   const theme = useTheme();
 
   // Keep <html data-theme> in sync with OS/tab changes after first paint.
@@ -16,12 +27,13 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
   }, [theme]);
 
   const dark = theme === "dark";
+  const label = dark ? labelLight : labelDark;
   return (
     <button
       type="button"
       onClick={() => setTheme(dark ? "light" : "dark")}
-      aria-label={dark ? "Helles Design aktivieren" : "Dunkles Design aktivieren"}
-      title={dark ? "Helles Design" : "Dunkles Design"}
+      aria-label={label}
+      title={label}
       className={className}
     >
       {dark ? (

@@ -89,6 +89,14 @@
   /* decorative only (hero / sunset gradient) */
   --rose: #dd8790;
   --violet: #7f6499;
+
+  /* elevation (light-tuned; dark theme overrides below) */
+  --shadow-card:
+    0 1px 2px rgba(43, 35, 30, 0.04),
+    0 10px 30px -12px rgba(15, 92, 125, 0.18);
+  --shadow-card-hover:
+    0 2px 4px rgba(43, 35, 30, 0.05),
+    0 22px 45px -15px rgba(15, 92, 125, 0.28);
 }
 
 /*
@@ -121,6 +129,14 @@
   /* decorative only */
   --rose: #c97b84;
   --violet: #8d74a6;
+
+  /* elevation — neutral black, stronger alpha so cards still lift off */
+  --shadow-card:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 12px 30px -12px rgba(0, 0, 0, 0.6);
+  --shadow-card-hover:
+    0 2px 4px rgba(0, 0, 0, 0.45),
+    0 22px 45px -15px rgba(0, 0, 0, 0.7);
 }
 
 @theme inline {
@@ -202,16 +218,12 @@ body {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 1.25rem;
-  box-shadow:
-    0 1px 2px rgba(43, 35, 30, 0.04),
-    0 10px 30px -12px rgba(15, 92, 125, 0.18);
+  box-shadow: var(--shadow-card);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .card-soft:hover {
   transform: translateY(-3px);
-  box-shadow:
-    0 2px 4px rgba(43, 35, 30, 0.05),
-    0 22px 45px -15px rgba(15, 92, 125, 0.28);
+  box-shadow: var(--shadow-card-hover);
 }
 
 /*

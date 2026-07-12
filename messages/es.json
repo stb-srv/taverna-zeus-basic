@@ -54,7 +54,15 @@
     "text": "Solo utilizamos cookies técnicamente necesarias. El contenido externo, como los mapas, solo se carga tras su consentimiento.",
     "accept": "Aceptar",
     "decline": "Solo necesarias",
-    "more": "Más información"
+    "more": "Más información",
+    "manage": "Configuración de cookies",
+    "statusAccepted": "Su elección actual: contenido externo permitido.",
+    "statusDeclined": "Su elección actual: solo cookies necesarias.",
+    "close": "Cerrar"
+  },
+  "theme": {
+    "toDark": "Activar modo oscuro",
+    "toLight": "Activar modo claro"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
