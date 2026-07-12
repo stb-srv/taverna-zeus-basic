@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { updateSettings, type ActionState } from "../../actions";
+import { updateSettings, type ActionState } from "@/app/admin/actions/settings";
 import { inputCls, labelCls, btnPrimary } from "../ui";
 import ImageUpload from "../ImageUpload";
 import TranslationsPanel from "../TranslationsPanel";
@@ -83,10 +83,12 @@ export default function SettingsForm({ settings }: { settings: Settings | null }
           </div>
         </div>
         <div>
-          <label className={labelCls}>Google-Maps Embed-URL</label>
+          <label className={labelCls}>Karten-Embed-URL (OpenStreetMap)</label>
           <textarea name="google_maps_embed" defaultValue={s?.google_maps_embed ?? ""} rows={3} className={inputCls} />
           <p className="mt-1 text-xs text-muted">
-            In Google Maps: „Teilen" → „Karte einbetten" → nur die URL aus dem <code>src=&quot;…&quot;</code> einfügen.
+            Leer lassen, dann wird die Karte beim Speichern automatisch aus der Adresse oben erzeugt.
+            Alternativ eine eigene URL einfügen — auf openstreetmap.org: Adresse suchen → rechts „Teilen“ →
+            Häkchen bei „Marker setzen“ → Format „HTML“ → nur die URL aus dem <code>src=&quot;…&quot;</code> einfügen.
           </p>
         </div>
       </section>

@@ -34,8 +34,8 @@
     "contact": "اتصل بنا",
     "phone": "الهاتف",
     "email": "البريد الإلكتروني",
-    "mapConsentTitle": "خرائط Google",
-    "mapConsentText": "لحماية بياناتك، يتم تحميل الخريطة فقط بعد موافقتك. وأثناء ذلك تُنقل بيانات إلى Google.",
+    "mapConsentTitle": "OpenStreetMap",
+    "mapConsentText": "لحماية بياناتك، يتم تحميل الخريطة فقط بعد موافقتك. وأثناء ذلك تُنقل بيانات إلى OpenStreetMap.",
     "mapConsentButton": "تحميل الخريطة"
   },
   "hours": {

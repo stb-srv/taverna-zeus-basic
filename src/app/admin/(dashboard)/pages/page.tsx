@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { deletePage } from "../../actions";
+import { deletePage } from "@/app/admin/actions/pages";
 import { btnPrimary, btnGhost, btnDanger } from "../ui";
 
 export default async function PagesAdminPage() {

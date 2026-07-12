@@ -34,8 +34,8 @@
     "contact": "Контакты",
     "phone": "Телефон",
     "email": "Эл. почта",
-    "mapConsentTitle": "Google Maps",
-    "mapConsentText": "В целях защиты ваших данных карта загружается только после вашего согласия. При этом данные передаются в Google.",
+    "mapConsentTitle": "OpenStreetMap",
+    "mapConsentText": "В целях защиты ваших данных карта загружается только после вашего согласия. При этом данные передаются в OpenStreetMap.",
     "mapConsentButton": "Загрузить карту"
   },
   "hours": {

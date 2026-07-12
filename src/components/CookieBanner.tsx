@@ -2,15 +2,7 @@
 
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
-
-export const CONSENT_KEY = "tz-cookie-consent";
-
-/** Reads the stored map/external-content consent choice ("accepted" | "declined" | null). */
-export function readConsent(): string | null {
-  if (typeof window === "undefined") return null;
-  return window.localStorage.getItem(CONSENT_KEY);
-}
+import { setConsent, useConsent } from "@/hooks/use-consent";
 
 /**
  * DE/EU-friendly cookie banner. Only technically necessary cookies are used;
@@ -18,20 +10,10 @@ export function readConsent(): string | null {
  */
 export default function CookieBanner() {
   const t = useTranslations("cookie");
-  const [visible, setVisible] = useState(false);
+  const consent = useConsent();
 
-  useEffect(() => {
-    if (!readConsent()) setVisible(true);
-  }, []);
-
-  function choose(value: "accepted" | "declined") {
-    window.localStorage.setItem(CONSENT_KEY, value);
-    setVisible(false);
-    // Let consent-gated components (e.g. the map) react without a reload.
-    window.dispatchEvent(new Event("tz-consent-change"));
-  }
-
-  if (!visible) return null;
+  // Hidden while server-rendered/hydrating and once a choice has been made.
+  if (consent !== null) return null;
 
   return (
     <div
@@ -49,14 +31,14 @@ export default function CookieBanner() {
         <div className="flex shrink-0 gap-3">
           <button
             type="button"
-            onClick={() => choose("declined")}
+            onClick={() => setConsent("declined")}
             className="rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-accent-soft"
           >
             {t("decline")}
           </button>
           <button
             type="button"
-            onClick={() => choose("accepted")}
+            onClick={() => setConsent("accepted")}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
           >
             {t("accept")}

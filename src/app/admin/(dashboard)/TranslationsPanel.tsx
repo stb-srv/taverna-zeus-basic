@@ -1,7 +1,7 @@
 "use client";
 
 import { routing, localeNames, type Locale } from "@/i18n/routing";
-import { retranslate } from "../actions";
+import { retranslate } from "@/app/admin/actions/translations";
 import { inputCls, btnGhost } from "./ui";
 
 export type TranslField = {

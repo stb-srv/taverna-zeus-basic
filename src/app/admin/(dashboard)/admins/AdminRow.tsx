@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { changeAdminPassword, type State } from "../../user-actions";
-import { removeAdmin } from "../../actions";
+import { removeAdmin } from "@/app/admin/actions/admins";
 import { inputCls, btnGhost, btnDanger } from "../ui";
 
 const initial: State = {};

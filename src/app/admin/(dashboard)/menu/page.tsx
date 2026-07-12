@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { deleteItem } from "../../actions";
+import { deleteItem } from "@/app/admin/actions/menu";
 import { btnPrimary, btnGhost, btnDanger } from "../ui";
 import AddCategory from "./AddCategory";
 import CategoryRow from "./CategoryRow";
@@ -73,10 +73,7 @@ export default async function MenuAdminPage() {
                       <Link href={`/admin/menu/item/${it.id}`} className={btnGhost}>
                         Bearbeiten
                       </Link>
-                      <form
-                        action={deleteItem}
-                        // eslint-disable-next-line react/no-unknown-property
-                      >
+                      <form action={deleteItem}>
                         <input type="hidden" name="id" value={it.id} />
                         <button type="submit" className={btnDanger}>
                           Löschen

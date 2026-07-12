@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { updateHours, type ActionState } from "../../actions";
+import { updateHours, type ActionState } from "@/app/admin/actions/hours";
 import { inputCls, btnPrimary } from "../ui";
 import type { Database } from "@/lib/supabase/types";
 

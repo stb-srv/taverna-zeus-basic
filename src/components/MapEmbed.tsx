@@ -1,20 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
-import { readConsent } from "./CookieBanner";
+import { setConsent, useConsent } from "@/hooks/use-consent";
 
-/** Google Maps iframe gated behind cookie consent (DSGVO-friendly). */
+/** OpenStreetMap iframe gated behind cookie consent (DSGVO-friendly). */
 export default function MapEmbed({ embedUrl }: { embedUrl: string | null }) {
   const t = useTranslations("location");
-  const [consented, setConsented] = useState(false);
-
-  useEffect(() => {
-    const update = () => setConsented(readConsent() === "accepted");
-    update();
-    window.addEventListener("tz-consent-change", update);
-    return () => window.removeEventListener("tz-consent-change", update);
-  }, []);
+  const consented = useConsent() === "accepted";
 
   if (!embedUrl) return null;
 
@@ -25,10 +17,7 @@ export default function MapEmbed({ embedUrl }: { embedUrl: string | null }) {
         <p className="max-w-md text-sm text-foreground/70">{t("mapConsentText")}</p>
         <button
           type="button"
-          onClick={() => {
-            window.localStorage.setItem("tz-cookie-consent", "accepted");
-            window.dispatchEvent(new Event("tz-consent-change"));
-          }}
+          onClick={() => setConsent("accepted")}
           className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
         >
           {t("mapConsentButton")}
@@ -43,7 +32,7 @@ export default function MapEmbed({ embedUrl }: { embedUrl: string | null }) {
       title={t("mapConsentTitle")}
       className="aspect-video w-full rounded-lg border border-border"
       loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
+      referrerPolicy="no-referrer"
       allowFullScreen
     />
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { savePage, type ActionState } from "../../actions";
+import { savePage, type ActionState } from "@/app/admin/actions/pages";
 import { inputCls, labelCls, btnPrimary, btnGhost } from "../ui";
 import TranslationsPanel from "../TranslationsPanel";
 import type { Database } from "@/lib/supabase/types";

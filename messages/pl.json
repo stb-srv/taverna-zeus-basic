@@ -34,8 +34,8 @@
     "contact": "Kontakt",
     "phone": "Telefon",
     "email": "E-mail",
-    "mapConsentTitle": "Google Maps",
-    "mapConsentText": "Aby chronić Twoje dane, mapa jest ładowana dopiero po Twojej zgodzie. Podczas tego procesu dane są przesyłane do Google.",
+    "mapConsentTitle": "OpenStreetMap",
+    "mapConsentText": "Aby chronić Twoje dane, mapa jest ładowana dopiero po Twojej zgodzie. Podczas tego procesu dane są przesyłane do OpenStreetMap.",
     "mapConsentButton": "Załaduj mapę"
   },
   "hours": {

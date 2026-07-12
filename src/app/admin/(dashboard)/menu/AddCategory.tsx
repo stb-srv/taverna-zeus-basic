@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { saveCategory, type ActionState } from "../../actions";
+import { saveCategory, type ActionState } from "@/app/admin/actions/menu";
 import { inputCls, btnPrimary } from "../ui";
 
 const initial: ActionState = {};

@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { saveCategory, deleteCategory, type ActionState } from "../../actions";
+import { saveCategory, deleteCategory, type ActionState } from "@/app/admin/actions/menu";
 import { inputCls, btnGhost, btnDanger } from "../ui";
 import type { Database } from "@/lib/supabase/types";
 

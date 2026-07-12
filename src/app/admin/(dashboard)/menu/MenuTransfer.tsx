@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { importMenu, type ActionState } from "../../actions";
+import { importMenu, type ActionState } from "@/app/admin/actions/menu-import";
 import { btnGhost, btnPrimary, inputCls } from "../ui";
 
 const initial: ActionState = {};

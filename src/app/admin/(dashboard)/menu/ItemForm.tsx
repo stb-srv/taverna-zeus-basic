@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { saveItem, type ActionState } from "../../actions";
+import { saveItem, type ActionState } from "@/app/admin/actions/menu";
 import { inputCls, labelCls, btnPrimary, btnGhost } from "../ui";
 import ImageUpload from "../ImageUpload";
 import TranslationsPanel from "../TranslationsPanel";
