@@ -66,6 +66,8 @@
   reads consistently across the UI.
 */
 :root {
+  color-scheme: light;
+
   /* 60% — base */
   --background: #fdf9f2;      /* warm cream */
   --card: #ffffff;
@@ -87,6 +89,38 @@
   /* decorative only (hero / sunset gradient) */
   --rose: #dd8790;
   --violet: #7f6499;
+}
+
+/*
+  Dark mode — the same design tokens with night values, activated via
+  <html data-theme="dark"> (ThemeScript sets it before paint, ThemeToggle
+  switches it). Components never branch on the theme; they only consume the
+  variables above, so dark mode applies everywhere without touching pages.
+*/
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* 60% — base */
+  --background: #16110d;      /* warm near-black */
+  --card: #211a15;
+  --foreground: #f1e9db;      /* warm off-white */
+  --muted: #a89a8c;
+  --border: #3b322a;
+
+  /* 30% — secondary (lightened for contrast on dark surfaces) */
+  --primary: #3f92b5;
+  --primary-dark: #2f7fa3;
+  --footer: #0a2f3f;
+  --footer-2: #06202b;
+
+  /* 10% — accent */
+  --accent: #d97c4a;
+  --accent-soft: #2d211a;     /* dark sand */
+  --gold: #e2ab5f;
+
+  /* decorative only */
+  --rose: #c97b84;
+  --violet: #8d74a6;
 }
 
 @theme inline {

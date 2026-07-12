@@ -10,6 +10,7 @@ import { fontVars } from "@/lib/fonts";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
+import ThemeScript from "@/components/ThemeScript";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -54,8 +55,10 @@ export default async function LocaleLayout({
       dir={rtlLocales.includes(locale as Locale) ? "rtl" : "ltr"}
       data-scroll-behavior="smooth"
       className={fontVars}
+      suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col">
+        <ThemeScript />
         <NextIntlClientProvider>
           <Nav restaurantName={name} locales={enabled} pages={pages} />
           <main className="flex-1">{children}</main>

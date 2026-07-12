@@ -4,6 +4,7 @@ import { getEnabledLocales } from "@/lib/locales";
 import { logout } from "../auth-actions";
 import Sidebar from "./Sidebar";
 import IdleLogout from "./IdleLogout";
+import ThemeToggle from "@/components/ThemeToggle";
 import { EnabledLocalesProvider } from "./EnabledLocalesContext";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -44,6 +45,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </Link>
           </div>
           <div className="ml-auto flex items-center gap-3 text-sm">
+            <ThemeToggle className="flex items-center rounded-lg border border-border p-2 transition hover:bg-accent-soft/60" />
             <span className="hidden items-center gap-2 sm:flex">
               <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-soft text-xs font-semibold text-primary-dark">
                 {initial}

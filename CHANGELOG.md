@@ -5,6 +5,16 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1
 
 ## 2026-07-12
 
+### Hinzugefügt
+
+- **Globaler Dark Mode** als Addon: Alle Farben laufen über zentrale
+  Design-Tokens in `globals.css`; der Dunkelmodus ist ein reines
+  Variablen-Overlay (`<html data-theme="dark">`) — keine Seite musste
+  angepasst werden, und neue Seiten erben ihn automatisch. Umschalter
+  (Sonne/Mond) in der Website-Navigation und im Admin-Header, Wahl wird
+  gespeichert, Standard folgt der Systemeinstellung, ein Init-Script
+  verhindert Farb-Flackern beim Laden.
+
 ### Behoben
 
 - CMS-Seiten mit „im Menü anzeigen“ erscheinen jetzt tatsächlich in der
