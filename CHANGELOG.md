@@ -7,9 +7,25 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1
 
 ### Hinzugefügt
 
-- Vitest-Testsuite mit 46 Unit-Tests (`npm test`): Geocoding, Formular-Parsing
-  (inkl. deutschem Dezimalkomma), Übersetzungs-Autofill, Locale-Formatierung,
-  Export-Dateinamen sowie Konsistenzprüfung aller 8 Sprachdateien
+- **Sprachverwaltung im Admin**: Unter „Übersetzungen“ lassen sich Sprachen
+  aktivieren/deaktivieren (bis zu 20, u. a. Französisch, Italienisch, Türkisch,
+  Ukrainisch, Chinesisch). Beim Aktivieren werden Oberflächentexte und alle
+  Inhalte automatisch über LibreTranslate übersetzt; die aktiven Sprachen und
+  die maschinellen UI-Texte liegen in der Datenbank
+  (SQL-Migration: `supabase/migrations/20260712_dynamic_locales.sql`).
+  Deaktivierte Sprachen behalten ihre Übersetzungen und leiten Besucher auf
+  Deutsch um. ICU-Plural-Strings werden nie maschinell übersetzt (Schutz vor
+  kaputter Syntax), fehlende UI-Texte fallen auf Deutsch zurück.
+- Admin-Seite **„Übersetzungen“** (`/admin/translations`): zeigt für alle Inhalte
+  (Speisen, Kategorien, Seiten, Beschreibung, Allergene, Zusatzstoffe), welche
+  Sprachen bereits übersetzt sind und welche fehlen; der Button „Fehlende
+  Übersetzungen erstellen“ füllt alle Lücken gebündelt über LibreTranslate —
+  vorhandene Werte werden nie überschrieben (`src/lib/i18n-backfill.ts`,
+  `src/lib/translation-status.ts`)
+- Vitest-Testsuite mit 55 Unit-Tests (`npm test`): Geocoding, Formular-Parsing
+  (inkl. deutschem Dezimalkomma), Übersetzungs-Autofill, Übersetzungsstatus,
+  Locale-Formatierung, Export-Dateinamen sowie Konsistenzprüfung aller
+  8 Sprachdateien
 - Automatisches Geocoding: Bleibt das Karten-URL-Feld in den Einstellungen leer,
   wird die Embed-URL beim Speichern serverseitig via Nominatim aus der
   Restaurantadresse erzeugt (`src/lib/geocode.ts`)

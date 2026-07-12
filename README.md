@@ -10,9 +10,9 @@ ohne externes CMS.
 
 - Startseite, Speisekarte (mit Allergenen & Zusatzstoffen), Standort, CMS-Seiten
   (z. B. Impressum, Datenschutz)
-- 8 Sprachen (de, en, el, ru, pl, nl, ar, es) über [next-intl](https://next-intl.dev) —
-  Deutsch ist die Quellsprache, maschinelle Übersetzungen kommen aus einer
-  selbst gehosteten LibreTranslate-Instanz
+- Mehrsprachig über [next-intl](https://next-intl.dev): 8 Sprachen ab Werk,
+  bis zu 20 im Admin aktivierbar — Deutsch ist die Quellsprache, maschinelle
+  Übersetzungen kommen aus einer selbst gehosteten LibreTranslate-Instanz
 - DSGVO-freundlich: Cookie-Banner mit Zwei-Klick-Lösung; die Standort-Karte ist eine
   **OpenStreetMap**-Einbettung (kein Google) und lädt erst nach Zustimmung
 
@@ -23,7 +23,9 @@ ohne externes CMS.
 - Öffnungszeiten, CMS-Seiten (Markdown), Admin-Verwaltung
 - Einstellungen: Name, Adresse, Kontakt, Hero-Bild — die Standort-Karte wird
   automatisch aus der Adresse erzeugt (Geocoding via Nominatim, serverseitig)
-- Übersetzungen pro Feld einsehbar und per Klick neu generierbar
+- Übersetzungen: Statusübersicht (was ist übersetzt, was fehlt), Lücken per Klick
+  gesammelt übersetzen, Sprachen aktivieren/deaktivieren — beim Aktivieren einer
+  neuen Sprache werden Oberflächentexte und Inhalte automatisch übersetzt
 
 ## Tech-Stack
 
@@ -37,6 +39,9 @@ npm install
 cp .env.example .env   # Supabase-Zugangsdaten eintragen (siehe Kommentare in der Datei)
 npm run dev            # http://localhost:3000
 ```
+
+Datenbank-Änderungen liegen als SQL-Dateien in `supabase/migrations/` und werden
+einmalig im Supabase-Dashboard (SQL Editor) ausgeführt.
 
 ## Skripte
 
@@ -63,7 +68,8 @@ src/
 ├── i18n/                  Routing & Locale-Konfiguration
 └── lib/                   Logik: Supabase-Clients, Queries, Geocoding,
                            Übersetzung, FormData-Parsing
-messages/                  Übersetzungsdateien, eine pro Sprache
+messages/                  UI-Übersetzungen der Standardsprachen (weitere in der DB)
+supabase/migrations/       SQL-Migrationen (im Supabase-Dashboard ausführen)
 test/                      Vitest-Unit-Tests
 ```
 
