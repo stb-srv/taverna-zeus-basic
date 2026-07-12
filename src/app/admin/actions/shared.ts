@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/supabase/auth";
 import { autofillI18n, type I18nMap } from "@/lib/i18n-fields";
+import { getEnabledLocales } from "@/lib/locales";
 
 export type ActionState = { ok?: boolean; error?: string };
 
@@ -37,7 +38,7 @@ export async function fillTranslations(
   fields: Record<string, { i18n: I18nMap; source: string }>,
   overwrite = false,
 ): Promise<void> {
-  const { result } = await autofillI18n(fields, { overwrite });
+  const { result } = await autofillI18n(fields, { overwrite, targets: await getEnabledLocales() });
   const patch: Record<string, I18nMap> = {};
   for (const name of Object.keys(fields)) patch[`${name}_i18n`] = result[name];
   await supabase

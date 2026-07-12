@@ -354,11 +354,13 @@ export type Database = {
           description_en: string | null
           description_i18n: Json
           email: string | null
+          enabled_locales: Json
           google_maps_embed: string | null
           hero_image_url: string | null
           id: number
           name: string
           phone: string | null
+          ui_messages: Json
           updated_at: string
         }
         Insert: {
@@ -371,11 +373,13 @@ export type Database = {
           description_en?: string | null
           description_i18n?: Json
           email?: string | null
+          enabled_locales?: Json
           google_maps_embed?: string | null
           hero_image_url?: string | null
           id?: number
           name?: string
           phone?: string | null
+          ui_messages?: Json
           updated_at?: string
         }
         Update: {
@@ -388,11 +392,13 @@ export type Database = {
           description_en?: string | null
           description_i18n?: Json
           email?: string | null
+          enabled_locales?: Json
           google_maps_embed?: string | null
           hero_image_url?: string | null
           id?: number
           name?: string
           phone?: string | null
+          ui_messages?: Json
           updated_at?: string
         }
         Relationships: []

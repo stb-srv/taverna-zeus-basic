@@ -1,7 +1,8 @@
 "use client";
 
-import { routing, localeNames, type Locale } from "@/i18n/routing";
+import { localeNames, rtlLocales } from "@/i18n/routing";
 import { retranslate } from "@/app/admin/actions/translations";
+import { useEnabledLocales } from "./EnabledLocalesContext";
 import { inputCls, btnGhost } from "./ui";
 
 export type TranslField = {
@@ -28,7 +29,7 @@ export default function TranslationsPanel({
   kind?: "item" | "category" | "page" | "settings";
   id?: string;
 }) {
-  const langs = routing.locales.filter((l) => l !== "de" && l !== "en") as Locale[];
+  const langs = useEnabledLocales().filter((l) => l !== "de" && l !== "en");
 
   return (
     <details className="card-soft p-6 hover:translate-y-0">
@@ -48,7 +49,7 @@ export default function TranslationsPanel({
             </h3>
             <div
               className="grid gap-3 sm:grid-cols-2"
-              dir={loc === "ar" ? "rtl" : undefined}
+              dir={rtlLocales.includes(loc) ? "rtl" : undefined}
             >
               {fields.map((f) =>
                 f.multiline ? (

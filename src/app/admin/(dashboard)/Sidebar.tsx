@@ -18,6 +18,7 @@ const groups: { title: string; items: Item[] }[] = [
       { href: "/admin/hours", label: "Öffnungszeiten", icon: <IconClock /> },
       { href: "/admin/settings", label: "Standort & Kontakt", icon: <IconPin /> },
       { href: "/admin/pages", label: "Seiten", icon: <IconPage /> },
+      { href: "/admin/translations", label: "Übersetzungen", icon: <IconGlobe /> },
     ],
   },
   {
@@ -122,6 +123,15 @@ function IconPage() {
       <path d="M6 2h8l4 4v16H6z" />
       <path d="M14 2v4h4" />
       <path d="M9 13h6M9 17h6" />
+    </>,
+  );
+}
+function IconGlobe() {
+  return svg(
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3a13.5 13.5 0 0 1 0 18a13.5 13.5 0 0 1 0-18Z" />
     </>,
   );
 }

@@ -30,6 +30,18 @@ const priceLocale: Record<Locale, string> = {
   nl: "nl-NL",
   ar: "ar",
   es: "es-ES",
+  fr: "fr-FR",
+  it: "it-IT",
+  tr: "tr-TR",
+  pt: "pt-PT",
+  cs: "cs-CZ",
+  da: "da-DK",
+  sv: "sv-SE",
+  uk: "uk-UA",
+  ro: "ro-RO",
+  hu: "hu-HU",
+  zh: "zh-CN",
+  ja: "ja-JP",
 };
 
 /** Formats a numeric price as a localized currency string (EUR). */

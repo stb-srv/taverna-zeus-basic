@@ -3,6 +3,7 @@
 import { Link, usePathname } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import type { Locale } from "@/i18n/routing";
 import LanguageSwitcher from "./LanguageSwitcher";
 
 const links = [
@@ -11,7 +12,13 @@ const links = [
   { href: "/location", key: "location" },
 ] as const;
 
-export default function Nav({ restaurantName }: { restaurantName: string }) {
+export default function Nav({
+  restaurantName,
+  locales,
+}: {
+  restaurantName: string;
+  locales: Locale[];
+}) {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -61,11 +68,11 @@ export default function Nav({ restaurantName }: { restaurantName: string }) {
               );
             })}
           </ul>
-          <LanguageSwitcher />
+          <LanguageSwitcher locales={locales} />
         </div>
 
         <div className="flex items-center gap-4 md:hidden">
-          <LanguageSwitcher />
+          <LanguageSwitcher locales={locales} />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}

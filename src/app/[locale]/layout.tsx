@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing, rtlLocales, type Locale } from "@/i18n/routing";
+import { getEnabledLocales } from "@/lib/locales";
 import { getSettings } from "@/lib/queries";
 import { fontVars } from "@/lib/fonts";
 import Nav from "@/components/Nav";
@@ -34,6 +35,9 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
+  // Deactivated locales fall back to the default language instead of a 404.
+  const enabled = await getEnabledLocales();
+  if (!enabled.includes(locale)) redirect(`/${routing.defaultLocale}`);
   setRequestLocale(locale);
 
   const settings = await getSettings();
@@ -48,7 +52,7 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-screen flex-col">
         <NextIntlClientProvider>
-          <Nav restaurantName={name} />
+          <Nav restaurantName={name} locales={enabled} />
           <main className="flex-1">{children}</main>
           <Footer restaurantName={name} phone={settings?.phone ?? null} email={settings?.email ?? null} />
           <CookieBanner />

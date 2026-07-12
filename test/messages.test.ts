@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { routing } from "@/i18n/routing";
+import { DEFAULT_ENABLED_LOCALES, localeNames, routing } from "@/i18n/routing";
 
 const messagesDir = new URL("../messages/", import.meta.url);
 
@@ -21,20 +21,20 @@ function keyPaths(obj: Record<string, unknown>, prefix = ""): string[] {
 describe("messages", () => {
   const reference = keyPaths(loadMessages(routing.defaultLocale)).sort();
 
-  it("has a messages file for every configured locale", () => {
-    for (const locale of routing.locales) {
+  it("has a bundled messages file for every default-enabled locale", () => {
+    for (const locale of DEFAULT_ENABLED_LOCALES) {
       expect(() => loadMessages(locale), `messages/${locale}.json`).not.toThrow();
     }
   });
 
-  for (const locale of routing.locales) {
+  for (const locale of DEFAULT_ENABLED_LOCALES) {
     it(`messages/${locale}.json has exactly the same keys as ${routing.defaultLocale}.json`, () => {
       expect(keyPaths(loadMessages(locale)).sort()).toEqual(reference);
     });
   }
 
-  it("has no empty message values in any locale", () => {
-    for (const locale of routing.locales) {
+  it("has no empty message values in any bundled locale", () => {
+    for (const locale of DEFAULT_ENABLED_LOCALES) {
       const messages = loadMessages(locale);
       const empty = keyPaths(messages).filter((path) => {
         const value = path
@@ -43,6 +43,20 @@ describe("messages", () => {
         return typeof value === "string" && value.trim() === "";
       });
       expect(empty, `empty values in messages/${locale}.json`).toEqual([]);
+    }
+  });
+});
+
+describe("locale configuration", () => {
+  it("default-enabled locales are a subset of the routing superset", () => {
+    for (const locale of DEFAULT_ENABLED_LOCALES) {
+      expect(routing.locales).toContain(locale);
+    }
+  });
+
+  it("every routable locale has a display name", () => {
+    for (const locale of routing.locales) {
+      expect(localeNames[locale], `localeNames.${locale}`).toBeTruthy();
     }
   });
 });

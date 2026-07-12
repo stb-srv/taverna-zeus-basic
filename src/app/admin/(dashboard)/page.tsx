@@ -15,6 +15,7 @@ const sections = [
   { href: "/admin/hours", title: "Öffnungszeiten", desc: "Zeiten pro Wochentag festlegen." },
   { href: "/admin/settings", title: "Standort & Kontakt", desc: "Adresse, Telefon, E-Mail, Karte, Hero-Bild." },
   { href: "/admin/pages", title: "Seiten", desc: "Impressum, Datenschutz und weitere Seiten." },
+  { href: "/admin/translations", title: "Übersetzungen", desc: "Stand der automatischen Übersetzungen, Lücken gesammelt füllen." },
 ];
 
 export default async function AdminHome() {

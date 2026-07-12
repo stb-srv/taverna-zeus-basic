@@ -7,13 +7,8 @@ export type I18nMap = Record<string, string>;
 /** The authoritative source language for translations. */
 export const SOURCE_LOCALE: Locale = routing.defaultLocale;
 
-/** All locales that are ever auto-filled (everything except the DE source). */
-export const ALL_TARGETS = routing.locales.filter((l) => l !== SOURCE_LOCALE) as Locale[];
-
-/** Machine-managed locales — DE + EN are human-authored, the rest are machine. */
-export const MACHINE_TARGETS = routing.locales.filter(
-  (l) => l !== SOURCE_LOCALE && l !== "en",
-) as Locale[];
+/** Human-authored locales — "re-translate" never overwrites these. */
+export const HUMAN_LOCALES: readonly Locale[] = ["de", "en"];
 
 /** Reads a `<field>_<locale>` set out of submitted form data into an i18n map. */
 export function i18nFromForm(get: (key: string) => string, field: string): I18nMap {
@@ -28,24 +23,27 @@ export function i18nFromForm(get: (key: string) => string, field: string): I18nM
 type FieldInput = { i18n: I18nMap; source: string };
 
 /**
- * Fills translations for a set of fields.
+ * Fills translations for a set of fields into the given target locales
+ * (usually the currently enabled ones — the DE source is always excluded).
  * - `overwrite: false` (default): only fills target locales that are currently
  *   empty — never touches human-edited values.
- * - `overwrite: true`: regenerates the machine locales (el/ru/pl/nl/ar/es) from
- *   the DE source, leaving DE + EN untouched.
+ * - `overwrite: true`: regenerates the machine locales from the DE source,
+ *   leaving the human-authored locales (DE + EN) untouched.
  *
  * Translation failures are non-fatal: the source (and any existing values) are
  * preserved and `ok:false` is returned so the caller can surface a hint.
  */
 export async function autofillI18n(
   fields: Record<string, FieldInput>,
-  opts: { overwrite?: boolean } = {},
+  opts: { targets: readonly Locale[]; overwrite?: boolean },
 ): Promise<{ result: Record<string, I18nMap>; ok: boolean; error?: string }> {
   const overwrite = opts.overwrite ?? false;
   const result: Record<string, I18nMap> = {};
   for (const [name, f] of Object.entries(fields)) result[name] = { ...f.i18n };
 
-  const targets = overwrite ? MACHINE_TARGETS : ALL_TARGETS;
+  const targets = opts.targets.filter(
+    (l) => l !== SOURCE_LOCALE && (!overwrite || !HUMAN_LOCALES.includes(l)),
+  );
   let ok = true;
   let error: string | undefined;
 
