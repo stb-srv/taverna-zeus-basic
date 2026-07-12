@@ -30,7 +30,13 @@ export default function SettingsForm({ settings }: { settings: Settings | null }
           </div>
           <div>
             <label className={labelCls}>Beschreibung (EN)</label>
-            <textarea name="description_en" defaultValue={s?.description_en ?? ""} rows={4} className={inputCls} />
+            <textarea
+              name="description_en"
+              defaultValue={s?.description_en ?? ""}
+              rows={4}
+              placeholder="leer = automatisch übersetzt"
+              className={inputCls}
+            />
           </div>
         </div>
         <ImageUpload name="hero_image_url" bucket="site-images" defaultUrl={s?.hero_image_url} label="Hero-Bild" />

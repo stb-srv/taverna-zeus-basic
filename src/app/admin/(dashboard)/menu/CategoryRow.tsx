@@ -22,7 +22,12 @@ export default function CategoryRow({ category }: { category: Category }) {
         </div>
         <div className="min-w-32 flex-1">
           <label className="mb-1 block text-xs font-medium text-muted">Name (EN)</label>
-          <input name="name_en" defaultValue={category.name_en} className={inputCls} />
+          <input
+            name="name_en"
+            defaultValue={category.name_en}
+            placeholder="leer = automatisch"
+            className={inputCls}
+          />
         </div>
         <div className="w-20">
           <label className="mb-1 block text-xs font-medium text-muted">Reihenf.</label>

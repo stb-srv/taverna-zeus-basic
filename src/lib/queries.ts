@@ -51,6 +51,18 @@ export async function getLabels() {
   return { allergens: allergens ?? [], additives: additives ?? [] };
 }
 
+/** Published pages flagged for the main navigation, in sort order. */
+export async function getNavPages() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("pages")
+    .select("slug, title_de, title_en, title_i18n, sort_order")
+    .eq("is_published", true)
+    .eq("show_in_nav", true)
+    .order("sort_order");
+  return data ?? [];
+}
+
 /** A single published page by slug (Impressum, Datenschutz, or custom pages). */
 export async function getPage(slug: string) {
   const supabase = await createClient();

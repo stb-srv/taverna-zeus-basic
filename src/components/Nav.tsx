@@ -12,17 +12,28 @@ const links = [
   { href: "/location", key: "location" },
 ] as const;
 
+type NavPage = { slug: string; title: string };
+
 export default function Nav({
   restaurantName,
   locales,
+  pages,
 }: {
   restaurantName: string;
   locales: Locale[];
+  /** Published CMS pages flagged "im Menü anzeigen", already localized. */
+  pages: NavPage[];
 }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  // Static links plus the CMS-managed pages, rendered identically.
+  const items = [
+    ...links.map(({ href, key }) => ({ href, label: t(key) })),
+    ...pages.map((p) => ({ href: `/${p.slug}`, label: p.title })),
+  ];
 
   // A soft shadow fades in once the page is scrolled, giving the bar depth
   // without a hard border. The bar itself shares the footer's deep Aegean tone
@@ -50,7 +61,7 @@ export default function Nav({
 
         <div className="hidden items-center gap-6 md:flex">
           <ul className="flex items-center gap-6">
-            {links.map(({ href, key }) => {
+            {items.map(({ href, label }) => {
               const isActive = pathname === href;
               return (
                 <li key={href}>
@@ -62,7 +73,7 @@ export default function Nav({
                         : "text-white/85 transition-colors hover:text-white"
                     }
                   >
-                    {t(key)}
+                    {label}
                   </Link>
                 </li>
               );
@@ -87,14 +98,14 @@ export default function Nav({
 
       {open && (
         <ul className="flex flex-col gap-1 border-t border-white/10 px-4 py-2 md:hidden">
-          {links.map(({ href, key }) => (
+          {items.map(({ href, label }) => (
             <li key={href}>
               <Link
                 href={href}
                 onClick={() => setOpen(false)}
                 className="block py-2 text-white/90 hover:text-white"
               >
-                {t(key)}
+                {label}
               </Link>
             </li>
           ))}

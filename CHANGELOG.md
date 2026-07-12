@@ -5,6 +5,16 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1
 
 ## 2026-07-12
 
+### Behoben
+
+- CMS-Seiten mit „im Menü anzeigen“ erscheinen jetzt tatsächlich in der
+  Navigation (Desktop und Mobil) und sind unter ihrer eigenen URL erreichbar
+  (neue Route `/<sprache>/<slug>`) — zuvor gab es weder Nav-Einträge noch eine
+  Route für selbst erstellte Seiten
+- Englisch ist kein Pflichtfeld mehr: Leere EN-Felder (Titel, Namen,
+  Beschreibungen, Inhalte) werden beim Speichern automatisch über
+  LibreTranslate gefüllt; manuell eingetragenes Englisch hat weiterhin Vorrang
+
 ### Hinzugefügt
 
 - **Sprachverwaltung im Admin**: Unter „Übersetzungen“ lassen sich Sprachen

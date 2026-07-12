@@ -27,9 +27,11 @@ export function revalidatePublic() {
 
 /**
  * Computes translations for the given fields (DE = source) and writes the
- * resulting `<field>_i18n` JSONB back to the row. Non-fatal: on any translation
- * error the source/existing values are kept. `overwrite` regenerates the
- * machine locales (used by the "re-translate" action).
+ * resulting `<field>_i18n` JSONB back to the row. The legacy `<field>_en`
+ * column is synced from the map, so a blank EN form field ends up with the
+ * machine translation. Non-fatal: on any translation error the
+ * source/existing values are kept. `overwrite` regenerates the machine
+ * locales (used by the "re-translate" action).
  */
 export async function fillTranslations(
   supabase: AdminClient,
@@ -39,8 +41,12 @@ export async function fillTranslations(
   overwrite = false,
 ): Promise<void> {
   const { result } = await autofillI18n(fields, { overwrite, targets: await getEnabledLocales() });
-  const patch: Record<string, I18nMap> = {};
-  for (const name of Object.keys(fields)) patch[`${name}_i18n`] = result[name];
+  const patch: Record<string, I18nMap | string> = {};
+  for (const name of Object.keys(fields)) {
+    patch[`${name}_i18n`] = result[name];
+    const en = result[name].en;
+    if (typeof en === "string" && en.trim()) patch[`${name}_en`] = en;
+  }
   await supabase
     .from(table)
     .update(patch as never)

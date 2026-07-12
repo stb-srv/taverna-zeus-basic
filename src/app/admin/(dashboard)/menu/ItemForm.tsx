@@ -60,7 +60,12 @@ export default function ItemForm({
           </div>
           <div>
             <label className={labelCls}>Name (EN)</label>
-            <input name="name_en" defaultValue={item?.name_en ?? ""} required className={inputCls} />
+            <input
+              name="name_en"
+              defaultValue={item?.name_en ?? ""}
+              placeholder="leer = automatisch übersetzt"
+              className={inputCls}
+            />
           </div>
         </div>
 
@@ -71,7 +76,13 @@ export default function ItemForm({
           </div>
           <div>
             <label className={labelCls}>Beschreibung (EN)</label>
-            <textarea name="description_en" defaultValue={item?.description_en ?? ""} rows={3} className={inputCls} />
+            <textarea
+              name="description_en"
+              defaultValue={item?.description_en ?? ""}
+              rows={3}
+              placeholder="leer = automatisch übersetzt"
+              className={inputCls}
+            />
           </div>
         </div>
 

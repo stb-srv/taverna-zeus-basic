@@ -16,7 +16,7 @@ export default function AddCategory() {
       </div>
       <div className="flex-1">
         <label className="mb-1 block text-xs font-medium text-muted">Name (EN)</label>
-        <input name="name_en" required className={inputCls} />
+        <input name="name_en" placeholder="leer = automatisch" className={inputCls} />
       </div>
       <div className="w-20">
         <label className="mb-1 block text-xs font-medium text-muted">Reihenf.</label>

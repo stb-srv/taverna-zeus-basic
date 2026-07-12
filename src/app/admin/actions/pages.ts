@@ -27,7 +27,7 @@ export async function savePage(_prev: ActionState, fd: FormData): Promise<Action
       sort_order: intOr(fd, "sort_order"),
     };
     if (!payload.slug) return { error: "Slug erforderlich." };
-    if (!payload.title_de || !payload.title_en) return { error: "Titel (DE/EN) erforderlich." };
+    if (!payload.title_de) return { error: "Titel (DE) erforderlich." };
 
     let pageId = id;
     if (id) {

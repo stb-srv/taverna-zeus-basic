@@ -27,7 +27,7 @@ export async function saveCategory(_prev: ActionState, fd: FormData): Promise<Ac
       sort_order: intOr(fd, "sort_order"),
       is_active: fd.get("is_active") === "on",
     };
-    if (!payload.name_de || !payload.name_en) return { error: "Name (DE/EN) erforderlich." };
+    if (!payload.name_de) return { error: "Name (DE) erforderlich." };
 
     let catId = id;
     if (id) {
@@ -81,7 +81,7 @@ export async function saveItem(_prev: ActionState, fd: FormData): Promise<Action
       is_active: fd.get("is_active") === "on",
     };
     if (!payload.category_id) return { error: "Kategorie erforderlich." };
-    if (!payload.name_de || !payload.name_en) return { error: "Name (DE/EN) erforderlich." };
+    if (!payload.name_de) return { error: "Name (DE) erforderlich." };
 
     let itemId = id;
     if (id) {

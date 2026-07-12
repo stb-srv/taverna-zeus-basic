@@ -43,7 +43,12 @@ export default function PageForm({ page }: { page: Page | null }) {
           </div>
           <div>
             <label className={labelCls}>Titel (EN)</label>
-            <input name="title_en" defaultValue={page?.title_en ?? ""} required className={inputCls} />
+            <input
+              name="title_en"
+              defaultValue={page?.title_en ?? ""}
+              placeholder="leer = automatisch übersetzt"
+              className={inputCls}
+            />
           </div>
         </div>
 
@@ -53,7 +58,13 @@ export default function PageForm({ page }: { page: Page | null }) {
         </div>
         <div>
           <label className={labelCls}>Inhalt (EN) — Markdown</label>
-          <textarea name="content_en" defaultValue={page?.content_en ?? ""} rows={10} className={`${inputCls} font-mono text-xs`} />
+          <textarea
+            name="content_en"
+            defaultValue={page?.content_en ?? ""}
+            rows={10}
+            placeholder="leer = automatisch übersetzt"
+            className={`${inputCls} font-mono text-xs`}
+          />
         </div>
         <p className="text-xs text-muted">
           Markdown: <code>## Überschrift</code>, <code>### Unterüberschrift</code>, <code>**fett**</code>, Leerzeile = neuer Absatz.

@@ -4,7 +4,8 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { routing, rtlLocales, type Locale } from "@/i18n/routing";
 import { getEnabledLocales } from "@/lib/locales";
-import { getSettings } from "@/lib/queries";
+import { getNavPages, getSettings } from "@/lib/queries";
+import { localized } from "@/lib/locale";
 import { fontVars } from "@/lib/fonts";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -40,8 +41,12 @@ export default async function LocaleLayout({
   if (!enabled.includes(locale)) redirect(`/${routing.defaultLocale}`);
   setRequestLocale(locale);
 
-  const settings = await getSettings();
+  const [settings, navPages] = await Promise.all([getSettings(), getNavPages()]);
   const name = settings?.name ?? "Taverna Zeus";
+  const pages = navPages.map((p) => ({
+    slug: p.slug,
+    title: localized(p, "title", locale as Locale),
+  }));
 
   return (
     <html
@@ -52,7 +57,7 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-screen flex-col">
         <NextIntlClientProvider>
-          <Nav restaurantName={name} locales={enabled} />
+          <Nav restaurantName={name} locales={enabled} pages={pages} />
           <main className="flex-1">{children}</main>
           <Footer restaurantName={name} phone={settings?.phone ?? null} email={settings?.email ?? null} />
           <CookieBanner />
