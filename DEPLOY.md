@@ -49,6 +49,16 @@ eigener Coolify-Service laufen (Docker-Image `libretranslate/libretranslate`).
 Dann `LIBRETRANSLATE_URL` auf die interne URL des Services setzen, z. B.
 `http://<service-name>:5000` (beide im selben Docker-Netzwerk/Projekt).
 
+**Wichtig:** Der Container lädt standardmäßig nur ausgewählte Sprachmodelle
+(`--load-only <codes>`). Nur Sprachen, deren Code dort aufgeführt ist, lassen
+sich unter `/admin/translations` sinnvoll aktivieren — für alle anderen
+schlägt die Übersetzung mit `"<code> is not supported"` fehl (Inhalte bleiben
+dann auf Deutsch). Der vollständige Satz an im Admin wählbaren Sprachen steht
+in `src/i18n/routing.ts`; `--load-only` sollte alle Codes enthalten, die
+aktiviert werden sollen, z. B.:
+`--load-only ar,de,el,en,es,nl,pl,ru,fr,it,tr,pt,cs,da,sv,uk,ro,hu,zh,ja`
+(mehr Sprachmodelle = mehr RAM/Speicherbedarf des Containers).
+
 ## 5. Deploy
 
 **Deploy** klicken. Der erste Build dauert am längsten (npm ci + next build);

@@ -5,9 +5,11 @@
  * overwrites values that already exist.
  *
  * Prerequisites:
- *   1. LibreTranslate running, e.g.:
+ *   1. LibreTranslate running with the target languages loaded, e.g.:
  *      docker run -ti -p 5000:5000 libretranslate/libretranslate \
  *        --load-only en,de,el,ru,pl,nl,ar,es
+ *      A language missing from --load-only fails with "<code> is not
+ *      supported" — see DEPLOY.md for the full locale list (src/i18n/routing.ts).
  *   2. .env.local with SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_URL.
  *
  * Run:  node scripts/backfill-i18n.mjs
