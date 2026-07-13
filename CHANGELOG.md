@@ -3,6 +3,26 @@
 Alle nennenswerten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
+## 2026-07-13
+
+### Behoben
+
+- **Coolify-Deployment schlug fehl** (`npm ci` mit `EUSAGE`/„Missing:
+  @swc/helpers@0.5.23 from lock file"): `package-lock.json` war mit einer
+  neueren lokalen npm-Version erzeugt worden, die einen verschachtelten
+  Abhängigkeits-Eintrag von next-intl verschluckt hatte. Neu erzeugt mit
+  npm 10 (wie im Docker-Image `node:22-alpine`) und per sauberem `npm ci`
+  verifiziert.
+- **Sprachverwaltung im Admin warf „column restaurant_settings.enabled_locales
+  does not exist"**: Die SQL-Migration vom 12.07. war nie gegen die
+  Produktivdatenbank gelaufen. Jetzt ausgeführt und verifiziert (Spalten
+  `enabled_locales`/`ui_messages` vorhanden, korrekte Default-Werte).
+
+### Hinzugefügt
+
+- Neues Skript `scripts/run-sql.mjs` zum Ausführen von SQL-Migrationen gegen
+  die Supabase-Datenbank (`node scripts/run-sql.mjs supabase/migrations/<datei>.sql`).
+
 ## 2026-07-12
 
 ### Hinzugefügt
