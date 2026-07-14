@@ -29,6 +29,30 @@ function setPath(target: MessageTree, path: string, value: string): void {
   node[keys[keys.length - 1]] = value;
 }
 
+function getPath(tree: unknown, path: string): unknown {
+  let node = tree;
+  for (const key of path.split(".")) {
+    if (!node || typeof node !== "object") return undefined;
+    node = (node as Record<string, unknown>)[key];
+  }
+  return node;
+}
+
+/** All DE source entries eligible for machine translation (ICU strings with `{…}` are skipped). */
+function translatableEntries(): [string, string][] {
+  return flattenMessages(deMessages as MessageTree).filter(([, v]) => !v.includes("{"));
+}
+
+/** Dotted paths still missing (or blank) from an existing per-locale message tree. */
+export function missingUiKeys(existing: unknown): string[] {
+  return translatableEntries()
+    .filter(([path]) => {
+      const cur = getPath(existing, path);
+      return !(typeof cur === "string" && cur.trim());
+    })
+    .map(([path]) => path);
+}
+
 /**
  * Deep-merges an overlay (bundled or machine-translated messages) over the
  * German base so every missing key still renders in German.
@@ -50,51 +74,71 @@ export function mergeMessages(base: MessageTree, overlay: Record<string, unknown
 }
 
 /**
- * Machine-translates the German UI strings for a newly enabled locale via
- * LibreTranslate. ICU strings (containing `{…}`) are skipped — broken plural
- * syntax would crash the renderer, so those fall back to German instead.
+ * Machine-translates the German UI strings for a locale via LibreTranslate,
+ * filling only keys still missing from `existing` (never re-translates or
+ * overwrites what's already there). ICU strings (containing `{…}`) are
+ * skipped — broken plural syntax would crash the renderer, so those fall
+ * back to German instead. Tolerant per chunk: a single failed chunk (e.g. a
+ * transient LibreTranslate/proxy hiccup) is recorded but doesn't abort the
+ * remaining chunks — otherwise one bad chunk partway through a large
+ * namespace like `admin` would silently strand everything after it.
  */
 export async function translateUiMessages(
   target: Locale,
+  existing: unknown = {},
 ): Promise<{ messages: MessageTree; error?: string }> {
-  const entries = flattenMessages(deMessages as MessageTree).filter(([, v]) => !v.includes("{"));
-  const out: MessageTree = {};
+  const out: MessageTree =
+    existing && typeof existing === "object"
+      ? (structuredClone(existing) as MessageTree)
+      : {};
+  const entries = translatableEntries().filter(([path]) => {
+    const cur = getPath(existing, path);
+    return !(typeof cur === "string" && cur.trim());
+  });
 
+  let error: string | undefined;
   for (let i = 0; i < entries.length; i += CHUNK) {
     const chunk = entries.slice(i, i + CHUNK);
-    const { byLocale, ok, error } = await translateBatch(
+    const { byLocale, ok, error: terr } = await translateBatch(
       chunk.map(([, v]) => v),
       SOURCE_LOCALE,
       [target],
     );
-    if (!ok) return { messages: out, error };
+    if (!ok) {
+      error = terr;
+      continue;
+    }
     const translated = byLocale[target] ?? [];
     chunk.forEach(([path], j) => {
       if (translated[j]) setPath(out, path, translated[j]);
     });
   }
-  return { messages: out };
+  return { messages: out, error };
 }
 
-/** Enabled locales beyond the bundled set that still have no `ui_messages` entry. */
+/** Enabled locales beyond the bundled set that are still missing any UI text. */
 export function missingUiLocales(uiMessages: unknown, targets: readonly Locale[]): Locale[] {
   const map = (uiMessages && typeof uiMessages === "object" ? uiMessages : {}) as Record<
     string,
     unknown
   >;
   return targets.filter(
-    (l) => !(DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(l) && !map[l],
+    (l) =>
+      !(DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(l) &&
+      missingUiKeys(map[l]).length > 0,
   );
 }
 
 export type UiBackfillResult = { translated: Locale[]; errors: string[] };
 
 /**
- * Fills `ui_messages` for every enabled locale beyond the bundled default set
- * that doesn't have it yet — same idea as `backfillMissingTranslations` for
- * content, but for the admin/site UI strings themselves. Tolerant by design:
- * a failed locale is reported but doesn't block the others, and callers can
- * re-run this safely since existing entries are never overwritten.
+ * Fills `ui_messages` for every enabled locale beyond the bundled default
+ * set that's still missing any key — same idea as `backfillMissingTranslations`
+ * for content, but for the admin/site UI strings themselves, and gap-filled at
+ * the individual key level so a locale that got partially translated last
+ * time (e.g. a namespace stranded by a proxy timeout) picks up exactly where
+ * it left off. Persists after each locale rather than once at the end, so a
+ * timeout partway through a multi-locale run doesn't lose earlier progress.
  */
 export async function backfillMissingUiMessages(
   supabase: SupabaseClient<Database>,
@@ -103,34 +147,38 @@ export async function backfillMissingUiMessages(
   const translated: Locale[] = [];
   const errors: string[] = [];
 
-  const { data, error } = await supabase
-    .from("restaurant_settings")
-    .select("ui_messages")
-    .eq("id", 1)
-    .maybeSingle();
-  if (error) return { translated, errors: [error.message] };
+  const goals = targets.filter((l) => !(DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(l));
+  if (goals.length === 0) return { translated, errors };
 
-  const uiMessages = (
-    data?.ui_messages && typeof data.ui_messages === "object" ? data.ui_messages : {}
-  ) as Record<string, unknown>;
-  const pending = missingUiLocales(uiMessages, targets);
-  if (pending.length === 0) return { translated, errors };
-
-  for (const loc of pending) {
-    const { messages, error: terr } = await translateUiMessages(loc);
-    if (terr) errors.push(`UI-Texte ${loc}: ${terr}`);
-    if (Object.keys(messages).length > 0) {
-      uiMessages[loc] = messages;
-      translated.push(loc);
+  for (const loc of goals) {
+    const { data, error } = await supabase
+      .from("restaurant_settings")
+      .select("ui_messages")
+      .eq("id", 1)
+      .maybeSingle();
+    if (error) {
+      errors.push(error.message);
+      continue;
     }
-  }
+    const uiMessages = (
+      data?.ui_messages && typeof data.ui_messages === "object" ? data.ui_messages : {}
+    ) as Record<string, unknown>;
+    const existing = uiMessages[loc];
+    if (missingUiKeys(existing).length === 0) continue;
 
-  if (translated.length > 0) {
+    const { messages, error: terr } = await translateUiMessages(loc, existing);
+    if (terr) errors.push(`UI-Texte ${loc}: ${terr}`);
+    uiMessages[loc] = messages;
+
     const up = await supabase
       .from("restaurant_settings")
       .update({ ui_messages: uiMessages as never })
       .eq("id", 1);
-    if (up.error) errors.push(up.error.message);
+    if (up.error) {
+      errors.push(up.error.message);
+      continue;
+    }
+    translated.push(loc);
   }
 
   return { translated, errors };
