@@ -1,7 +1,7 @@
 # Deployment auf Coolify
 
 Das Projekt wird über den Build Pack **`Docker Compose`** deployt. Coolify parst
-die mitgelieferte `docker-compose.yml`, findet jede `${VARIABLE}`-Referenz und
+die mitgelieferte `docker-compose.yaml`, findet jede `${VARIABLE}`-Referenz und
 legt daraus **automatisch editierbare Felder** im Tab „Environment Variables" an.
 Damit trägst du die Werte einmal in der UI ein – sie fließen sowohl in die
 Build-Args (`NEXT_PUBLIC_*`) als auch in die Laufzeit-Umgebung.
@@ -14,7 +14,7 @@ Build-Args (`NEXT_PUBLIC_*`) als auch in die Laufzeit-Umgebung.
 1. In Coolify: **+ New → Application** (Public/Private Repository)
 2. Repository verbinden, Branch: `master`
 3. **Build Pack: `Docker Compose`** auswählen
-4. Docker Compose Location: `/docker-compose.yml` (Standard)
+4. Docker Compose Location: `/docker-compose.yaml` (Standard)
 
 ## 2. Environment-Variablen
 
@@ -29,14 +29,14 @@ Werte eintragen (aus Supabase-Dashboard / `.env.example`):
 | `LIBRETRANSLATE_URL` | nein | optional |
 | `LIBRETRANSLATE_API_KEY` | nein | optional |
 
-Die Felder erscheinen automatisch, sobald Coolify die `docker-compose.yml`
+Die Felder erscheinen automatisch, sobald Coolify die `docker-compose.yaml`
 eingelesen hat (jede `${VAR}`-Referenz wird ein editierbares Feld). Erscheint
 **kein** Feld, ist meist noch der alte Build Pack `Dockerfile` aktiv — auf
 `Docker Compose` umstellen und einmal speichern.
 
 Die beiden `NEXT_PUBLIC_*`-Variablen werden beim `next build` fest ins
 Client-Bundle eingebacken (auch der erlaubte Bild-Host in `next.config.ts` wird
-daraus abgeleitet) und sind in `docker-compose.yml` als **bloße Build-Args**
+daraus abgeleitet) und sind in `docker-compose.yaml` als **bloße Build-Args**
 (`args: - NAME`) hinterlegt — Coolify liefert den Wert dann über die von ihm
 geschriebene `.env` an den Build. **Nicht** den Coolify-Toggle „Build Variable?"
 benutzen; der funktioniert bei Docker Compose nicht. Es genügt, die Variable
@@ -50,7 +50,7 @@ mit `NEXT_PUBLIC_`-Prefix versehen und nicht als Build-Arg übergeben.
 
 Der Container exponiert Port `3000`; Coolify routet seinen Proxy automatisch
 dorthin. Die öffentliche **Domain** wird in der Coolify-UI unter der Application
-gesetzt. Der **Healthcheck** ist bereits in `docker-compose.yml` und im
+gesetzt. Der **Healthcheck** ist bereits in `docker-compose.yaml` und im
 `Dockerfile` (`/api/health`) definiert und ermöglicht Zero-Downtime-Deploys.
 
 ## 4. LibreTranslate (optional)
@@ -63,7 +63,7 @@ Für die automatische Übersetzung im Admin-Bereich zwei Varianten:
 `http://<service-name>:5000` (gleiches Docker-Netzwerk/Projekt).
 
 **B) Mitstarten**: den auskommentierten `libretranslate`-Block in
-`docker-compose.yml` einkommentieren und `LIBRETRANSLATE_URL=http://libretranslate:5000`
+`docker-compose.yaml` einkommentieren und `LIBRETRANSLATE_URL=http://libretranslate:5000`
 setzen.
 
 **Wichtig:** Der Container lädt standardmäßig nur ausgewählte Sprachmodelle
@@ -90,7 +90,7 @@ Danach prüfen:
 
 ## Lokal testen
 
-Eine `.env` neben der `docker-compose.yml` mit den Werten anlegen
+Eine `.env` neben der `docker-compose.yaml` mit den Werten anlegen
 (siehe `.env.example`), dann:
 
 ```bash
