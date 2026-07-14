@@ -1,0 +1,63 @@
+# Docker-Compose-Deployment für Coolify.
+#
+# Warum Compose statt „Build Pack: Dockerfile"?
+# Coolify liest bei einem reinen Dockerfile-Deploy KEINE .env(.example) ein.
+# Beim Build Pack „Docker Compose" dagegen parst Coolify diese Datei, findet
+# jede ${VARIABLE}-Referenz und legt daraus automatisch ein editierbares Feld
+# im Tab „Environment Variables" an. Die Werte fließen dann sowohl in die
+# Build-Args (NEXT_PUBLIC_*, ins Client-Bundle eingebacken) als auch in die
+# Laufzeit-Umgebung des Containers.
+#
+# Lokal:  docker compose up --build   (Werte aus einer .env neben dieser Datei)
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # NEXT_PUBLIC_* werden beim `next build` fest ins Client-Bundle eingebacken
+      # und MÜSSEN daher schon zur Build-Zeit als Build-Arg vorliegen.
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    environment:
+      # Öffentliche Supabase-Anbindung (auch zur Laufzeit für Server Components).
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      # Server-only Geheimnis mit vollen DB-Rechten – NIE mit NEXT_PUBLIC_-Prefix.
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      # LibreTranslate (optional). Leer lassen -> Fallback http://localhost:5000.
+      LIBRETRANSLATE_URL: ${LIBRETRANSLATE_URL:-}
+      LIBRETRANSLATE_API_KEY: ${LIBRETRANSLATE_API_KEY:-}
+    # Coolify routet über seinen Proxy auf diesen Container-Port (Domain in der UI setzen).
+    expose:
+      - "3000"
+    healthcheck:
+      # node:22-alpine hat kein curl, aber busybox-wget. Ermöglicht Rolling Updates.
+      test: ["CMD", "wget", "-q", "-O-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    restart: unless-stopped
+
+  # --- LibreTranslate (optional) ------------------------------------------
+  # Auskommentiert lassen, wenn du LibreTranslate als eigenen Coolify-Service
+  # betreibst. Zum Mitstarten hier einkommentieren und oben
+  # LIBRETRANSLATE_URL=http://libretranslate:5000 setzen.
+  #
+  # libretranslate:
+  #   image: libretranslate/libretranslate:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     # Nur diese Sprachmodelle laden (RAM sparen). Muss alle Codes enthalten,
+  #     # die unter /admin/translations aktiviert werden – siehe src/i18n/routing.ts.
+  #     LT_LOAD_ONLY: "ar,de,el,en,es,nl,pl,ru,fr,it,tr,pt,cs,da,sv,uk,ro,hu,zh,ja"
+  #     LT_API_KEYS: "false"
+  #   expose:
+  #     - "5000"
+  #   volumes:
+  #     - libretranslate_models:/home/libretranslate/.local
+
+# volumes:
+#   libretranslate_models:

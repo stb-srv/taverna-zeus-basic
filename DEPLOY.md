@@ -1,30 +1,25 @@
 # Deployment auf Coolify
 
-Das Projekt wird über das mitgelieferte Multi-Stage-`Dockerfile` deployt
-(Next.js-Standalone-Output → kleines Image, schnelle Builds durch Layer-Caching).
+Das Projekt wird über den Build Pack **`Docker Compose`** deployt. Coolify parst
+die mitgelieferte `docker-compose.yml`, findet jede `${VARIABLE}`-Referenz und
+legt daraus **automatisch editierbare Felder** im Tab „Environment Variables" an.
+Damit trägst du die Werte einmal in der UI ein – sie fließen sowohl in die
+Build-Args (`NEXT_PUBLIC_*`) als auch in die Laufzeit-Umgebung.
+
+> Wichtig: **Nicht** den Build Pack `Dockerfile` verwenden. Dabei liest Coolify
+> keine `.env`/`.env.example` ein, und die Variablenfelder erscheinen nicht.
 
 ## 1. Ressource anlegen
 
 1. In Coolify: **+ New → Application** (Public/Private Repository)
 2. Repository verbinden, Branch: `master`
-3. **Build Pack: `Dockerfile`** auswählen (nicht Nixpacks)
-4. Dockerfile Location: `/Dockerfile` (Standard)
+3. **Build Pack: `Docker Compose`** auswählen
+4. Docker Compose Location: `/docker-compose.yml` (Standard)
 
-## 2. Netzwerk / Port
+## 2. Environment-Variablen
 
-| Einstellung | Wert |
-|---|---|
-| Ports Exposes | `3000` |
-| Health Check Path | `/api/health` |
-| Health Check Port | `3000` |
-
-Der Healthcheck ermöglicht Zero-Downtime-Deploys (Rolling Update).
-Hinweis: Das Alpine-Image enthält kein `curl`; falls Coolify für den
-Healthcheck ein Kommando statt eines HTTP-Checks verwendet, `wget -q -O- http://127.0.0.1:3000/api/health` nutzen.
-
-## 3. Environment-Variablen
-
-Unter **Environment Variables** eintragen (Werte siehe `.env.example` / Supabase-Dashboard):
+Nach dem ersten Speichern legt Coolify die Felder aus der Compose-Datei an.
+Werte eintragen (aus Supabase-Dashboard / `.env.example`):
 
 | Variable | Build-Zeit? | Pflicht |
 |---|---|---|
@@ -34,29 +29,43 @@ Unter **Environment Variables** eintragen (Werte siehe `.env.example` / Supabase
 | `LIBRETRANSLATE_URL` | nein | optional |
 | `LIBRETRANSLATE_API_KEY` | nein | optional |
 
-Wichtig: Die beiden `NEXT_PUBLIC_*`-Variablen werden beim `next build` fest ins
-Client-Bundle eingebacken. Ohne das Buildtime-Häkchen kommen sie im Docker-Build
-nicht an und die Supabase-Anbindung im Browser schlägt fehl. Nach einer Änderung
+Die beiden `NEXT_PUBLIC_*`-Variablen werden beim `next build` fest ins
+Client-Bundle eingebacken (auch der erlaubte Bild-Host in `next.config.ts` wird
+daraus abgeleitet). Ohne das Buildtime-Häkchen kommen sie im Docker-Build nicht
+an und die Supabase-Anbindung im Browser schlägt fehl. Nach einer Änderung
 dieser Werte ist ein **Redeploy (Rebuild)** nötig.
 
 `SUPABASE_SERVICE_ROLE_KEY` ist ein Geheimnis mit vollen DB-Rechten — niemals
 mit `NEXT_PUBLIC_`-Prefix versehen und nicht als Build-Arg übergeben.
 
+## 3. Netzwerk / Port / Domain
+
+Der Container exponiert Port `3000`; Coolify routet seinen Proxy automatisch
+dorthin. Die öffentliche **Domain** wird in der Coolify-UI unter der Application
+gesetzt. Der **Healthcheck** ist bereits in `docker-compose.yml` und im
+`Dockerfile` (`/api/health`) definiert und ermöglicht Zero-Downtime-Deploys.
+
 ## 4. LibreTranslate (optional)
 
-Für die automatische Übersetzung im Admin-Bereich kann LibreTranslate als
-eigener Coolify-Service laufen (Docker-Image `libretranslate/libretranslate`).
-Dann `LIBRETRANSLATE_URL` auf die interne URL des Services setzen, z. B.
-`http://<service-name>:5000` (beide im selben Docker-Netzwerk/Projekt).
+Für die automatische Übersetzung im Admin-Bereich zwei Varianten:
+
+**A) Eigener Coolify-Service** (empfohlen): LibreTranslate
+(`libretranslate/libretranslate`) als separaten Service anlegen und
+`LIBRETRANSLATE_URL` auf dessen interne URL setzen, z. B.
+`http://<service-name>:5000` (gleiches Docker-Netzwerk/Projekt).
+
+**B) Mitstarten**: den auskommentierten `libretranslate`-Block in
+`docker-compose.yml` einkommentieren und `LIBRETRANSLATE_URL=http://libretranslate:5000`
+setzen.
 
 **Wichtig:** Der Container lädt standardmäßig nur ausgewählte Sprachmodelle
-(`--load-only <codes>`). Nur Sprachen, deren Code dort aufgeführt ist, lassen
-sich unter `/admin/translations` sinnvoll aktivieren — für alle anderen
-schlägt die Übersetzung mit `"<code> is not supported"` fehl (Inhalte bleiben
-dann auf Deutsch). Der vollständige Satz an im Admin wählbaren Sprachen steht
-in `src/i18n/routing.ts`; `--load-only` sollte alle Codes enthalten, die
-aktiviert werden sollen, z. B.:
-`--load-only ar,de,el,en,es,nl,pl,ru,fr,it,tr,pt,cs,da,sv,uk,ro,hu,zh,ja`
+(`LT_LOAD_ONLY` / `--load-only <codes>`). Nur Sprachen, deren Code dort
+aufgeführt ist, lassen sich unter `/admin/translations` sinnvoll aktivieren —
+für alle anderen schlägt die Übersetzung mit `"<code> is not supported"` fehl
+(Inhalte bleiben dann auf Deutsch). Der vollständige Satz an im Admin wählbaren
+Sprachen steht in `src/i18n/routing.ts`; `LT_LOAD_ONLY` sollte alle Codes
+enthalten, die aktiviert werden sollen, z. B.:
+`ar,de,el,en,es,nl,pl,ru,fr,it,tr,pt,cs,da,sv,uk,ro,hu,zh,ja`
 (mehr Sprachmodelle = mehr RAM/Speicherbedarf des Containers).
 
 ## 5. Deploy
@@ -73,13 +82,22 @@ Danach prüfen:
 
 ## Lokal testen
 
+Eine `.env` neben der `docker-compose.yml` mit den Werten anlegen
+(siehe `.env.example`), dann:
+
+```bash
+docker compose up --build
+```
+
+Ohne Compose, nur Dockerfile:
+
 ```bash
 docker build \
   --build-arg NEXT_PUBLIC_SUPABASE_URL=... \
   --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=... \
   -t taverna-zeus .
 
-docker run --rm -p 3000:3000 --env-file .env.local taverna-zeus
+docker run --rm -p 3000:3000 --env-file .env taverna-zeus
 ```
 
 Ohne Docker: `npm run build && node .next/standalone/server.js`
