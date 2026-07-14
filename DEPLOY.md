@@ -36,12 +36,12 @@ eingelesen hat (jede `${VAR}`-Referenz wird ein editierbares Feld). Erscheint
 
 Die beiden `NEXT_PUBLIC_*`-Variablen werden beim `next build` fest ins
 Client-Bundle eingebacken (auch der erlaubte Bild-Host in `next.config.ts` wird
-daraus abgeleitet) und sind in `docker-compose.yaml` als **bloße Build-Args**
-(`args: - NAME`) hinterlegt — Coolify liefert den Wert dann über die von ihm
-geschriebene `.env` an den Build. **Nicht** den Coolify-Toggle „Build Variable?"
-benutzen; der funktioniert bei Docker Compose nicht. Es genügt, die Variable
-normal im Tab „Environment Variables" zu setzen. Nach einer Änderung dieser
-Werte ist ein **Redeploy (Rebuild)** nötig.
+daraus abgeleitet) und sind in `docker-compose.yaml` als Build-Args explizit mit
+`${VAR}` interpoliert (`args: NAME: ${VAR}`) — so erkennt Coolifys UI sie korrekt
+als Variable statt sie als "hardcoded" zu markieren. **Nicht** den Coolify-Toggle
+„Build Variable?" benutzen; der funktioniert bei Docker Compose nicht. Es genügt,
+die Variable normal im Tab „Environment Variables" zu setzen. Nach einer
+Änderung dieser Werte ist ein **Redeploy (Rebuild)** nötig.
 
 `SUPABASE_SERVICE_ROLE_KEY` ist ein Geheimnis mit vollen DB-Rechten — niemals
 mit `NEXT_PUBLIC_`-Prefix versehen und nicht als Build-Arg übergeben.

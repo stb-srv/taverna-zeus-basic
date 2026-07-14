@@ -15,13 +15,13 @@ services:
       context: .
       dockerfile: Dockerfile
       # NEXT_PUBLIC_* werden beim `next build` fest ins Client-Bundle eingebacken
-      # und MÜSSEN daher schon zur Build-Zeit vorliegen. Als BLOSSE Namen listen
-      # (ohne Wert!): docker compose übernimmt den Wert dann aus der von Coolify
-      # geschriebenen .env. NICHT den Coolify-Toggle „Build Variable?" benutzen –
-      # der funktioniert bei Docker Compose nicht.
+      # und MÜSSEN daher schon zur Build-Zeit vorliegen. Explizit als ${VAR}
+      # interpolieren (nicht als bloßer Name): Coolifys UI erkennt Variablen nur
+      # an der ${VAR}-Schreibweise und markiert bloße Namen sonst als "hardcoded",
+      # obwohl sie funktional aus der Umgebung aufgelöst würden.
       args:
-        - NEXT_PUBLIC_SUPABASE_URL
-        - NEXT_PUBLIC_SUPABASE_ANON_KEY
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
     environment:
       # ${VAR} -> erzeugt ein editierbares Feld in der Coolify-UI.
       # Öffentliche Supabase-Anbindung (auch zur Laufzeit für Server Components).
