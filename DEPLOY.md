@@ -29,11 +29,19 @@ Werte eintragen (aus Supabase-Dashboard / `.env.example`):
 | `LIBRETRANSLATE_URL` | nein | optional |
 | `LIBRETRANSLATE_API_KEY` | nein | optional |
 
+Die Felder erscheinen automatisch, sobald Coolify die `docker-compose.yml`
+eingelesen hat (jede `${VAR}`-Referenz wird ein editierbares Feld). Erscheint
+**kein** Feld, ist meist noch der alte Build Pack `Dockerfile` aktiv — auf
+`Docker Compose` umstellen und einmal speichern.
+
 Die beiden `NEXT_PUBLIC_*`-Variablen werden beim `next build` fest ins
 Client-Bundle eingebacken (auch der erlaubte Bild-Host in `next.config.ts` wird
-daraus abgeleitet). Ohne das Buildtime-Häkchen kommen sie im Docker-Build nicht
-an und die Supabase-Anbindung im Browser schlägt fehl. Nach einer Änderung
-dieser Werte ist ein **Redeploy (Rebuild)** nötig.
+daraus abgeleitet) und sind in `docker-compose.yml` als **bloße Build-Args**
+(`args: - NAME`) hinterlegt — Coolify liefert den Wert dann über die von ihm
+geschriebene `.env` an den Build. **Nicht** den Coolify-Toggle „Build Variable?"
+benutzen; der funktioniert bei Docker Compose nicht. Es genügt, die Variable
+normal im Tab „Environment Variables" zu setzen. Nach einer Änderung dieser
+Werte ist ein **Redeploy (Rebuild)** nötig.
 
 `SUPABASE_SERVICE_ROLE_KEY` ist ein Geheimnis mit vollen DB-Rechten — niemals
 mit `NEXT_PUBLIC_`-Prefix versehen und nicht als Build-Arg übergeben.

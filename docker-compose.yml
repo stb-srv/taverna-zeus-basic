@@ -3,10 +3,9 @@
 # Warum Compose statt „Build Pack: Dockerfile"?
 # Coolify liest bei einem reinen Dockerfile-Deploy KEINE .env(.example) ein.
 # Beim Build Pack „Docker Compose" dagegen parst Coolify diese Datei, findet
-# jede ${VARIABLE}-Referenz und legt daraus automatisch ein editierbares Feld
-# im Tab „Environment Variables" an. Die Werte fließen dann sowohl in die
-# Build-Args (NEXT_PUBLIC_*, ins Client-Bundle eingebacken) als auch in die
-# Laufzeit-Umgebung des Containers.
+# jede ${VARIABLE}-Referenz und legt daraus automatisch ein EDITIERBARES Feld
+# im Tab „Environment Variables" an. Coolify schreibt die eingetragenen Werte
+# in eine .env, die docker compose beim Build und zur Laufzeit einliest.
 #
 # Lokal:  docker compose up --build   (Werte aus einer .env neben dieser Datei)
 
@@ -16,29 +15,40 @@ services:
       context: .
       dockerfile: Dockerfile
       # NEXT_PUBLIC_* werden beim `next build` fest ins Client-Bundle eingebacken
-      # und MÜSSEN daher schon zur Build-Zeit als Build-Arg vorliegen.
+      # und MÜSSEN daher schon zur Build-Zeit vorliegen. Als BLOSSE Namen listen
+      # (ohne Wert!): docker compose übernimmt den Wert dann aus der von Coolify
+      # geschriebenen .env. NICHT den Coolify-Toggle „Build Variable?" benutzen –
+      # der funktioniert bei Docker Compose nicht.
       args:
-        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        - NEXT_PUBLIC_SUPABASE_URL
+        - NEXT_PUBLIC_SUPABASE_ANON_KEY
     environment:
+      # ${VAR} -> erzeugt ein editierbares Feld in der Coolify-UI.
       # Öffentliche Supabase-Anbindung (auch zur Laufzeit für Server Components).
-      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
       # Server-only Geheimnis mit vollen DB-Rechten – NIE mit NEXT_PUBLIC_-Prefix.
-      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
-      # LibreTranslate (optional). Leer lassen -> Fallback http://localhost:5000.
-      LIBRETRANSLATE_URL: ${LIBRETRANSLATE_URL:-}
-      LIBRETRANSLATE_API_KEY: ${LIBRETRANSLATE_API_KEY:-}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      # LibreTranslate (optional). :- = editierbares Feld mit leerem Default,
+      # bleibt also nicht als Pflichtfeld rot. Leer -> Fallback http://localhost:5000.
+      - LIBRETRANSLATE_URL=${LIBRETRANSLATE_URL:-}
+      - LIBRETRANSLATE_API_KEY=${LIBRETRANSLATE_API_KEY:-}
     # Coolify routet über seinen Proxy auf diesen Container-Port (Domain in der UI setzen).
     expose:
       - "3000"
     healthcheck:
-      # node:22-alpine hat kein curl, aber busybox-wget. Ermöglicht Rolling Updates.
-      test: ["CMD", "wget", "-q", "-O-", "http://127.0.0.1:3000/api/health"]
+      # Node ist im Image garantiert vorhanden (anders als curl; wget nur via
+      # busybox). fetch ist in Node 22 global. Exit 0 nur bei HTTP 2xx.
+      # Traefik routet erst, wenn der Container „healthy" meldet.
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
       interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 20s
+      start_period: 30s
     restart: unless-stopped
 
   # --- LibreTranslate (optional) ------------------------------------------
