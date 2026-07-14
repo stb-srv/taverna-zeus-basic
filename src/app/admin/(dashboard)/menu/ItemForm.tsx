@@ -33,6 +33,15 @@ export default function ItemForm({
 }) {
   const [state, action, pending] = useActionState(saveItem, initial);
 
+  const topLevel = categories.filter((c) => !c.parent_id);
+  const childrenByParent = new Map<string, Category[]>();
+  for (const c of categories) {
+    if (!c.parent_id) continue;
+    const list = childrenByParent.get(c.parent_id) ?? [];
+    list.push(c);
+    childrenByParent.set(c.parent_id, list);
+  }
+
   return (
     <form action={action} className="max-w-2xl space-y-6">
       {item && <input type="hidden" name="id" value={item.id} />}
@@ -42,9 +51,20 @@ export default function ItemForm({
           <div>
             <label className={labelCls}>Kategorie</label>
             <select name="category_id" defaultValue={item?.category_id ?? categories[0]?.id} className={inputCls}>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>{c.name_de}</option>
-              ))}
+              {topLevel.map((top) => {
+                const kids = childrenByParent.get(top.id) ?? [];
+                if (kids.length === 0) {
+                  return <option key={top.id} value={top.id}>{top.name_de}</option>;
+                }
+                return (
+                  <optgroup key={top.id} label={top.name_de}>
+                    <option value={top.id}>{top.name_de} (allgemein)</option>
+                    {kids.map((k) => (
+                      <option key={k.id} value={k.id}>{k.name_de}</option>
+                    ))}
+                  </optgroup>
+                );
+              })}
             </select>
           </div>
           <div className="w-28">

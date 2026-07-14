@@ -16,6 +16,7 @@ export async function saveCategory(_prev: ActionState, fd: FormData): Promise<Ac
     const id = strOrNull(fd, "id");
     const nameI18n = i18nFromForm((k) => str(fd, k), "name");
     const descI18n = i18nFromForm((k) => str(fd, k), "description");
+    const parentId = strOrNull(fd, "parent_id");
     const payload = {
       slug: str(fd, "slug") || crypto.randomUUID().slice(0, 8),
       name_de: str(fd, "name_de"),
@@ -26,8 +27,31 @@ export async function saveCategory(_prev: ActionState, fd: FormData): Promise<Ac
       description_i18n: descI18n,
       sort_order: intOr(fd, "sort_order"),
       is_active: fd.get("is_active") === "on",
+      parent_id: parentId,
     };
     if (!payload.name_de) return { error: "Name (DE) erforderlich." };
+
+    if (parentId) {
+      if (parentId === id) return { error: "Eine Kategorie kann nicht sich selbst zugeordnet werden." };
+      const { data: parent } = await supabase
+        .from("menu_categories")
+        .select("parent_id")
+        .eq("id", parentId)
+        .maybeSingle();
+      if (parent?.parent_id) {
+        return { error: "Unterkategorien können keine weitere Unterkategorie enthalten." };
+      }
+    }
+    if (id && parentId) {
+      const { data: children } = await supabase
+        .from("menu_categories")
+        .select("id")
+        .eq("parent_id", id)
+        .limit(1);
+      if (children?.length) {
+        return { error: "Diese Kategorie hat Unterkategorien und kann nicht selbst einer Kategorie zugeordnet werden." };
+      }
+    }
 
     let catId = id;
     if (id) {

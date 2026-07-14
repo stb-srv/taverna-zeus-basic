@@ -4,14 +4,16 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Locale } from "@/i18n/routing";
-import type { MenuCategory } from "@/lib/queries";
+import type { MenuCategory, MenuItem } from "@/lib/queries";
 import { localized, formatPrice } from "@/lib/locale";
 
 /**
- * Interactive menu: free-text dish search + toggleable category chips.
- * - No chip selected → all categories shown.
+ * Interactive menu: free-text dish search + toggleable category chips, with
+ * independently collapsible category/subcategory sections.
+ * - No chip selected → all top-level categories shown.
  * - Clicking a chip adds its category to the view; clicking it again removes it.
- * - Search filters dishes by name/description across the visible categories.
+ * - Search filters dishes by name/description across visible categories and
+ *   subcategories, and force-opens any section containing a match.
  */
 export default function MenuBrowser({
   categories,
@@ -23,6 +25,9 @@ export default function MenuBrowser({
   const t = useTranslations("menu");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [query, setQuery] = useState("");
+  const [openIds, setOpenIds] = useState<Set<string>>(
+    () => new Set(categories.flatMap((c) => [c.id, ...c.subcategories.map((s) => s.id)])),
+  );
 
   function toggleCategory(id: string) {
     setSelected((prev) => {
@@ -33,33 +38,56 @@ export default function MenuBrowser({
     });
   }
 
+  function handleToggleOpen(id: string, e: React.SyntheticEvent<HTMLDetailsElement>) {
+    const isOpen = e.currentTarget.open;
+    setOpenIds((prev) => {
+      const next = new Set(prev);
+      if (isOpen) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
+
   const normalizedQuery = query.trim().toLowerCase();
 
-  // Apply category selection first, then the text search within each category.
+  // Apply category selection first, then the text search within each category/subcategory.
   const visible = useMemo(() => {
+    function filterItems(items: MenuItem[]): MenuItem[] {
+      if (!normalizedQuery) return items;
+      return items.filter((item) => {
+        const haystack = [
+          localized(item, "name", locale),
+          localized(item, "description", locale),
+          item.item_number ?? "",
+        ]
+          .join(" ")
+          .toLowerCase();
+        return haystack.includes(normalizedQuery);
+      });
+    }
+
     const byCategory = selected.size === 0 ? categories : categories.filter((c) => selected.has(c.id));
 
     return byCategory
       .map((category) => {
-        const items = normalizedQuery
-          ? category.menu_items.filter((item) => {
-              const haystack = [
-                localized(item, "name", locale),
-                localized(item, "description", locale),
-                item.item_number ?? "",
-              ]
-                .join(" ")
-                .toLowerCase();
-              return haystack.includes(normalizedQuery);
-            })
-          : category.menu_items;
-        return { category, items };
+        const items = filterItems(category.menu_items);
+        const subcategories = category.subcategories.map((sub) => ({
+          subcategory: sub,
+          items: filterItems(sub.menu_items),
+        }));
+        return { category, items, subcategories };
       })
-      // While searching, hide categories that have no matches.
-      .filter(({ items }) => !normalizedQuery || items.length > 0);
+      // While searching, hide categories that have no matches anywhere.
+      .filter(
+        ({ items, subcategories }) =>
+          !normalizedQuery || items.length > 0 || subcategories.some((s) => s.items.length > 0),
+      );
   }, [categories, selected, normalizedQuery, locale]);
 
-  const totalItems = visible.reduce((sum, { items }) => sum + items.length, 0);
+  const totalItems = visible.reduce(
+    (sum, { items, subcategories }) => sum + items.length + subcategories.reduce((s, sc) => s + sc.items.length, 0),
+    0,
+  );
 
   return (
     <div>
@@ -120,72 +148,114 @@ export default function MenuBrowser({
         <p className="py-8 text-center text-sm text-muted">{t("noResults")}</p>
       ) : (
         <div className="space-y-12">
-          {visible.map(({ category, items }) => (
-            <section key={category.id}>
-              <h2 className="rule-gold mb-3 inline-block text-2xl text-primary">
-                {localized(category, "name", locale)}
-              </h2>
-              {localized(category, "description", locale) && (
-                <p className="mt-2 text-sm text-muted">
-                  {localized(category, "description", locale)}
-                </p>
-              )}
+          {visible.map(({ category, items, subcategories }) => {
+            const hasMatches = items.length > 0 || subcategories.some((s) => s.items.length > 0);
+            const forcedOpen = normalizedQuery.length > 0 && hasMatches;
+            const noItemsAtAll = items.length === 0 && subcategories.every((s) => s.items.length === 0);
 
-              {items.length === 0 ? (
-                <p className="mt-4 text-sm text-muted">{t("noItems")}</p>
-              ) : (
-                <ul className="mt-4 divide-y divide-border">
-                  {items.map((item) => {
-                    const codes = [
-                      ...item.menu_item_allergens.map((a) => a.allergens?.code),
-                      ...item.menu_item_additives.map((a) => a.additives?.code),
-                    ].filter(Boolean);
+            return (
+              <section key={category.id}>
+                <details
+                  open={forcedOpen || openIds.has(category.id)}
+                  onToggle={(e) => handleToggleOpen(category.id, e)}
+                >
+                  <summary
+                    onClick={(e) => {
+                      if (forcedOpen) e.preventDefault();
+                    }}
+                    className="rule-gold mb-3 inline-block cursor-pointer select-none text-2xl text-primary"
+                  >
+                    {localized(category, "name", locale)}
+                  </summary>
+                  {localized(category, "description", locale) && (
+                    <p className="mt-2 text-sm text-muted">{localized(category, "description", locale)}</p>
+                  )}
 
-                    return (
-                      <li
-                        key={item.id}
-                        className="-mx-3 flex gap-4 rounded-2xl px-3 py-4 transition-colors hover:bg-accent-soft/40"
-                      >
-                        {item.image_url && (
-                          <Image
-                            src={item.image_url}
-                            alt={localized(item, "name", locale)}
-                            width={96}
-                            height={96}
-                            className="h-24 w-24 shrink-0 rounded-lg object-cover"
-                          />
-                        )}
-                        <div className="flex-1">
-                          <div className="flex items-baseline justify-between gap-3">
-                            <h3 className="font-display text-lg">
-                              {item.item_number && (
-                                <span className="mr-2 text-sm text-muted">{item.item_number}</span>
-                              )}
-                              {localized(item, "name", locale)}
-                              {codes.length > 0 && (
-                                <sup className="ml-1 text-xs text-muted">({codes.join(", ")})</sup>
-                              )}
-                            </h3>
-                            <span className="whitespace-nowrap font-medium text-primary">
-                              {formatPrice(item.price, locale)}
-                            </span>
-                          </div>
-                          {localized(item, "description", locale) && (
-                            <p className="mt-1 text-sm text-foreground/70">
-                              {localized(item, "description", locale)}
-                            </p>
-                          )}
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </section>
-          ))}
+                  {noItemsAtAll ? (
+                    <p className="mt-4 text-sm text-muted">{t("noItems")}</p>
+                  ) : (
+                    <>
+                      {items.length > 0 && <ItemList items={items} locale={locale} />}
+                      {subcategories.map(({ subcategory, items: subItems }) => {
+                        if (normalizedQuery && subItems.length === 0) return null;
+                        const subForcedOpen = normalizedQuery.length > 0 && subItems.length > 0;
+                        return (
+                          <details
+                            key={subcategory.id}
+                            open={subForcedOpen || openIds.has(subcategory.id)}
+                            onToggle={(e) => handleToggleOpen(subcategory.id, e)}
+                            className="mt-6 ml-2"
+                          >
+                            <summary
+                              onClick={(e) => {
+                                if (subForcedOpen) e.preventDefault();
+                              }}
+                              className="cursor-pointer select-none font-display text-lg text-foreground/90"
+                            >
+                              {localized(subcategory, "name", locale)}
+                            </summary>
+                            {subItems.length === 0 ? (
+                              <p className="mt-2 text-sm text-muted">{t("noItems")}</p>
+                            ) : (
+                              <ItemList items={subItems} locale={locale} />
+                            )}
+                          </details>
+                        );
+                      })}
+                    </>
+                  )}
+                </details>
+              </section>
+            );
+          })}
         </div>
       )}
     </div>
+  );
+}
+
+function ItemList({ items, locale }: { items: MenuItem[]; locale: Locale }) {
+  return (
+    <ul className="mt-4 divide-y divide-border">
+      {items.map((item) => {
+        const codes = [
+          ...item.menu_item_allergens.map((a) => a.allergens?.code),
+          ...item.menu_item_additives.map((a) => a.additives?.code),
+        ].filter(Boolean);
+
+        return (
+          <li
+            key={item.id}
+            className="-mx-3 flex gap-4 rounded-2xl px-3 py-4 transition-colors hover:bg-accent-soft/40"
+          >
+            {item.image_url && (
+              <Image
+                src={item.image_url}
+                alt={localized(item, "name", locale)}
+                width={96}
+                height={96}
+                className="h-24 w-24 shrink-0 rounded-lg object-cover"
+              />
+            )}
+            <div className="flex-1">
+              <div className="flex items-baseline justify-between gap-3">
+                <h3 className="font-display text-lg">
+                  {item.item_number && <span className="mr-2 text-sm text-muted">{item.item_number}</span>}
+                  {localized(item, "name", locale)}
+                  {codes.length > 0 && <sup className="ml-1 text-xs text-muted">({codes.join(", ")})</sup>}
+                </h3>
+                <span className="whitespace-nowrap font-medium text-primary">
+                  {formatPrice(item.price, locale)}
+                </span>
+              </div>
+              {localized(item, "description", locale) && (
+                <p className="mt-1 text-sm text-foreground/70">{localized(item, "description", locale)}</p>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

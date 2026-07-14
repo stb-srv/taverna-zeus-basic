@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { str } from "@/lib/form-data";
+import { resolveParentIds } from "@/lib/menu-transfer";
 import { guard, revalidatePublic, type ActionState, type AdminClient } from "./shared";
 
 export type { ActionState } from "./shared";
@@ -117,6 +118,17 @@ export async function importMenu(_prev: ActionState, fd: FormData): Promise<Acti
       .select("id, slug");
     if (catIns.error) return { error: catIns.error.message };
     const catIdBySlug = new Map((catIns.data ?? []).map((c) => [c.slug, c.id]));
+
+    const parentIds = resolveParentIds(
+      categories.map((c) => ({
+        slug: String(c.slug ?? ""),
+        parent_slug: (c.parent_slug as string | null) ?? null,
+      })),
+      catIdBySlug,
+    );
+    for (const [childId, parentId] of parentIds) {
+      await supabase.from("menu_categories").update({ parent_id: parentId }).eq("id", childId);
+    }
 
     for (const it of items) {
       const categoryId = catIdBySlug.get(String(it.category_slug));

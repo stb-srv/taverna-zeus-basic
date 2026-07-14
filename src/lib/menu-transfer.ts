@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "./supabase/types";
 
 /** Bump when the export shape changes in a non-backwards-compatible way. */
-export const MENU_EXPORT_VERSION = 2;
+export const MENU_EXPORT_VERSION = 3;
 
 export type ExportCategory = {
   slug: string;
@@ -12,6 +12,8 @@ export type ExportCategory = {
   description_en: string | null;
   sort_order: number;
   is_active: boolean;
+  /** Slug of the parent category, or null for a top-level category. */
+  parent_slug: string | null;
 };
 
 export type ExportItem = {
@@ -68,6 +70,7 @@ export async function collectMenu(
       description_en: c.description_en,
       sort_order: c.sort_order,
       is_active: c.is_active,
+      parent_slug: c.parent_id ? (catSlug.get(c.parent_id) ?? null) : null,
     })),
     items: (items ?? []).map((i) => ({
       category_slug: catSlug.get(i.category_id) ?? null,
@@ -89,6 +92,32 @@ export async function collectMenu(
         .filter(Boolean) as string[],
     })),
   };
+}
+
+/**
+ * Resolves `parent_slug` references (from an import manifest) to `parent_id`
+ * updates, given the slug→id map built from freshly-inserted categories.
+ * Order-independent (both ids already exist by the time this runs). Caps
+ * nesting at one level: if the declared parent itself has a `parent_slug` in
+ * the source data, the link is dropped rather than creating a 3rd level.
+ * Unresolvable or self-referencing links are silently ignored.
+ */
+export function resolveParentIds(
+  categories: Array<{ slug: string; parent_slug: string | null }>,
+  idBySlug: Map<string, string>,
+): Map<string, string> {
+  const parentSlugOf = new Map(categories.map((c) => [c.slug, c.parent_slug]));
+  const result = new Map<string, string>();
+  for (const c of categories) {
+    if (!c.parent_slug) continue;
+    if (parentSlugOf.get(c.parent_slug)) continue; // parent itself has a parent — cap at 2 levels
+    const childId = idBySlug.get(c.slug);
+    const parentId = idBySlug.get(c.parent_slug);
+    if (childId && parentId && childId !== parentId) {
+      result.set(childId, parentId);
+    }
+  }
+  return result;
 }
 
 /** Turns an image URL/path into a safe, unique filename for the ZIP `images/` folder. */

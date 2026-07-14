@@ -8,7 +8,13 @@ import { getEnabledLocales } from "@/lib/locales";
 
 export type ActionState = { ok?: boolean; error?: string };
 
-export type TranslatableTable = "menu_items" | "menu_categories" | "pages" | "restaurant_settings";
+export type TranslatableTable =
+  | "menu_items"
+  | "menu_categories"
+  | "pages"
+  | "restaurant_settings"
+  | "allergens"
+  | "additives";
 
 /** Supabase client as returned by `guard()`. */
 export type AdminClient = Awaited<ReturnType<typeof createClient>>;

@@ -112,6 +112,7 @@ export type Database = {
           name_de: string
           name_en: string
           name_i18n: Json
+          parent_id: string | null
           slug: string
           sort_order: number
           updated_at: string
@@ -126,6 +127,7 @@ export type Database = {
           name_de: string
           name_en: string
           name_i18n?: Json
+          parent_id?: string | null
           slug: string
           sort_order?: number
           updated_at?: string
@@ -140,11 +142,20 @@ export type Database = {
           name_de?: string
           name_en?: string
           name_i18n?: Json
+          parent_id?: string | null
           slug?: string
           sort_order?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "menu_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "menu_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       menu_item_additives: {
         Row: {

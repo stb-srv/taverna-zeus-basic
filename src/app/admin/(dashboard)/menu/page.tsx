@@ -14,6 +14,16 @@ export default async function MenuAdminPage() {
   ]);
 
   const cats = categories ?? [];
+  const topLevel = cats.filter((c) => !c.parent_id);
+  const childrenByParent = new Map<string, typeof cats>();
+  for (const c of cats) {
+    if (!c.parent_id) continue;
+    const list = childrenByParent.get(c.parent_id) ?? [];
+    list.push(c);
+    childrenByParent.set(c.parent_id, list);
+  }
+  const parentNameById = new Map(cats.map((c) => [c.id, c.name_de]));
+
   const byCategory = new Map<string, typeof items>();
   for (const it of items ?? []) {
     const list = byCategory.get(it.category_id) ?? [];
@@ -28,18 +38,28 @@ export default async function MenuAdminPage() {
           <h1 className="font-display text-3xl">Speisekarte</h1>
           <p className="mt-1 text-sm text-muted">Kategorien und Speisen verwalten.</p>
         </div>
-        <Link href="/admin/menu/item/new" className={btnPrimary}>
-          + Neue Speise
-        </Link>
+        <div className="flex gap-3">
+          <Link href="/admin/menu/allergens" className={btnGhost}>
+            Allergene &amp; Zusatzstoffe
+          </Link>
+          <Link href="/admin/menu/item/new" className={btnPrimary}>
+            + Neue Speise
+          </Link>
+        </div>
       </div>
 
       {/* Categories */}
       <section className="space-y-3">
         <h2 className="font-display text-xl">Kategorien</h2>
-        {cats.map((c) => (
-          <CategoryRow key={c.id} category={c} />
+        {topLevel.map((c) => (
+          <div key={c.id} className="space-y-3">
+            <CategoryRow category={c} parentOptions={topLevel} hasChildren={childrenByParent.has(c.id)} />
+            {(childrenByParent.get(c.id) ?? []).map((child) => (
+              <CategoryRow key={child.id} category={child} parentOptions={topLevel} indent />
+            ))}
+          </div>
         ))}
-        <AddCategory />
+        <AddCategory parentOptions={topLevel} />
       </section>
 
       {/* Items grouped by category */}
@@ -47,10 +67,13 @@ export default async function MenuAdminPage() {
         <h2 className="font-display text-xl">Speisen</h2>
         {cats.map((c) => {
           const list = byCategory.get(c.id) ?? [];
+          const heading = c.parent_id
+            ? `${parentNameById.get(c.parent_id) ?? ""} › ${c.name_de}`
+            : c.name_de;
           return (
             <div key={c.id}>
               <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">
-                {c.name_de}
+                {heading}
               </h3>
               {list.length === 0 ? (
                 <p className="text-sm text-muted">Keine Speisen.</p>

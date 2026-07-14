@@ -22,13 +22,12 @@ export async function getOpeningHours() {
   return data ?? [];
 }
 
-/** Active categories with their active items, each including allergen & additive codes. */
-export async function getMenu() {
+async function fetchRawMenu() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("menu_categories")
     .select(
-      `id, slug, name_de, name_en, name_i18n, description_de, description_en, description_i18n, sort_order,
+      `id, slug, name_de, name_en, name_i18n, description_de, description_en, description_i18n, sort_order, parent_id,
        menu_items (
          id, item_number, name_de, name_en, name_i18n, description_de, description_en, description_i18n,
          price, image_url, sort_order,
@@ -39,6 +38,33 @@ export async function getMenu() {
     .order("sort_order", { ascending: true })
     .order("sort_order", { ascending: true, referencedTable: "menu_items" });
   return data ?? [];
+}
+
+type RawCategory = Awaited<ReturnType<typeof fetchRawMenu>>[number];
+export type MenuItem = RawCategory["menu_items"][number];
+export type MenuCategory = Omit<RawCategory, "menu_items"> & {
+  menu_items: MenuItem[];
+  subcategories: MenuCategory[];
+};
+
+/**
+ * Active categories with their active items, each including allergen &
+ * additive codes. Returns only top-level categories; each carries its
+ * subcategories (one level deep) with their own items nested inside.
+ */
+export async function getMenu(): Promise<MenuCategory[]> {
+  const flat = await fetchRawMenu();
+  const byId = new Map<string, MenuCategory>(flat.map((c) => [c.id, { ...c, subcategories: [] }]));
+  const roots: MenuCategory[] = [];
+  for (const c of flat) {
+    const node = byId.get(c.id)!;
+    if (c.parent_id && byId.has(c.parent_id)) {
+      byId.get(c.parent_id)!.subcategories.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
 }
 
 /** All allergen + additive definitions, for the legend on the menu page. */
@@ -74,6 +100,3 @@ export async function getPage(slug: string) {
     .maybeSingle();
   return data;
 }
-
-export type MenuCategory = Awaited<ReturnType<typeof getMenu>>[number];
-export type MenuItem = MenuCategory["menu_items"][number];
