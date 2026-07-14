@@ -58,8 +58,10 @@ export default async function LocaleLayout({
       className={fontVars}
       suppressHydrationWarning
     >
-      <body className="flex min-h-screen flex-col">
+      <head>
         <ThemeScript />
+      </head>
+      <body className="flex min-h-screen flex-col">
         <NextIntlClientProvider>
           <Nav restaurantName={name} locales={enabled} pages={pages} />
           <main className="flex-1">{children}</main>

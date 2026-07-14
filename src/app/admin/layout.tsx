@@ -13,8 +13,10 @@ export const metadata: Metadata = {
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de" data-scroll-behavior="smooth" className={fontVars} suppressHydrationWarning>
-      <body className="min-h-screen bg-background text-foreground">
+      <head>
         <ThemeScript />
+      </head>
+      <body className="min-h-screen bg-background text-foreground">
         {children}
         <FloatingActions />
       </body>
