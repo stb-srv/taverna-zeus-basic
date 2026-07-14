@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/routing";
-import { SOURCE_LOCALE, type I18nMap } from "./i18n-fields";
+import { SOURCE_LOCALE, type I18nMap } from "./fields";
 
 /**
  * Every content table with machine-translated `<field>_i18n` columns.

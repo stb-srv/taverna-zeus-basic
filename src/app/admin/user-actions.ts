@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/supabase/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getAdminLocale } from "@/lib/locales";
+import { getAdminLocale } from "@/i18n/locale-state";
 
 export type State = { ok?: boolean; error?: string };
 

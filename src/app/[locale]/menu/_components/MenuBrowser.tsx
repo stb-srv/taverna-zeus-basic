@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { Locale } from "@/i18n/routing";
 import type { MenuCategory, MenuItem } from "@/lib/queries";
-import { localized, formatPrice } from "@/lib/locale";
+import { localized, formatPrice } from "@/i18n/localized-content";
 
 /**
  * Interactive menu: free-text dish search + toggleable category chips, with

@@ -4,7 +4,7 @@ import { requireUser } from "@/lib/supabase/auth";
 import { logout } from "../auth-actions";
 import Sidebar from "./Sidebar";
 import IdleLogout from "./IdleLogout";
-import AdminLanguageSwitcher from "../AdminLanguageSwitcher";
+import AdminLanguageSwitcher from "@/components/admin/AdminLanguageSwitcher";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();

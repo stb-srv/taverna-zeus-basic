@@ -1,10 +1,10 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "./supabase/types";
+import type { Database } from "@/lib/supabase/types";
 import type { Locale } from "@/i18n/routing";
 import { translateBatch } from "./translate";
-import { SOURCE_LOCALE, type I18nMap } from "./i18n-fields";
+import { SOURCE_LOCALE, type I18nMap } from "./fields";
 import { missingForRow, TRANSLATABLE_TABLES } from "./translation-status";
 
 type Row = Record<string, unknown> & { id: string | number };

@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { login, type LoginState } from "../auth-actions";
-import AdminLanguageSwitcher from "../AdminLanguageSwitcher";
+import AdminLanguageSwitcher from "@/components/admin/AdminLanguageSwitcher";
 
 const initial: LoginState = {};
 

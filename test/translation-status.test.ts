@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { missingForRow, missingLocales, TRANSLATABLE_TABLES } from "@/lib/translation-status";
+import { missingForRow, missingLocales, TRANSLATABLE_TABLES } from "@/i18n/translation-status";
 import type { Locale } from "@/i18n/routing";
 
 /** Enabled locales as passed by the callers (incl. the DE source). */

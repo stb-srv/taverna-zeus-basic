@@ -1,8 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { DEFAULT_ENABLED_LOCALES, type Locale } from "@/i18n/routing";
-import type { Database } from "./supabase/types";
+import type { Database } from "@/lib/supabase/types";
 import { translateBatch } from "./translate";
-import { SOURCE_LOCALE } from "./i18n-fields";
+import { SOURCE_LOCALE } from "./fields";
 import deMessages from "../../messages/de.json";
 
 export type MessageTree = { [key: string]: string | MessageTree };

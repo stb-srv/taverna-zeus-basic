@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { autofillI18n, i18nFromForm } from "@/lib/i18n-fields";
-import { translateBatch } from "@/lib/translate";
+import { autofillI18n, i18nFromForm } from "@/i18n/fields";
+import { translateBatch } from "@/i18n/translate";
 import type { Locale } from "@/i18n/routing";
 
-vi.mock("@/lib/translate", () => ({ translateBatch: vi.fn() }));
+vi.mock("@/i18n/translate", () => ({ translateBatch: vi.fn() }));
 
 const translateMock = vi.mocked(translateBatch);
 

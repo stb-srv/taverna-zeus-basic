@@ -1,6 +1,6 @@
 import { DEFAULT_ENABLED_LOCALES, type Locale } from "./routing";
-import { getUiMessages } from "@/lib/locales";
-import { mergeMessages, type MessageTree } from "@/lib/ui-messages";
+import { getUiMessages } from "@/i18n/locale-state";
+import { mergeMessages, type MessageTree } from "@/i18n/ui-messages";
 import deMessages from "../../messages/de.json";
 
 /**

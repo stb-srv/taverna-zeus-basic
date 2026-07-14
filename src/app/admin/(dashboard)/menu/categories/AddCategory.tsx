@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { saveCategory, type ActionState } from "@/app/admin/actions/menu";
-import { inputCls, btnPrimary } from "../ui";
+import { inputCls, btnPrimary } from "@/components/admin/ui";
 import type { Database } from "@/lib/supabase/types";
 
 type Category = Database["public"]["Tables"]["menu_categories"]["Row"];

@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import { getTranslations } from "next-intl/server";
-import { i18nFromForm } from "@/lib/i18n-fields";
+import { i18nFromForm } from "@/i18n/fields";
 import { str, strOrNull } from "@/lib/form-data";
-import { getAdminLocale } from "@/lib/locales";
+import { getAdminLocale } from "@/i18n/locale-state";
 import { fillTranslations, guard, revalidatePublic, type ActionState } from "./shared";
 
 export type { ActionState } from "./shared";

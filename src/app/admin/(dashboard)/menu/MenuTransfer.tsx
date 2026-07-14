@@ -3,7 +3,7 @@
 import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { importMenu, type ActionState } from "@/app/admin/actions/menu-import";
-import { btnGhost, btnPrimary, inputCls } from "../ui";
+import { btnGhost, btnPrimary, inputCls } from "@/components/admin/ui";
 
 const initial: ActionState = {};
 

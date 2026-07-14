@@ -4,10 +4,10 @@ import {
   mergeMessages,
   translateUiMessages,
   type MessageTree,
-} from "@/lib/ui-messages";
-import { translateBatch } from "@/lib/translate";
+} from "@/i18n/ui-messages";
+import { translateBatch } from "@/i18n/translate";
 
-vi.mock("@/lib/translate", () => ({ translateBatch: vi.fn() }));
+vi.mock("@/i18n/translate", () => ({ translateBatch: vi.fn() }));
 
 const translateMock = vi.mocked(translateBatch);
 

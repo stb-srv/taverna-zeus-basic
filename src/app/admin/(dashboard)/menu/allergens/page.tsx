@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { btnGhost } from "../../ui";
+import { btnGhost } from "@/components/admin/ui";
 import AllergenRow from "./AllergenRow";
 import AddAllergen from "./AddAllergen";
 import AdditiveRow from "./AdditiveRow";

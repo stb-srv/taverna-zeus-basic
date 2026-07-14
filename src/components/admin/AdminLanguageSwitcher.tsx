@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { setAdminLocale } from "./actions/admin-locale";
+import { setAdminLocale } from "@/app/admin/actions/admin-locale";
 import { localeNames, type Locale } from "@/i18n/routing";
 import { useEnabledLocales } from "./EnabledLocalesContext";
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatPrice, formatTime, localized } from "@/lib/locale";
+import { formatPrice, formatTime, localized } from "@/i18n/localized-content";
 
 /** Intl inserts non-breaking spaces; normalize for readable assertions. */
 function plain(s: string): string {

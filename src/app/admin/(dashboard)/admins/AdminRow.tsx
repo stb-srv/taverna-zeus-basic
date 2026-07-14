@@ -4,7 +4,7 @@ import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { changeAdminPassword, type State } from "../../user-actions";
 import { removeAdmin } from "@/app/admin/actions/admins";
-import { inputCls, btnGhost, btnDanger } from "../ui";
+import { inputCls, btnGhost, btnDanger } from "@/components/admin/ui";
 
 const initial: State = {};
 

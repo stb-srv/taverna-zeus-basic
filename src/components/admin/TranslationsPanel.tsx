@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { localeNames, rtlLocales } from "@/i18n/routing";
 import { retranslate } from "@/app/admin/actions/translations";
-import { useEnabledLocales } from "../EnabledLocalesContext";
+import { useEnabledLocales } from "./EnabledLocalesContext";
 import { inputCls, btnGhost } from "./ui";
 
 export type TranslField = {

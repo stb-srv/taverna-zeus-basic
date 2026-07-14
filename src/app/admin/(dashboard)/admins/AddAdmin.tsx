@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { createAdminUser, type State } from "../../user-actions";
-import { inputCls, btnPrimary } from "../ui";
+import { inputCls, btnPrimary } from "@/components/admin/ui";
 
 const initial: State = {};
 

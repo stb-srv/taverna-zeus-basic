@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { routing, type Locale } from "@/i18n/routing";
-import { ADMIN_LOCALE_COOKIE, getEnabledLocales } from "@/lib/locales";
+import { ADMIN_LOCALE_COOKIE, getEnabledLocales } from "@/i18n/locale-state";
 
 /**
  * Sets the admin UI's own display language (independent of the public site's

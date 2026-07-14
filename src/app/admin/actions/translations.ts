@@ -1,10 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import type { I18nMap } from "@/lib/i18n-fields";
-import { backfillMissingTranslations } from "@/lib/i18n-backfill";
-import { getEnabledLocales } from "@/lib/locales";
-import { backfillMissingUiMessages } from "@/lib/ui-messages";
+import type { I18nMap } from "@/i18n/fields";
+import { backfillMissingTranslations } from "@/i18n/backfill";
+import { getEnabledLocales } from "@/i18n/locale-state";
+import { backfillMissingUiMessages } from "@/i18n/ui-messages";
 import { str } from "@/lib/form-data";
 import { routing } from "@/i18n/routing";
 import {

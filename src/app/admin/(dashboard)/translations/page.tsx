@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_ENABLED_LOCALES, localeNames, routing, type Locale } from "@/i18n/routing";
-import { getEnabledLocales } from "@/lib/locales";
-import { collectTranslationStatus } from "@/lib/i18n-backfill";
-import { missingUiLocales } from "@/lib/ui-messages";
+import { getEnabledLocales } from "@/i18n/locale-state";
+import { collectTranslationStatus } from "@/i18n/backfill";
+import { missingUiLocales } from "@/i18n/ui-messages";
 import BackfillButton from "./BackfillButton";
 import LocalesForm from "./LocalesForm";
 

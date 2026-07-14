@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { savePage, type ActionState } from "@/app/admin/actions/pages";
-import { inputCls, labelCls, btnPrimary, btnGhost } from "../ui";
-import TranslationsPanel from "../TranslationsPanel";
+import { inputCls, labelCls, btnPrimary, btnGhost } from "@/components/admin/ui";
+import TranslationsPanel from "@/components/admin/TranslationsPanel";
 import type { Database } from "@/lib/supabase/types";
 
 type Page = Database["public"]["Tables"]["pages"]["Row"];

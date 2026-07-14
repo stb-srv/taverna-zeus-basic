@@ -2,7 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getSettings, getOpeningHours } from "@/lib/queries";
-import { localized } from "@/lib/locale";
+import { localized } from "@/i18n/localized-content";
 import OpeningHours from "@/components/OpeningHours";
 
 export default async function HomePage({

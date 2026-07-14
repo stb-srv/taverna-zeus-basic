@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { getAdminLocale } from "@/lib/locales";
+import { getAdminLocale } from "@/i18n/locale-state";
 
 export type LoginState = { error?: string };
 

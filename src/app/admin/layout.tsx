@@ -4,9 +4,9 @@ import { fontVars } from "@/lib/fonts";
 import FloatingActions from "@/components/FloatingActions";
 import ThemeScript from "@/components/ThemeScript";
 import { rtlLocales } from "@/i18n/routing";
-import { getAdminLocale, getEnabledLocales } from "@/lib/locales";
+import { getAdminLocale, getEnabledLocales } from "@/i18n/locale-state";
 import { resolveMessages } from "@/i18n/messages";
-import { EnabledLocalesProvider } from "./EnabledLocalesContext";
+import { EnabledLocalesProvider } from "@/components/admin/EnabledLocalesContext";
 import "../globals.css";
 
 export const metadata: Metadata = {

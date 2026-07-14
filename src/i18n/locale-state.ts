@@ -2,7 +2,7 @@ import "server-only";
 
 import { cache } from "react";
 import { cookies } from "next/headers";
-import { createClient } from "./supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { DEFAULT_ENABLED_LOCALES, routing, type Locale } from "@/i18n/routing";
 
 /** Cookie holding the admin UI's own display language (separate from public site content). */

@@ -3,8 +3,8 @@ import "server-only";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/supabase/auth";
-import { autofillI18n, type I18nMap } from "@/lib/i18n-fields";
-import { getEnabledLocales } from "@/lib/locales";
+import { autofillI18n, type I18nMap } from "@/i18n/fields";
+import { getEnabledLocales } from "@/i18n/locale-state";
 
 export type ActionState = { ok?: boolean; error?: string };
 

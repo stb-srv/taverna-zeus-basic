@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { saveAllergen, deleteAllergen, type ActionState } from "@/app/admin/actions/allergens";
-import { inputCls, btnGhost, btnDanger } from "../../ui";
+import { inputCls, btnGhost, btnDanger } from "@/components/admin/ui";
 import type { Database } from "@/lib/supabase/types";
 
 type Allergen = Database["public"]["Tables"]["allergens"]["Row"];

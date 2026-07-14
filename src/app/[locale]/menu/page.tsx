@@ -1,8 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getMenu, getLabels } from "@/lib/queries";
-import { localized } from "@/lib/locale";
-import MenuBrowser from "@/components/MenuBrowser";
+import { localized } from "@/i18n/localized-content";
+import MenuBrowser from "./_components/MenuBrowser";
 
 export async function generateMetadata() {
   const t = await getTranslations("menu");

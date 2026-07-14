@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { formatTime } from "@/lib/locale";
+import { formatTime } from "@/i18n/localized-content";
 import type { Database } from "@/lib/supabase/types";
 
 type Hours = Database["public"]["Tables"]["opening_hours"]["Row"];

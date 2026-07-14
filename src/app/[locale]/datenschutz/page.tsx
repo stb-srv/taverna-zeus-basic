@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getPage } from "@/lib/queries";
-import { localized } from "@/lib/locale";
+import { localized } from "@/i18n/localized-content";
 import Markdown from "@/components/Markdown";
 
 export async function generateMetadata({

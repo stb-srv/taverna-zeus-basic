@@ -4,9 +4,9 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { saveItem, type ActionState } from "@/app/admin/actions/menu";
-import { inputCls, labelCls, btnPrimary, btnGhost } from "../ui";
-import ImageUpload from "../ImageUpload";
-import TranslationsPanel from "../TranslationsPanel";
+import { inputCls, labelCls, btnPrimary, btnGhost } from "@/components/admin/ui";
+import ImageUpload from "@/components/admin/ImageUpload";
+import TranslationsPanel from "@/components/admin/TranslationsPanel";
 import type { Database } from "@/lib/supabase/types";
 
 type I18n = Record<string, string>;
