@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getItemFormOptions } from "../../data";
 import ItemForm from "../../ItemForm";
@@ -24,10 +25,11 @@ export default async function EditItemPage({
 
   const selectedAllergens = item.menu_item_allergens.map((a) => a.allergen_id);
   const selectedAdditives = item.menu_item_additives.map((a) => a.additive_id);
+  const t = await getTranslations("admin.menu");
 
   return (
     <div>
-      <h1 className="mb-6 font-display text-3xl">Speise bearbeiten</h1>
+      <h1 className="mb-6 font-display text-3xl">{t("editItem")}</h1>
       <ItemForm
         item={item}
         categories={options.categories}

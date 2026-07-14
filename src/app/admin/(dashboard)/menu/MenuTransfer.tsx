@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { useTranslations } from "next-intl";
 import { importMenu, type ActionState } from "@/app/admin/actions/menu-import";
 import { btnGhost, btnPrimary, inputCls } from "../ui";
 
@@ -9,13 +10,13 @@ const initial: ActionState = {};
 export default function MenuTransfer() {
   const [state, action, pending] = useActionState(importMenu, initial);
   const [fileName, setFileName] = useState<string | null>(null);
+  const t = useTranslations("admin.menu.transfer");
 
   return (
     <section className="card-soft space-y-4 p-6 hover:translate-y-0">
-      <h2 className="font-display text-xl">Import / Export</h2>
+      <h2 className="font-display text-xl">{t("title")}</h2>
       <p className="text-sm text-muted">
-        Sichere die komplette Speisekarte als ZIP-Paket – inklusive aller Bilder – oder spiele ein
-        zuvor exportiertes Paket wieder ein. <strong>Import ersetzt die gesamte Speisekarte.</strong>
+        {t("description")} <strong>{t("descriptionStrong")}</strong>
       </p>
 
       <a
@@ -24,13 +25,13 @@ export default function MenuTransfer() {
         download
       >
         <DownloadIcon />
-        Speisekarte exportieren (ZIP)
+        {t("exportButton")}
       </a>
 
       <form
         action={action}
         onSubmit={(e) => {
-          if (!confirm("Import ersetzt die komplette Speisekarte. Fortfahren?")) e.preventDefault();
+          if (!confirm(t("importConfirm"))) e.preventDefault();
         }}
         className="space-y-3 border-t border-border pt-4"
       >
@@ -41,21 +42,25 @@ export default function MenuTransfer() {
           onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
           className="block text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-primary-dark"
         />
-        {fileName && <p className="text-xs text-muted">Ausgewählt: {fileName}</p>}
+        {fileName && (
+          <p className="text-xs text-muted">
+            {t("selectedPrefix")} {fileName}
+          </p>
+        )}
         <details className="text-sm text-muted">
-          <summary className="cursor-pointer select-none">… oder JSON direkt einfügen</summary>
+          <summary className="cursor-pointer select-none">{t("pasteJson")}</summary>
           <textarea
             name="data"
             rows={5}
-            placeholder="JSON hier einfügen"
+            placeholder={t("pasteJsonPlaceholder")}
             className={`${inputCls} mt-2 font-mono text-xs`}
           />
         </details>
         <div className="flex items-center gap-4">
           <button type="submit" disabled={pending} className={btnPrimary}>
-            {pending ? "Import …" : "Importieren"}
+            {pending ? t("importing") : t("importButton")}
           </button>
-          {state.ok && <span className="text-sm text-primary">Import erfolgreich ✓</span>}
+          {state.ok && <span className="text-sm text-primary">{t("importSuccess")}</span>}
           {state.error && <span className="text-sm text-accent">{state.error}</span>}
         </div>
       </form>

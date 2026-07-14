@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { updateSettings, type ActionState } from "@/app/admin/actions/settings";
 import { inputCls, labelCls, btnPrimary } from "../ui";
 import ImageUpload from "../ImageUpload";
@@ -14,39 +15,29 @@ const initial: ActionState = {};
 export default function SettingsForm({ settings }: { settings: Settings | null }) {
   const [state, action, pending] = useActionState(updateSettings, initial);
   const s = settings;
+  const t = useTranslations("admin.settings");
+  const tc = useTranslations("admin.common");
 
   return (
     <form action={action} className="max-w-2xl space-y-8">
       <section className="card-soft space-y-4 p-6 hover:translate-y-0">
-        <h2 className="font-display text-lg">Allgemein</h2>
+        <h2 className="font-display text-lg">{t("generalHeading")}</h2>
         <div>
-          <label className={labelCls}>Name des Restaurants</label>
+          <label className={labelCls}>{t("restaurantName")}</label>
           <input name="name" defaultValue={s?.name ?? ""} className={inputCls} />
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelCls}>Beschreibung (DE)</label>
-            <textarea name="description_de" defaultValue={s?.description_de ?? ""} rows={4} className={inputCls} />
-          </div>
-          <div>
-            <label className={labelCls}>Beschreibung (EN)</label>
-            <textarea
-              name="description_en"
-              defaultValue={s?.description_en ?? ""}
-              rows={4}
-              placeholder="leer = automatisch übersetzt"
-              className={inputCls}
-            />
-          </div>
+        <div>
+          <label className={labelCls}>{t("descriptionDe")}</label>
+          <textarea name="description_de" defaultValue={s?.description_de ?? ""} rows={4} className={inputCls} />
         </div>
-        <ImageUpload name="hero_image_url" bucket="site-images" defaultUrl={s?.hero_image_url} label="Hero-Bild" />
+        <ImageUpload name="hero_image_url" bucket="site-images" defaultUrl={s?.hero_image_url} label={t("heroImage")} />
         <TranslationsPanel
           kind="settings"
           id={s ? String(s.id) : undefined}
           fields={[
             {
               name: "description",
-              label: "Beschreibung",
+              label: tc("description"),
               multiline: true,
               values: (s?.description_i18n as I18n) ?? {},
             },
@@ -55,55 +46,53 @@ export default function SettingsForm({ settings }: { settings: Settings | null }
       </section>
 
       <section className="card-soft space-y-4 p-6 hover:translate-y-0">
-        <h2 className="font-display text-lg">Adresse</h2>
+        <h2 className="font-display text-lg">{t("addressHeading")}</h2>
         <div>
-          <label className={labelCls}>Straße & Nr.</label>
+          <label className={labelCls}>{t("street")}</label>
           <input name="address_street" defaultValue={s?.address_street ?? ""} className={inputCls} />
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
-            <label className={labelCls}>PLZ</label>
+            <label className={labelCls}>{t("zip")}</label>
             <input name="address_zip" defaultValue={s?.address_zip ?? ""} className={inputCls} />
           </div>
           <div className="sm:col-span-2">
-            <label className={labelCls}>Ort</label>
+            <label className={labelCls}>{t("city")}</label>
             <input name="address_city" defaultValue={s?.address_city ?? ""} className={inputCls} />
           </div>
         </div>
         <div>
-          <label className={labelCls}>Land</label>
+          <label className={labelCls}>{t("country")}</label>
           <input name="address_country" defaultValue={s?.address_country ?? ""} className={inputCls} />
         </div>
       </section>
 
       <section className="card-soft space-y-4 p-6 hover:translate-y-0">
-        <h2 className="font-display text-lg">Kontakt & Karte</h2>
+        <h2 className="font-display text-lg">{t("contactHeading")}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className={labelCls}>Telefon</label>
+            <label className={labelCls}>{t("phone")}</label>
             <input name="phone" defaultValue={s?.phone ?? ""} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>E-Mail</label>
+            <label className={labelCls}>{t("email")}</label>
             <input name="email" type="email" defaultValue={s?.email ?? ""} className={inputCls} />
           </div>
         </div>
         <div>
-          <label className={labelCls}>Karten-Embed-URL (OpenStreetMap)</label>
+          <label className={labelCls}>{t("mapEmbed")}</label>
           <textarea name="google_maps_embed" defaultValue={s?.google_maps_embed ?? ""} rows={3} className={inputCls} />
           <p className="mt-1 text-xs text-muted">
-            Leer lassen, dann wird die Karte beim Speichern automatisch aus der Adresse oben erzeugt.
-            Alternativ eine eigene URL einfügen — auf openstreetmap.org: Adresse suchen → rechts „Teilen“ →
-            Häkchen bei „Marker setzen“ → Format „HTML“ → nur die URL aus dem <code>src=&quot;…&quot;</code> einfügen.
+            {t("mapEmbedHint")} <code>src=&quot;…&quot;</code> {t("mapEmbedHintSuffix")}
           </p>
         </div>
       </section>
 
       <div className="flex items-center gap-4">
         <button type="submit" disabled={pending} className={btnPrimary}>
-          {pending ? "Speichern …" : "Speichern"}
+          {pending ? tc("saving") : tc("save")}
         </button>
-        {state.ok && <span className="text-sm text-primary">Gespeichert ✓</span>}
+        {state.ok && <span className="text-sm text-primary">{tc("saved")}</span>}
         {state.error && <span className="text-sm text-accent">{state.error}</span>}
       </div>
     </form>

@@ -4,9 +4,9 @@ import { revalidatePath } from "next/cache";
 import type { I18nMap } from "@/lib/i18n-fields";
 import { backfillMissingTranslations } from "@/lib/i18n-backfill";
 import { getEnabledLocales } from "@/lib/locales";
-import { translateUiMessages } from "@/lib/ui-messages";
+import { backfillMissingUiMessages } from "@/lib/ui-messages";
 import { str } from "@/lib/form-data";
-import { DEFAULT_ENABLED_LOCALES, routing, type Locale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import {
   fillTranslations,
   guard,
@@ -18,7 +18,9 @@ export type TranslateAllState = { ok?: boolean; error?: string; translated?: num
 
 /**
  * "Fehlende Übersetzungen erstellen": fills every untranslated enabled locale
- * of every content table via LibreTranslate. Only gaps — existing values are kept.
+ * of every content table, plus any enabled locale still missing its admin/site
+ * UI texts, via LibreTranslate. Only gaps — existing values are kept. Safe to
+ * re-run: it's how a previously failed UI-text translation gets retried.
  */
 export async function translateAllMissing(
   _prev: TranslateAllState,
@@ -27,12 +29,14 @@ export async function translateAllMissing(
   try {
     const supabase = await guard();
     const targets = await getEnabledLocales();
+    const ui = await backfillMissingUiMessages(supabase, targets);
     const { translated, errors } = await backfillMissingTranslations(supabase, targets);
-    if (translated > 0) {
+    const allErrors = [...ui.errors, ...errors];
+    if (translated > 0 || ui.translated.length > 0) {
       revalidatePublic();
       revalidatePath("/admin", "layout");
     }
-    if (errors.length) return { translated, error: errors.slice(0, 3).join(" · ") };
+    if (allErrors.length) return { translated, error: allErrors.slice(0, 3).join(" · ") };
     return { ok: true, translated };
   } catch (e) {
     return { error: (e as Error).message };
@@ -45,9 +49,11 @@ const MIGRATION_HINT =
   "Wurde die SQL-Migration ausgeführt? (supabase/migrations/20260712_dynamic_locales.sql)";
 
 /**
- * Saves the set of active languages. Newly enabled locales get their UI texts
- * machine-translated via LibreTranslate (stored in the DB) and their content
- * gaps backfilled immediately; disabling keeps all translations for later.
+ * Saves the set of active languages, then backfills gaps for every enabled
+ * locale — its admin/site UI texts and its content — via LibreTranslate.
+ * Running this against the full enabled set (not just newly-added locales)
+ * makes it self-healing: re-saving retries any locale whose translation
+ * failed last time, since existing entries are never overwritten.
  */
 export async function updateEnabledLocales(
   _prev: LocalesState,
@@ -59,50 +65,22 @@ export async function updateEnabledLocales(
     selected.add(routing.defaultLocale);
     const enabled = routing.locales.filter((l) => selected.has(l));
 
-    const { data, error } = await supabase
-      .from("restaurant_settings")
-      .select("enabled_locales, ui_messages")
-      .eq("id", 1)
-      .maybeSingle();
-    if (error) return { error: `${error.message} — ${MIGRATION_HINT}` };
-
-    const current = Array.isArray(data?.enabled_locales)
-      ? (data.enabled_locales as string[])
-      : [...DEFAULT_ENABLED_LOCALES];
-    const uiMessages = (
-      data?.ui_messages && typeof data.ui_messages === "object" ? data.ui_messages : {}
-    ) as Record<string, unknown>;
-    const added = enabled.filter((l) => !current.includes(l));
-    const problems: string[] = [];
-
-    // UI texts for newly enabled locales without a bundled messages file.
-    for (const loc of added) {
-      if ((DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(loc) || uiMessages[loc]) continue;
-      const { messages, error: terr } = await translateUiMessages(loc);
-      if (terr) problems.push(`UI-Texte ${loc}: ${terr}`);
-      if (Object.keys(messages).length > 0) uiMessages[loc] = messages;
-    }
-
     const up = await supabase
       .from("restaurant_settings")
-      .update({ enabled_locales: enabled, ui_messages: uiMessages as never })
+      .update({ enabled_locales: enabled })
       .eq("id", 1);
     if (up.error) return { error: `${up.error.message} — ${MIGRATION_HINT}` };
 
-    // Content translations for the new locales (fills gaps only).
-    let translated = 0;
-    if (added.length > 0) {
-      const res = await backfillMissingTranslations(supabase, enabled);
-      translated = res.translated;
-      problems.push(...res.errors);
-    }
+    const problems: string[] = [];
+    const ui = await backfillMissingUiMessages(supabase, enabled);
+    problems.push(...ui.errors);
+    const { translated, errors } = await backfillMissingTranslations(supabase, enabled);
+    problems.push(...errors);
 
     revalidatePublic();
     revalidatePath("/admin", "layout");
 
-    const info = added.length
-      ? `${added.length} ${added.length === 1 ? "Sprache" : "Sprachen"} aktiviert, ${translated} Übersetzungen erstellt`
-      : "Gespeichert";
+    const info = `${translated} Übersetzungen erstellt`;
     if (problems.length) return { info, error: problems.slice(0, 3).join(" · ") };
     return { ok: true, info };
   } catch (e) {
@@ -117,7 +95,7 @@ const RETRANSLATE_FIELDS: Record<string, { table: TranslatableTable; fields: str
   settings: { table: "restaurant_settings", fields: ["description"] },
 };
 
-/** "Alle neu übersetzen": regenerates el/ru/pl/nl/ar/es from DE (DE/EN kept). */
+/** "Alle neu übersetzen": regenerates every non-DE locale from DE. */
 export async function retranslate(fd: FormData) {
   const supabase = await guard();
   const cfg = RETRANSLATE_FIELDS[str(fd, "kind")];

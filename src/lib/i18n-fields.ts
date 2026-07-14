@@ -8,7 +8,7 @@ export type I18nMap = Record<string, string>;
 export const SOURCE_LOCALE: Locale = routing.defaultLocale;
 
 /** Human-authored locales — "re-translate" never overwrites these. */
-export const HUMAN_LOCALES: readonly Locale[] = ["de", "en"];
+export const HUMAN_LOCALES: readonly Locale[] = ["de"];
 
 /** Reads a `<field>_<locale>` set out of submitted form data into an i18n map. */
 export function i18nFromForm(get: (key: string) => string, field: string): I18nMap {
@@ -28,7 +28,7 @@ type FieldInput = { i18n: I18nMap; source: string };
  * - `overwrite: false` (default): only fills target locales that are currently
  *   empty — never touches human-edited values.
  * - `overwrite: true`: regenerates the machine locales from the DE source,
- *   leaving the human-authored locales (DE + EN) untouched.
+ *   leaving the human-authored DE source untouched.
  *
  * Translation failures are non-fatal: the source (and any existing values) are
  * preserved and `ok:false` is returned so the caller can surface a hint.

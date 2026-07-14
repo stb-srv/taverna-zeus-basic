@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { i18nFromForm } from "@/lib/i18n-fields";
 import { intOr, numOrNull, str, strOrNull } from "@/lib/form-data";
+import { getAdminLocale } from "@/lib/locales";
 import { fillTranslations, guard, revalidatePublic, type ActionState } from "./shared";
 
 export type { ActionState } from "./shared";
@@ -13,6 +15,7 @@ export type { ActionState } from "./shared";
 export async function saveCategory(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
     const supabase = await guard();
+    const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin.errors" });
     const id = strOrNull(fd, "id");
     const nameI18n = i18nFromForm((k) => str(fd, k), "name");
     const descI18n = i18nFromForm((k) => str(fd, k), "description");
@@ -29,17 +32,17 @@ export async function saveCategory(_prev: ActionState, fd: FormData): Promise<Ac
       is_active: fd.get("is_active") === "on",
       parent_id: parentId,
     };
-    if (!payload.name_de) return { error: "Name (DE) erforderlich." };
+    if (!payload.name_de) return { error: t("nameDeRequired") };
 
     if (parentId) {
-      if (parentId === id) return { error: "Eine Kategorie kann nicht sich selbst zugeordnet werden." };
+      if (parentId === id) return { error: t("selfParent") };
       const { data: parent } = await supabase
         .from("menu_categories")
         .select("parent_id")
         .eq("id", parentId)
         .maybeSingle();
       if (parent?.parent_id) {
-        return { error: "Unterkategorien können keine weitere Unterkategorie enthalten." };
+        return { error: t("subcategoryNoNesting") };
       }
     }
     if (id && parentId) {
@@ -49,7 +52,7 @@ export async function saveCategory(_prev: ActionState, fd: FormData): Promise<Ac
         .eq("parent_id", id)
         .limit(1);
       if (children?.length) {
-        return { error: "Diese Kategorie hat Unterkategorien und kann nicht selbst einer Kategorie zugeordnet werden." };
+        return { error: t("categoryHasChildren") };
       }
     }
 
@@ -87,6 +90,7 @@ export async function deleteCategory(fd: FormData) {
 export async function saveItem(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
     const supabase = await guard();
+    const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin.errors" });
     const id = strOrNull(fd, "id");
     const nameI18n = i18nFromForm((k) => str(fd, k), "name");
     const descI18n = i18nFromForm((k) => str(fd, k), "description");
@@ -104,8 +108,8 @@ export async function saveItem(_prev: ActionState, fd: FormData): Promise<Action
       sort_order: intOr(fd, "sort_order"),
       is_active: fd.get("is_active") === "on",
     };
-    if (!payload.category_id) return { error: "Kategorie erforderlich." };
-    if (!payload.name_de) return { error: "Name (DE) erforderlich." };
+    if (!payload.category_id) return { error: t("categoryRequired") };
+    if (!payload.name_de) return { error: t("nameDeRequired") };
 
     let itemId = id;
     if (id) {

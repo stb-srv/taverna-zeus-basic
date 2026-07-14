@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { saveItem, type ActionState } from "@/app/admin/actions/menu";
 import { inputCls, labelCls, btnPrimary, btnGhost } from "../ui";
 import ImageUpload from "../ImageUpload";
@@ -32,6 +33,8 @@ export default function ItemForm({
   selectedAdditives: string[];
 }) {
   const [state, action, pending] = useActionState(saveItem, initial);
+  const t = useTranslations("admin.menu.item");
+  const tc = useTranslations("admin.common");
 
   const topLevel = categories.filter((c) => !c.parent_id);
   const childrenByParent = new Map<string, Category[]>();
@@ -49,7 +52,7 @@ export default function ItemForm({
       <section className="card-soft space-y-4 p-6 hover:translate-y-0">
         <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
           <div>
-            <label className={labelCls}>Kategorie</label>
+            <label className={labelCls}>{t("category")}</label>
             <select name="category_id" defaultValue={item?.category_id ?? categories[0]?.id} className={inputCls}>
               {topLevel.map((top) => {
                 const kids = childrenByParent.get(top.id) ?? [];
@@ -58,7 +61,7 @@ export default function ItemForm({
                 }
                 return (
                   <optgroup key={top.id} label={top.name_de}>
-                    <option value={top.id}>{top.name_de} (allgemein)</option>
+                    <option value={top.id}>{top.name_de} {t("generalOption")}</option>
                     {kids.map((k) => (
                       <option key={k.id} value={k.id}>{k.name_de}</option>
                     ))}
@@ -68,70 +71,47 @@ export default function ItemForm({
             </select>
           </div>
           <div className="w-28">
-            <label className={labelCls}>Nr.</label>
+            <label className={labelCls}>{t("number")}</label>
             <input name="item_number" defaultValue={item?.item_number ?? ""} className={inputCls} />
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelCls}>Name (DE)</label>
-            <input name="name_de" defaultValue={item?.name_de ?? ""} required className={inputCls} />
-          </div>
-          <div>
-            <label className={labelCls}>Name (EN)</label>
-            <input
-              name="name_en"
-              defaultValue={item?.name_en ?? ""}
-              placeholder="leer = automatisch übersetzt"
-              className={inputCls}
-            />
-          </div>
+        <div>
+          <label className={labelCls}>{t("nameDe")}</label>
+          <input name="name_de" defaultValue={item?.name_de ?? ""} required className={inputCls} />
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelCls}>Beschreibung (DE)</label>
-            <textarea name="description_de" defaultValue={item?.description_de ?? ""} rows={3} className={inputCls} />
-          </div>
-          <div>
-            <label className={labelCls}>Beschreibung (EN)</label>
-            <textarea
-              name="description_en"
-              defaultValue={item?.description_en ?? ""}
-              rows={3}
-              placeholder="leer = automatisch übersetzt"
-              className={inputCls}
-            />
-          </div>
+        <div>
+          <label className={labelCls}>{t("descriptionDe")}</label>
+          <textarea name="description_de" defaultValue={item?.description_de ?? ""} rows={3} className={inputCls} />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3">
           <div>
-            <label className={labelCls}>Preis (€)</label>
+            <label className={labelCls}>{t("price")}</label>
             <input name="price" defaultValue={item?.price ?? ""} inputMode="decimal" className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>Reihenfolge</label>
+            <label className={labelCls}>{t("sortOrder")}</label>
             <input name="sort_order" type="number" defaultValue={item?.sort_order ?? 0} className={inputCls} />
           </div>
           <label className="flex items-center gap-2 pt-6 text-sm">
             <input type="checkbox" name="is_active" defaultChecked={item?.is_active ?? true} />
-            aktiv (sichtbar)
+            {t("activeVisible")}
           </label>
         </div>
 
-        <ImageUpload name="image_url" bucket="menu-images" defaultUrl={item?.image_url} label="Bild" />
+        <ImageUpload name="image_url" bucket="menu-images" defaultUrl={item?.image_url} label={t("image")} />
       </section>
 
       <TranslationsPanel
         kind="item"
         id={item?.id}
         fields={[
-          { name: "name", label: "Name", values: (item?.name_i18n as I18n) ?? {} },
+          { name: "name", label: tc("name"), values: (item?.name_i18n as I18n) ?? {} },
           {
             name: "description",
-            label: "Beschreibung",
+            label: tc("description"),
             multiline: true,
             values: (item?.description_i18n as I18n) ?? {},
           },
@@ -139,9 +119,9 @@ export default function ItemForm({
       />
 
       <section className="card-soft space-y-4 p-6 hover:translate-y-0">
-        <h2 className="font-display text-lg">Allergene & Zusatzstoffe</h2>
+        <h2 className="font-display text-lg">{t("labelsTitle")}</h2>
         <fieldset>
-          <legend className="mb-2 text-sm font-medium">Allergene</legend>
+          <legend className="mb-2 text-sm font-medium">{t("allergens")}</legend>
           <div className="flex flex-wrap gap-2">
             {allergens.map((a) => (
               <Checkbox key={a.id} name="allergens" value={a.id} defaultChecked={selectedAllergens.includes(a.id)}>
@@ -151,7 +131,7 @@ export default function ItemForm({
           </div>
         </fieldset>
         <fieldset>
-          <legend className="mb-2 text-sm font-medium">Zusatzstoffe</legend>
+          <legend className="mb-2 text-sm font-medium">{t("additives")}</legend>
           <div className="flex flex-wrap gap-2">
             {additives.map((a) => (
               <Checkbox key={a.id} name="additives" value={a.id} defaultChecked={selectedAdditives.includes(a.id)}>
@@ -164,9 +144,9 @@ export default function ItemForm({
 
       <div className="flex items-center gap-4">
         <button type="submit" disabled={pending} className={btnPrimary}>
-          {pending ? "Speichern …" : "Speichern"}
+          {pending ? tc("saving") : tc("save")}
         </button>
-        <Link href="/admin/menu" className={btnGhost}>Abbrechen</Link>
+        <Link href="/admin/menu" className={btnGhost}>{tc("cancel")}</Link>
         {state.error && <span className="text-sm text-accent">{state.error}</span>}
       </div>
     </form>

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { str } from "@/lib/form-data";
-import { resolveParentIds } from "@/lib/menu-transfer";
+import { itemNaturalKey, keyOldItemsBySlug, resolveParentIds, type PreservedI18n } from "@/lib/menu-transfer";
 import { guard, revalidatePublic, type ActionState, type AdminClient } from "./shared";
 
 export type { ActionState } from "./shared";
@@ -99,21 +99,40 @@ export async function importMenu(_prev: ActionState, fd: FormData): Promise<Acti
     const allergenByCode = new Map((allergens ?? []).map((a) => [a.code, a.id]));
     const additiveByCode = new Map((additives ?? []).map((a) => [a.code, a.id]));
 
+    // Snapshot existing `_i18n` data before the destructive delete, keyed by
+    // natural key (slug / category+item_number-or-name), so a routine reimport
+    // doesn't wipe every non-DE/EN translation back to empty.
+    const [{ data: oldCats }, { data: oldItems }] = await Promise.all([
+      supabase.from("menu_categories").select("id, slug, name_i18n, description_i18n"),
+      supabase.from("menu_items").select("category_id, item_number, name_de, name_i18n, description_i18n"),
+    ]);
+    const oldCatI18nBySlug = new Map<string, PreservedI18n>(
+      (oldCats ?? []).map((c) => [c.slug, { name_i18n: c.name_i18n, description_i18n: c.description_i18n }]),
+    );
+    const categorySlugById = new Map((oldCats ?? []).map((c) => [c.id, c.slug]));
+    const oldItemI18nByKey = keyOldItemsBySlug(oldItems ?? [], categorySlugById);
+
     // Replace the whole menu (categories cascade-delete their items + joins).
     await supabase.from("menu_categories").delete().gte("sort_order", -2147483648);
 
     const catIns = await supabase
       .from("menu_categories")
       .insert(
-        categories.map((c) => ({
-          slug: String(c.slug ?? crypto.randomUUID().slice(0, 8)),
-          name_de: String(c.name_de ?? ""),
-          name_en: String(c.name_en ?? ""),
-          description_de: (c.description_de as string) ?? null,
-          description_en: (c.description_en as string) ?? null,
-          sort_order: Number(c.sort_order ?? 0),
-          is_active: c.is_active !== false,
-        })),
+        categories.map((c) => {
+          const slug = String(c.slug ?? crypto.randomUUID().slice(0, 8));
+          const preserved = oldCatI18nBySlug.get(slug);
+          return {
+            slug,
+            name_de: String(c.name_de ?? ""),
+            name_en: String(c.name_en ?? ""),
+            description_de: (c.description_de as string) ?? null,
+            description_en: (c.description_en as string) ?? null,
+            sort_order: Number(c.sort_order ?? 0),
+            is_active: c.is_active !== false,
+            name_i18n: preserved?.name_i18n ?? {},
+            description_i18n: preserved?.description_i18n ?? {},
+          };
+        }),
       )
       .select("id, slug");
     if (catIns.error) return { error: catIns.error.message };
@@ -131,16 +150,20 @@ export async function importMenu(_prev: ActionState, fd: FormData): Promise<Acti
     }
 
     for (const it of items) {
-      const categoryId = catIdBySlug.get(String(it.category_slug));
+      const categorySlug = String(it.category_slug);
+      const categoryId = catIdBySlug.get(categorySlug);
       if (!categoryId) continue;
       // Prefer a freshly-uploaded bundled image; fall back to the stored URL.
       const bundled = it.image_file ? images.get(String(it.image_file)) : undefined;
+      const itemNumber = (it.item_number as string) ?? null;
+      const nameDe = String(it.name_de ?? "");
+      const preserved = oldItemI18nByKey.get(itemNaturalKey(categorySlug, itemNumber, nameDe));
       const ins = await supabase
         .from("menu_items")
         .insert({
           category_id: categoryId,
-          item_number: (it.item_number as string) ?? null,
-          name_de: String(it.name_de ?? ""),
+          item_number: itemNumber,
+          name_de: nameDe,
           name_en: String(it.name_en ?? ""),
           description_de: (it.description_de as string) ?? null,
           description_en: (it.description_en as string) ?? null,
@@ -148,6 +171,8 @@ export async function importMenu(_prev: ActionState, fd: FormData): Promise<Acti
           image_url: bundled ?? (it.image_url as string) ?? null,
           sort_order: Number(it.sort_order ?? 0),
           is_active: it.is_active !== false,
+          name_i18n: preserved?.name_i18n ?? {},
+          description_i18n: preserved?.description_i18n ?? {},
         })
         .select("id")
         .single();

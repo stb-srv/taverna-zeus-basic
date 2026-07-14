@@ -1,4 +1,6 @@
-import type { Locale } from "@/i18n/routing";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { DEFAULT_ENABLED_LOCALES, type Locale } from "@/i18n/routing";
+import type { Database } from "./supabase/types";
 import { translateBatch } from "./translate";
 import { SOURCE_LOCALE } from "./i18n-fields";
 import deMessages from "../../messages/de.json";
@@ -72,4 +74,64 @@ export async function translateUiMessages(
     });
   }
   return { messages: out };
+}
+
+/** Enabled locales beyond the bundled set that still have no `ui_messages` entry. */
+export function missingUiLocales(uiMessages: unknown, targets: readonly Locale[]): Locale[] {
+  const map = (uiMessages && typeof uiMessages === "object" ? uiMessages : {}) as Record<
+    string,
+    unknown
+  >;
+  return targets.filter(
+    (l) => !(DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(l) && !map[l],
+  );
+}
+
+export type UiBackfillResult = { translated: Locale[]; errors: string[] };
+
+/**
+ * Fills `ui_messages` for every enabled locale beyond the bundled default set
+ * that doesn't have it yet — same idea as `backfillMissingTranslations` for
+ * content, but for the admin/site UI strings themselves. Tolerant by design:
+ * a failed locale is reported but doesn't block the others, and callers can
+ * re-run this safely since existing entries are never overwritten.
+ */
+export async function backfillMissingUiMessages(
+  supabase: SupabaseClient<Database>,
+  targets: readonly Locale[],
+): Promise<UiBackfillResult> {
+  const translated: Locale[] = [];
+  const errors: string[] = [];
+
+  const { data, error } = await supabase
+    .from("restaurant_settings")
+    .select("ui_messages")
+    .eq("id", 1)
+    .maybeSingle();
+  if (error) return { translated, errors: [error.message] };
+
+  const uiMessages = (
+    data?.ui_messages && typeof data.ui_messages === "object" ? data.ui_messages : {}
+  ) as Record<string, unknown>;
+  const pending = missingUiLocales(uiMessages, targets);
+  if (pending.length === 0) return { translated, errors };
+
+  for (const loc of pending) {
+    const { messages, error: terr } = await translateUiMessages(loc);
+    if (terr) errors.push(`UI-Texte ${loc}: ${terr}`);
+    if (Object.keys(messages).length > 0) {
+      uiMessages[loc] = messages;
+      translated.push(loc);
+    }
+  }
+
+  if (translated.length > 0) {
+    const up = await supabase
+      .from("restaurant_settings")
+      .update({ ui_messages: uiMessages as never })
+      .eq("id", 1);
+    if (up.error) errors.push(up.error.message);
+  }
+
+  return { translated, errors };
 }

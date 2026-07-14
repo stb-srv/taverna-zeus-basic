@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "./supabase/types";
+import type { Database, Json } from "./supabase/types";
 
 /** Bump when the export shape changes in a non-backwards-compatible way. */
 export const MENU_EXPORT_VERSION = 3;
@@ -116,6 +116,39 @@ export function resolveParentIds(
     if (childId && parentId && childId !== parentId) {
       result.set(childId, parentId);
     }
+  }
+  return result;
+}
+
+export type PreservedI18n = { name_i18n: Json; description_i18n: Json };
+
+/**
+ * A menu item's natural key, stable across a delete-and-reinsert reimport:
+ * its `item_number` when present, otherwise its DE name (scoped to its
+ * category, since numbers/names aren't necessarily unique across categories).
+ */
+export function itemNaturalKey(categorySlug: string, itemNumber: string | null, nameDe: string): string {
+  return `${categorySlug}::${itemNumber ?? nameDe}`;
+}
+
+/**
+ * Keys a snapshot of existing menu items by their natural key, so their
+ * `_i18n` data can be re-attached to freshly-reinserted rows after a menu
+ * reimport (which otherwise wipes every non-DE/EN translation). Items whose
+ * category no longer resolves to a slug are skipped.
+ */
+export function keyOldItemsBySlug(
+  items: Array<{ category_id: string; item_number: string | null; name_de: string } & PreservedI18n>,
+  categorySlugById: Map<string, string>,
+): Map<string, PreservedI18n> {
+  const result = new Map<string, PreservedI18n>();
+  for (const it of items) {
+    const slug = categorySlugById.get(it.category_id);
+    if (!slug) continue;
+    result.set(itemNaturalKey(slug, it.item_number, it.name_de), {
+      name_i18n: it.name_i18n,
+      description_i18n: it.description_i18n,
+    });
   }
   return result;
 }

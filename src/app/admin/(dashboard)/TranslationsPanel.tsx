@@ -1,8 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { localeNames, rtlLocales } from "@/i18n/routing";
 import { retranslate } from "@/app/admin/actions/translations";
-import { useEnabledLocales } from "./EnabledLocalesContext";
+import { useEnabledLocales } from "../EnabledLocalesContext";
 import { inputCls, btnGhost } from "./ui";
 
 export type TranslField = {
@@ -15,10 +16,10 @@ export type TranslField = {
 };
 
 /**
- * Collapsible editor for the machine-translated locales (everything except the
- * DE source and human-authored EN). Fields submit as `<field>_<locale>` and are
- * picked up by the save action; values entered here are preserved (auto-fill
- * only touches empty locales). The "re-translate" button regenerates them.
+ * Collapsible editor for every machine-translated locale (everything except
+ * the DE source). Fields submit as `<field>_<locale>` and are picked up by the
+ * save action; values entered here are preserved (auto-fill only touches
+ * empty locales). The "re-translate" button regenerates them.
  */
 export default function TranslationsPanel({
   fields,
@@ -29,17 +30,15 @@ export default function TranslationsPanel({
   kind?: "item" | "category" | "page" | "settings";
   id?: string;
 }) {
-  const langs = useEnabledLocales().filter((l) => l !== "de" && l !== "en");
+  const langs = useEnabledLocales().filter((l) => l !== "de");
+  const t = useTranslations("admin.translationsPanel");
 
   return (
     <details className="card-soft p-6 hover:translate-y-0">
       <summary className="cursor-pointer select-none font-display text-lg">
-        Weitere Sprachen <span className="text-sm text-muted">(automatisch übersetzt)</span>
+        {t("title")} <span className="text-sm text-muted">{t("subtitle")}</span>
       </summary>
-      <p className="mt-2 text-sm text-muted">
-        Deutsch ist die Quelle. Leere Felder werden beim Speichern automatisch übersetzt; hier
-        eingetragene Werte bleiben erhalten.
-      </p>
+      <p className="mt-2 text-sm text-muted">{t("description")}</p>
 
       <div className="mt-4 space-y-6">
         {langs.map((loc) => (
@@ -80,7 +79,7 @@ export default function TranslationsPanel({
         <div className="mt-5">
           <input type="hidden" name="kind" value={kind} />
           <button type="submit" formAction={retranslate} formNoValidate className={btnGhost}>
-            Alle neu übersetzen
+            {t("retranslate")}
           </button>
         </div>
       )}

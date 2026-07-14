@@ -40,7 +40,7 @@ describe("autofillI18n", () => {
     );
 
     expect(ok).toBe(true);
-    // Human-authored EN stays untouched.
+    // Existing non-empty values are never touched during a normal (non-overwrite) fill.
     expect(result.name.en).toBe("Starters");
     // DE mirrors the source.
     expect(result.name.de).toBe("Vorspeisen");
@@ -69,14 +69,15 @@ describe("autofillI18n", () => {
     expect(result.name.el).toBe("Ορεκτικά");
   });
 
-  it("regenerates machine locales with overwrite: true, keeping EN", async () => {
+  it("regenerates every machine locale (including EN) with overwrite: true, keeping only DE", async () => {
     fakeTranslator();
     const { result } = await autofillI18n(
       { name: { i18n: { en: "Starters", el: "Ορεκτικά (alt)" }, source: "Vorspeisen" } },
       { targets: ENABLED, overwrite: true },
     );
-    expect(result.name.en).toBe("Starters");
+    expect(result.name.en).toBe("en:Vorspeisen");
     expect(result.name.el).toBe("el:Vorspeisen");
+    expect(result.name.de).toBe("Vorspeisen");
   });
 
   it("is non-fatal on translation failure: existing values survive, ok is false", async () => {

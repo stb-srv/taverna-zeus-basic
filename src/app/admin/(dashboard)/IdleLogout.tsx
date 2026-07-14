@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { logout } from "../auth-actions";
 
 /** Idle timeout before automatic logout, and how long before that to warn. */
@@ -14,6 +15,7 @@ const STORAGE_KEY = "meraki:last-activity";
  * signed in" action) is shared across tabs via localStorage.
  */
 export default function IdleLogout() {
+  const t = useTranslations("admin.idleLogout");
   const [remaining, setRemaining] = useState<number | null>(null);
   const lastActivity = useRef<number>(0);
   const loggingOut = useRef(false);
@@ -84,26 +86,24 @@ export default function IdleLogout() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4 backdrop-blur-sm">
       <div className="card-soft w-full max-w-sm p-6 text-center hover:translate-y-0">
-        <h2 className="font-display text-xl">Noch angemeldet?</h2>
-        <p className="mt-2 text-sm text-muted">
-          Aus Sicherheitsgründen wirst du wegen Inaktivität in
-        </p>
+        <h2 className="font-display text-xl">{t("title")}</h2>
+        <p className="mt-2 text-sm text-muted">{t("before")}</p>
         <p className="my-3 font-display text-4xl text-primary tabular-nums">{secs}s</p>
-        <p className="text-sm text-muted">automatisch abgemeldet.</p>
+        <p className="text-sm text-muted">{t("after")}</p>
         <div className="mt-5 flex justify-center gap-3">
           <button
             type="button"
             onClick={markActive}
             className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-primary-dark"
           >
-            Angemeldet bleiben
+            {t("stayLoggedIn")}
           </button>
           <button
             type="button"
             onClick={() => logout()}
             className="rounded-lg border border-border px-4 py-2.5 text-sm font-medium transition hover:bg-accent-soft/60"
           >
-            Jetzt abmelden
+            {t("logoutNow")}
           </button>
         </div>
       </div>

@@ -2,33 +2,35 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
 type Item = { href: string; label: string; icon: ReactNode; exact?: boolean };
 
-const groups: { title: string; items: Item[] }[] = [
-  {
-    title: "Allgemein",
-    items: [{ href: "/admin", label: "Übersicht", icon: <IconHome />, exact: true }],
-  },
-  {
-    title: "Inhalte",
-    items: [
-      { href: "/admin/menu", label: "Speisekarte", icon: <IconMenu /> },
-      { href: "/admin/hours", label: "Öffnungszeiten", icon: <IconClock /> },
-      { href: "/admin/settings", label: "Standort & Kontakt", icon: <IconPin /> },
-      { href: "/admin/pages", label: "Seiten", icon: <IconPage /> },
-      { href: "/admin/translations", label: "Übersetzungen", icon: <IconGlobe /> },
-    ],
-  },
-  {
-    title: "System",
-    items: [{ href: "/admin/admins", label: "Admins", icon: <IconUsers /> }],
-  },
-];
-
 export default function Sidebar() {
   const pathname = usePathname();
+  const t = useTranslations("admin.nav");
+
+  const groups: { title: string; items: Item[] }[] = [
+    {
+      title: t("groupGeneral"),
+      items: [{ href: "/admin", label: t("overview"), icon: <IconHome />, exact: true }],
+    },
+    {
+      title: t("groupContent"),
+      items: [
+        { href: "/admin/menu", label: t("menu"), icon: <IconMenu /> },
+        { href: "/admin/hours", label: t("hours"), icon: <IconClock /> },
+        { href: "/admin/settings", label: t("settings"), icon: <IconPin /> },
+        { href: "/admin/pages", label: t("pages"), icon: <IconPage /> },
+        { href: "/admin/translations", label: t("translations"), icon: <IconGlobe /> },
+      ],
+    },
+    {
+      title: t("groupSystem"),
+      items: [{ href: "/admin/admins", label: t("admins"), icon: <IconUsers /> }],
+    },
+  ];
 
   return (
     <nav className="space-y-6">

@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { i18nFromForm } from "@/lib/i18n-fields";
 import { intOr, str, strOrNull } from "@/lib/form-data";
+import { getAdminLocale } from "@/lib/locales";
 import { fillTranslations, guard, revalidatePublic, type ActionState } from "./shared";
 
 export type { ActionState } from "./shared";
@@ -11,6 +13,7 @@ export type { ActionState } from "./shared";
 export async function savePage(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
     const supabase = await guard();
+    const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin.errors" });
     const id = strOrNull(fd, "id");
     const titleI18n = i18nFromForm((k) => str(fd, k), "title");
     const contentI18n = i18nFromForm((k) => str(fd, k), "content");
@@ -26,8 +29,8 @@ export async function savePage(_prev: ActionState, fd: FormData): Promise<Action
       show_in_nav: fd.get("show_in_nav") === "on",
       sort_order: intOr(fd, "sort_order"),
     };
-    if (!payload.slug) return { error: "Slug erforderlich." };
-    if (!payload.title_de) return { error: "Titel (DE) erforderlich." };
+    if (!payload.slug) return { error: t("slugRequired") };
+    if (!payload.title_de) return { error: t("titleDeRequired") };
 
     let pageId = id;
     if (id) {

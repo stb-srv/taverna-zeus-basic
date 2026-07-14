@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { routing, localeNames, type Locale } from "@/i18n/routing";
 import {
   updateEnabledLocales,
@@ -13,6 +14,7 @@ const initial: LocalesState = {};
 /** Checkbox grid to activate/deactivate website languages. */
 export default function LocalesForm({ enabled }: { enabled: Locale[] }) {
   const [state, action, pending] = useActionState(updateEnabledLocales, initial);
+  const t = useTranslations("admin.localesForm");
 
   return (
     <form action={action}>
@@ -40,19 +42,16 @@ export default function LocalesForm({ enabled }: { enabled: Locale[] }) {
         ))}
       </div>
 
-      <p className="mt-3 text-xs text-muted">
-        Beim Aktivieren einer neuen Sprache werden Oberflächentexte und Inhalte automatisch über
-        LibreTranslate übersetzt. Beim Deaktivieren bleiben vorhandene Übersetzungen erhalten.
-      </p>
+      <p className="mt-3 text-xs text-muted">{t("hint")}</p>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
         <button type="submit" disabled={pending} className={btnPrimary}>
-          {pending ? "Speichern & Übersetzen …" : "Sprachen speichern"}
+          {pending ? t("submitting") : t("submit")}
         </button>
         {state.ok && <span className="text-sm text-primary">{state.info} ✓</span>}
         {state.error && (
           <span className="text-sm text-accent">
-            {state.info ? `${state.info} — ` : ""}Fehler: {state.error}
+            {state.info ? `${state.info} — ` : ""}{t("errorPrefix")} {state.error}
           </span>
         )}
       </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { savePage, type ActionState } from "@/app/admin/actions/pages";
 import { inputCls, labelCls, btnPrimary, btnGhost } from "../ui";
 import TranslationsPanel from "../TranslationsPanel";
@@ -13,6 +14,8 @@ const initial: ActionState = {};
 
 export default function PageForm({ page }: { page: Page | null }) {
   const [state, action, pending] = useActionState(savePage, initial);
+  const t = useTranslations("admin.pages");
+  const tc = useTranslations("admin.common");
 
   return (
     <form action={action} className="max-w-2xl space-y-6">
@@ -21,63 +24,42 @@ export default function PageForm({ page }: { page: Page | null }) {
       <section className="card-soft space-y-4 p-6 hover:translate-y-0">
         <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
           <div>
-            <label className={labelCls}>Slug (URL)</label>
+            <label className={labelCls}>{t("slug")}</label>
             <input
               name="slug"
               defaultValue={page?.slug ?? ""}
-              placeholder="z. B. ueber-uns"
+              placeholder={t("slugPlaceholder")}
               required
               className={inputCls}
             />
           </div>
           <div className="w-28">
-            <label className={labelCls}>Reihenfolge</label>
+            <label className={labelCls}>{t("sortOrder")}</label>
             <input name="sort_order" type="number" defaultValue={page?.sort_order ?? 0} className={inputCls} />
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className={labelCls}>Titel (DE)</label>
-            <input name="title_de" defaultValue={page?.title_de ?? ""} required className={inputCls} />
-          </div>
-          <div>
-            <label className={labelCls}>Titel (EN)</label>
-            <input
-              name="title_en"
-              defaultValue={page?.title_en ?? ""}
-              placeholder="leer = automatisch übersetzt"
-              className={inputCls}
-            />
-          </div>
+        <div>
+          <label className={labelCls}>{t("titleDe")}</label>
+          <input name="title_de" defaultValue={page?.title_de ?? ""} required className={inputCls} />
         </div>
 
         <div>
-          <label className={labelCls}>Inhalt (DE) — Markdown</label>
+          <label className={labelCls}>{t("contentDe")}</label>
           <textarea name="content_de" defaultValue={page?.content_de ?? ""} rows={10} className={`${inputCls} font-mono text-xs`} />
         </div>
-        <div>
-          <label className={labelCls}>Inhalt (EN) — Markdown</label>
-          <textarea
-            name="content_en"
-            defaultValue={page?.content_en ?? ""}
-            rows={10}
-            placeholder="leer = automatisch übersetzt"
-            className={`${inputCls} font-mono text-xs`}
-          />
-        </div>
         <p className="text-xs text-muted">
-          Markdown: <code>## Überschrift</code>, <code>### Unterüberschrift</code>, <code>**fett**</code>, Leerzeile = neuer Absatz.
+          {t("markdownHint")} <code>## Überschrift</code>, <code>### Unterüberschrift</code>, <code>**fett**</code>, {t("markdownHintSuffix")}
         </p>
 
         <div className="flex flex-wrap gap-6">
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" name="is_published" defaultChecked={page?.is_published ?? false} />
-            veröffentlicht
+            {t("published")}
           </label>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" name="show_in_nav" defaultChecked={page?.show_in_nav ?? false} />
-            im Menü anzeigen
+            {t("showInNav")}
           </label>
         </div>
       </section>
@@ -86,10 +68,10 @@ export default function PageForm({ page }: { page: Page | null }) {
         kind="page"
         id={page?.id}
         fields={[
-          { name: "title", label: "Titel", values: (page?.title_i18n as I18n) ?? {} },
+          { name: "title", label: t("titleField"), values: (page?.title_i18n as I18n) ?? {} },
           {
             name: "content",
-            label: "Inhalt (Markdown)",
+            label: t("contentField"),
             multiline: true,
             values: (page?.content_i18n as I18n) ?? {},
           },
@@ -98,9 +80,9 @@ export default function PageForm({ page }: { page: Page | null }) {
 
       <div className="flex items-center gap-4">
         <button type="submit" disabled={pending} className={btnPrimary}>
-          {pending ? "Speichern …" : "Speichern"}
+          {pending ? tc("saving") : tc("save")}
         </button>
-        <Link href="/admin/pages" className={btnGhost}>Abbrechen</Link>
+        <Link href="/admin/pages" className={btnGhost}>{tc("cancel")}</Link>
         {state.error && <span className="text-sm text-accent">{state.error}</span>}
       </div>
     </form>

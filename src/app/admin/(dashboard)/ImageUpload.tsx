@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 
 type Props = {
@@ -16,6 +17,7 @@ export default function ImageUpload({ name, bucket, defaultUrl, label }: Props) 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
+  const t = useTranslations("admin.imageUpload");
 
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -47,7 +49,7 @@ export default function ImageUpload({ name, bucket, defaultUrl, label }: Props) 
           <img src={url} alt="" className="h-24 w-24 rounded-lg border border-border object-cover" />
         ) : (
           <div className="flex h-24 w-24 items-center justify-center rounded-lg border border-dashed border-border text-xs text-muted">
-            kein Bild
+            {t("noImage")}
           </div>
         )}
         <div className="space-y-2">
@@ -58,17 +60,21 @@ export default function ImageUpload({ name, bucket, defaultUrl, label }: Props) 
             disabled={busy}
             className="block text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-primary-dark"
           />
-          {busy && <p className="text-xs text-muted">Wird hochgeladen …</p>}
+          {busy && <p className="text-xs text-muted">{t("uploading")}</p>}
           {url && (
             <button
               type="button"
               onClick={() => setUrl("")}
               className="text-xs text-accent hover:underline"
             >
-              Bild entfernen
+              {t("remove")}
             </button>
           )}
-          {error && <p className="text-xs text-accent">Upload fehlgeschlagen: {error}</p>}
+          {error && (
+            <p className="text-xs text-accent">
+              {t("uploadFailedPrefix")} {error}
+            </p>
+          )}
         </div>
       </div>
     </div>

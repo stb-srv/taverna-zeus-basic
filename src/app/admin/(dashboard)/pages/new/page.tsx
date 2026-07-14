@@ -1,9 +1,11 @@
+import { getTranslations } from "next-intl/server";
 import PageForm from "../PageForm";
 
-export default function NewPage() {
+export default async function NewPage() {
+  const t = await getTranslations("admin.pages");
   return (
     <div>
-      <h1 className="mb-6 font-display text-3xl">Neue Seite</h1>
+      <h1 className="mb-6 font-display text-3xl">{t("newPageTitle")}</h1>
       <PageForm page={null} />
     </div>
   );

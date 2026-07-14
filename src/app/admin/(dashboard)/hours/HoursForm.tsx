@@ -1,26 +1,23 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { updateHours, type ActionState } from "@/app/admin/actions/hours";
 import { inputCls, btnPrimary } from "../ui";
 import type { Database } from "@/lib/supabase/types";
 
 type Hours = Database["public"]["Tables"]["opening_hours"]["Row"];
 
-const days = [
-  [1, "Montag"],
-  [2, "Dienstag"],
-  [3, "Mittwoch"],
-  [4, "Donnerstag"],
-  [5, "Freitag"],
-  [6, "Samstag"],
-  [7, "Sonntag"],
-] as const;
+const days = [1, 2, 3, 4, 5, 6, 7] as const;
 
 const initial: ActionState = {};
 
 export default function HoursForm({ hours }: { hours: Hours[] }) {
   const [state, action, pending] = useActionState(updateHours, initial);
+  const tDays = useTranslations("hours.days");
+  const tHours = useTranslations("hours");
+  const t = useTranslations("admin.hours");
+  const tc = useTranslations("admin.common");
 
   // First row per weekday (the editor manages one range per day).
   const byDay = new Map<number, Hours>();
@@ -29,15 +26,15 @@ export default function HoursForm({ hours }: { hours: Hours[] }) {
   return (
     <form action={action} className="max-w-xl space-y-4">
       <div className="card-soft divide-y divide-border p-2 hover:translate-y-0">
-        {days.map(([day, label]) => {
+        {days.map((day) => {
           const row = byDay.get(day);
           const closed = row?.is_closed ?? false;
           return (
             <div key={day} className="grid grid-cols-[1fr_auto] items-center gap-4 p-3 sm:grid-cols-[140px_auto_1fr]">
-              <span className="font-medium">{label}</span>
+              <span className="font-medium">{tDays(String(day))}</span>
               <label className="flex items-center gap-2 text-sm text-muted">
                 <input type="checkbox" name={`closed_${day}`} defaultChecked={closed} />
-                geschlossen
+                {tHours("closed")}
               </label>
               <div className="flex items-center gap-2 justify-self-end sm:justify-self-start">
                 <input
@@ -59,16 +56,13 @@ export default function HoursForm({ hours }: { hours: Hours[] }) {
         })}
       </div>
 
-      <p className="text-xs text-muted">
-        Hinweis: Der Editor verwaltet eine Zeitspanne pro Tag. Mehrere Spannen (z. B. Mittagspause)
-        können bei Bedarf ergänzt werden.
-      </p>
+      <p className="text-xs text-muted">{t("hint")}</p>
 
       <div className="flex items-center gap-4">
         <button type="submit" disabled={pending} className={btnPrimary}>
-          {pending ? "Speichern …" : "Speichern"}
+          {pending ? tc("saving") : tc("save")}
         </button>
-        {state.ok && <span className="text-sm text-primary">Gespeichert ✓</span>}
+        {state.ok && <span className="text-sm text-primary">{tc("saved")}</span>}
         {state.error && <span className="text-sm text-accent">{state.error}</span>}
       </div>
     </form>

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/supabase/auth";
 import { hasServiceRole } from "@/lib/supabase/admin";
@@ -12,20 +13,16 @@ export default async function AdminsPage() {
   ]);
   const me = (user?.email ?? "").toLowerCase();
   const canManage = hasServiceRole();
+  const t = await getTranslations("admin.admins");
 
   return (
     <div className="mx-auto max-w-2xl">
-      <h1 className="mb-1 font-display text-3xl">Admins</h1>
-      <p className="mb-6 text-sm text-muted">
-        Wer hier gelistet ist, darf Inhalte bearbeiten. Beim Anlegen wird ein Login-Konto mit Passwort erstellt.
-      </p>
+      <h1 className="mb-1 font-display text-3xl">{t("title")}</h1>
+      <p className="mb-6 text-sm text-muted">{t("intro")}</p>
 
       {!canManage && (
         <div className="mb-6 rounded-xl border border-accent/40 bg-accent-soft/50 p-4 text-sm">
-          <strong>Passwort-Verwaltung ist deaktiviert.</strong> Um Konten mit Passwort anzulegen oder
-          Passwörter zu ändern, trage das <code>service_role</code>-Secret (Supabase → Project Settings
-          → API) als <code>SUPABASE_SERVICE_ROLE_KEY</code> in <code>.env.local</code> ein und starte den
-          Server neu. Ohne den Schlüssel lassen sich E-Mails nur freischalten (Konto muss dann separat existieren).
+          <strong>{t("passwordDisabledTitle")}</strong> {t("passwordDisabledBody")}
         </div>
       )}
 
@@ -38,7 +35,7 @@ export default async function AdminsPage() {
             canManagePasswords={canManage}
           />
         ))}
-        {(admins ?? []).length === 0 && <li className="p-4 text-sm text-muted">Noch keine Admins.</li>}
+        {(admins ?? []).length === 0 && <li className="p-4 text-sm text-muted">{t("noAdmins")}</li>}
       </ul>
 
       <AddAdmin disabled={!canManage} />

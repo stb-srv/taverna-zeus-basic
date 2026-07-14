@@ -39,12 +39,14 @@ export function StatCard({
 export function PriceHighlightCard({
   title,
   name,
+  emptyLabel,
   price,
   icon,
   tone = "primary",
 }: {
   title: string;
   name: string | null;
+  emptyLabel: string;
   price: string;
   icon: ReactNode;
   tone?: "primary" | "accent";
@@ -64,7 +66,7 @@ export function PriceHighlightCard({
       <div className="min-w-0 flex-1">
         <div className="text-xs uppercase tracking-wide text-muted">{title}</div>
         <div className="truncate font-display text-lg text-foreground">
-          {name ?? "Keine Speise mit Preis"}
+          {name ?? emptyLabel}
         </div>
       </div>
       <div className="shrink-0 font-display text-xl text-primary tabular-nums">{price}</div>

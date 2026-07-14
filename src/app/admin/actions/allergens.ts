@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { i18nFromForm } from "@/lib/i18n-fields";
 import { str, strOrNull } from "@/lib/form-data";
+import { getAdminLocale } from "@/lib/locales";
 import { fillTranslations, guard, revalidatePublic, type ActionState } from "./shared";
 
 export type { ActionState } from "./shared";
@@ -12,6 +14,7 @@ export type { ActionState } from "./shared";
 export async function saveAllergen(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
     const supabase = await guard();
+    const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin.errors" });
     const id = strOrNull(fd, "id");
     const nameI18n = i18nFromForm((k) => str(fd, k), "name");
     const payload = {
@@ -20,8 +23,8 @@ export async function saveAllergen(_prev: ActionState, fd: FormData): Promise<Ac
       name_en: str(fd, "name_en"),
       name_i18n: nameI18n,
     };
-    if (!payload.code) return { error: "Code erforderlich." };
-    if (!payload.name_de) return { error: "Name (DE) erforderlich." };
+    if (!payload.code) return { error: t("codeRequired") };
+    if (!payload.name_de) return { error: t("nameDeRequired") };
 
     let rowId = id;
     if (id) {
@@ -58,6 +61,7 @@ export async function deleteAllergen(fd: FormData) {
 export async function saveAdditive(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
     const supabase = await guard();
+    const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin.errors" });
     const id = strOrNull(fd, "id");
     const nameI18n = i18nFromForm((k) => str(fd, k), "name");
     const payload = {
@@ -66,8 +70,8 @@ export async function saveAdditive(_prev: ActionState, fd: FormData): Promise<Ac
       name_en: str(fd, "name_en"),
       name_i18n: nameI18n,
     };
-    if (!payload.code) return { error: "Code erforderlich." };
-    if (!payload.name_de) return { error: "Name (DE) erforderlich." };
+    if (!payload.code) return { error: t("codeRequired") };
+    if (!payload.name_de) return { error: t("nameDeRequired") };
 
     let rowId = id;
     if (id) {

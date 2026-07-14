@@ -1,9 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdmin } from "@/lib/supabase/auth";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getAdminLocale } from "@/lib/locales";
 
 export type State = { ok?: boolean; error?: string };
 
@@ -13,10 +15,11 @@ const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function createAdminUser(_prev: State, fd: FormData): Promise<State> {
   try {
     await requireAdmin();
+    const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin.errors" });
     const email = String(fd.get("email") ?? "").trim().toLowerCase();
     const password = String(fd.get("password") ?? "");
-    if (!emailRe.test(email)) return { error: "Bitte eine gültige E-Mail-Adresse eingeben." };
-    if (password.length < 8) return { error: "Passwort muss mindestens 8 Zeichen haben." };
+    if (!emailRe.test(email)) return { error: t("invalidEmail") };
+    if (password.length < 8) return { error: t("passwordTooShort") };
 
     const admin = createAdminClient();
     const { error: cErr } = await admin.auth.admin.createUser({
@@ -44,9 +47,10 @@ export async function createAdminUser(_prev: State, fd: FormData): Promise<State
 export async function changeAdminPassword(_prev: State, fd: FormData): Promise<State> {
   try {
     await requireAdmin();
+    const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin.errors" });
     const email = String(fd.get("email") ?? "").trim().toLowerCase();
     const password = String(fd.get("password") ?? "");
-    if (password.length < 8) return { error: "Passwort muss mindestens 8 Zeichen haben." };
+    if (password.length < 8) return { error: t("passwordTooShort") };
 
     const admin = createAdminClient();
     // Locate the auth user by email (paginated; fine for a small team).
@@ -54,7 +58,7 @@ export async function changeAdminPassword(_prev: State, fd: FormData): Promise<S
     if (lErr) return { error: lErr.message };
     const target = data.users.find((u) => (u.email ?? "").toLowerCase() === email);
     if (!target) {
-      return { error: "Kein Konto mit dieser E-Mail gefunden. Zuerst als Admin anlegen." };
+      return { error: t("accountNotFound") };
     }
 
     const { error: uErr } = await admin.auth.admin.updateUserById(target.id, { password });
