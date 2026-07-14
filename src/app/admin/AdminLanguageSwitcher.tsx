@@ -14,6 +14,7 @@ export default function AdminLanguageSwitcher() {
   return (
     <form action={setAdminLocale}>
       <select
+        key={current}
         name="locale"
         defaultValue={current}
         onChange={(e) => e.currentTarget.form?.requestSubmit()}
