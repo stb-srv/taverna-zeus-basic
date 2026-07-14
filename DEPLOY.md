@@ -21,27 +21,30 @@ Build-Args (`NEXT_PUBLIC_*`) als auch in die Laufzeit-Umgebung.
 Nach dem ersten Speichern legt Coolify die Felder aus der Compose-Datei an.
 Werte eintragen (aus Supabase-Dashboard / `.env.example`):
 
-| Variable | Build-Zeit? | Pflicht |
-|---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | ✅ **„Available at Buildtime" aktivieren** | ja |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ✅ **„Available at Buildtime" aktivieren** | ja |
-| `SUPABASE_SERVICE_ROLE_KEY` | nein (nur Laufzeit) | ja |
-| `LIBRETRANSLATE_URL` | nein | optional |
-| `LIBRETRANSLATE_API_KEY` | nein | optional |
+| Variable | Pflicht |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | ja |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ja |
+| `SUPABASE_SERVICE_ROLE_KEY` | ja |
+| `LIBRETRANSLATE_URL` | optional |
+| `LIBRETRANSLATE_API_KEY` | optional |
 
 Die Felder erscheinen automatisch, sobald Coolify die `docker-compose.yaml`
 eingelesen hat (jede `${VAR}`-Referenz wird ein editierbares Feld). Erscheint
 **kein** Feld, ist meist noch der alte Build Pack `Dockerfile` aktiv — auf
-`Docker Compose` umstellen und einmal speichern.
+`Docker Compose` umstellen und einmal speichern. Jede Variable sollte nur
+**einmal** in der Liste stehen (pro Name nur eine Zeile) — taucht sie doppelt
+auf, ist eine Kopie leer geblieben und muss ebenfalls befüllt werden.
 
-Die beiden `NEXT_PUBLIC_*`-Variablen werden beim `next build` fest ins
-Client-Bundle eingebacken (auch der erlaubte Bild-Host in `next.config.ts` wird
-daraus abgeleitet) und sind in `docker-compose.yaml` als Build-Args explizit mit
-`${VAR}` interpoliert (`args: NAME: ${VAR}`) — so erkennt Coolifys UI sie korrekt
-als Variable statt sie als "hardcoded" zu markieren. **Nicht** den Coolify-Toggle
-„Build Variable?" benutzen; der funktioniert bei Docker Compose nicht. Es genügt,
-die Variable normal im Tab „Environment Variables" zu setzen. Nach einer
-Änderung dieser Werte ist ein **Redeploy (Rebuild)** nötig.
+Den Coolify-Toggle **„Available at Buildtime" / „Build Variable?" gibt es
+hier nicht zu setzen** — er gilt nur für den reinen `Dockerfile`-Build-Pack.
+Bei Docker Compose übernimmt `docker compose build` die Werte automatisch aus
+der von Coolify geschriebenen `.env`, weil `docker-compose.yaml` sie explizit
+als `${VAR}` referenziert (`build.args: NAME: ${VAR}`). Es genügt, den Wert
+einmal im Tab „Environment Variables" zu setzen. Nach einer Änderung der
+beiden `NEXT_PUBLIC_*`-Werte ist ein **Redeploy (Rebuild)** nötig, da sie fest
+in den JS-Code eingebacken werden (auch der erlaubte Bild-Host in
+`next.config.ts` wird daraus abgeleitet).
 
 `SUPABASE_SERVICE_ROLE_KEY` ist ein Geheimnis mit vollen DB-Rechten — niemals
 mit `NEXT_PUBLIC_`-Prefix versehen und nicht als Build-Arg übergeben.

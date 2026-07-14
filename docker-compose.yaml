@@ -24,9 +24,12 @@ services:
         NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
     environment:
       # ${VAR} -> erzeugt ein editierbares Feld in der Coolify-UI.
-      # Öffentliche Supabase-Anbindung (auch zur Laufzeit für Server Components).
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      # NEXT_PUBLIC_* absichtlich NICHT hier wiederholen: Next.js baut diese
+      # Werte beim `next build` fest in den JS-Code ein (Client UND Server) und
+      # liest sie zur Laufzeit nie aus process.env. Ein zweiter Eintrag hier
+      # würde in Coolify nur ein doppeltes, verwirrendes Feld erzeugen (siehe
+      # build.args oben – dort ist der einzige Ort, an dem der Wert gebraucht wird).
+      #
       # Server-only Geheimnis mit vollen DB-Rechten – NIE mit NEXT_PUBLIC_-Prefix.
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
       # LibreTranslate (optional). :- = editierbares Feld mit leerem Default,
