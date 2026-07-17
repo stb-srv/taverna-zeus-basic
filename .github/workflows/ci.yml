@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Node/npm versions must match the Dockerfile (node:22-alpine + npm 10) — a
+# package-lock.json regenerated with a newer local npm can silently drop
+# nested-dependency entries that npm 10's stricter `npm ci` then rejects.
+# See AGENTS.md.
+env:
+  NODE_VERSION: 22
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm install -g npm@10
+      - run: npm ci
+      - run: npx tsc --noEmit
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm install -g npm@10
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm install -g npm@10
+      - run: npm ci
+      - run: npm test
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm install -g npm@10
+      # A clean `npm ci` on npm 10 is the same check the Dockerfile's `deps`
+      # stage does — this is what actually catches the lockfile drift from
+      # AGENTS.md before it reaches a deploy.
+      - run: npm ci
+      - name: Build (Next.js)
+        run: npm run build
+        env:
+          # Public (anon) Supabase config — same values baked into the
+          # deployed client bundle, so safe as repo secrets/variables here.
+          # generateMetadata() in src/app/[locale]/layout.tsx queries
+          # Supabase during static generation, so a real reachable project
+          # is required for `next build` to succeed. Configure
+          # NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY under
+          # Settings → Secrets and variables → Actions.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
