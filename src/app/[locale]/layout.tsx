@@ -18,14 +18,47 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const [settings, enabled] = await Promise.all([getSettings(), getEnabledLocales()]);
+  const name = settings?.name ?? "Taverna Zeus";
+  const description = settings ? localized(settings, "description", locale as Locale) : undefined;
+
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/+$/, "");
+  const localeUrl = `${siteUrl}/${locale}`;
+  const languages = Object.fromEntries(enabled.map((l) => [l, `${siteUrl}/${l}`]));
+  const images = settings?.hero_image_url ? [{ url: settings.hero_image_url }] : undefined;
+
   return {
+    metadataBase: new URL(siteUrl),
     title: {
-      default: settings?.name ?? "Taverna Zeus",
-      template: `%s · ${settings?.name ?? "Taverna Zeus"}`,
+      default: name,
+      template: `%s · ${name}`,
     },
-    description: settings?.description_de ?? undefined,
+    description,
+    alternates: {
+      canonical: localeUrl,
+      languages,
+    },
+    openGraph: {
+      title: name,
+      description,
+      url: localeUrl,
+      siteName: name,
+      locale,
+      type: "website",
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: name,
+      description,
+      images,
+    },
   };
 }
 
@@ -65,7 +98,12 @@ export default async function LocaleLayout({
         <NextIntlClientProvider>
           <Nav restaurantName={name} locales={enabled} pages={pages} />
           <main className="flex-1">{children}</main>
-          <Footer restaurantName={name} phone={settings?.phone ?? null} email={settings?.email ?? null} />
+          <Footer
+            restaurantName={name}
+            phone={settings?.phone ?? null}
+            email={settings?.email ?? null}
+            socialLinks={settings?.social_links}
+          />
           <CookieBanner />
           <FloatingActions withConsent />
         </NextIntlClientProvider>
