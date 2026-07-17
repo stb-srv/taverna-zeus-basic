@@ -77,6 +77,39 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+          locale: string | null
+          message: string
+          name: string
+          phone: string | null
+          read_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: never
+          locale?: string | null
+          message: string
+          name: string
+          phone?: string | null
+          read_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: never
+          locale?: string | null
+          message?: string
+          name?: string
+          phone?: string | null
+          read_at?: string | null
+        }
+        Relationships: []
+      }
       languages: {
         Row: {
           code: string

@@ -132,3 +132,10 @@ export const IconTrendDown = () =>
       <path d="M17 17h4v-4" />
     </>,
   );
+export const IconMail = () =>
+  svg(
+    <>
+      <path d="M4 5h16v14H4z" />
+      <path d="m4 6 8 7 8-7" />
+    </>,
+  );

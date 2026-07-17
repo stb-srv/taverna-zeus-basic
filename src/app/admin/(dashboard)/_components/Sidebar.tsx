@@ -23,6 +23,7 @@ export default function Sidebar() {
         { href: "/admin/hours", label: t("hours"), icon: <IconClock /> },
         { href: "/admin/settings", label: t("settings"), icon: <IconPin /> },
         { href: "/admin/pages", label: t("pages"), icon: <IconPage /> },
+        { href: "/admin/messages", label: t("messages"), icon: <IconMail /> },
         { href: "/admin/translations", label: t("translations"), icon: <IconGlobe /> },
       ],
     },
@@ -134,6 +135,14 @@ function IconGlobe() {
       <circle cx="12" cy="12" r="9" />
       <path d="M3 12h18" />
       <path d="M12 3a13.5 13.5 0 0 1 0 18a13.5 13.5 0 0 1 0-18Z" />
+    </>,
+  );
+}
+function IconMail() {
+  return svg(
+    <>
+      <path d="M4 5h16v14H4z" />
+      <path d="m4 6 8 7 8-7" />
     </>,
   );
 }

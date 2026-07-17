@@ -3,6 +3,7 @@ import type { Locale } from "@/i18n/routing";
 import { getSettings, getOpeningHours } from "@/lib/queries";
 import OpeningHours from "@/components/OpeningHours";
 import MapEmbed from "@/components/MapEmbed";
+import ContactForm from "./ContactForm";
 
 export async function generateMetadata() {
   const t = await getTranslations("location");
@@ -75,6 +76,11 @@ export default async function LocationPage({
           <MapEmbed embedUrl={settings?.google_maps_embed ?? null} />
         </div>
       </div>
+
+      <section className="card-soft mt-8 max-w-xl p-6">
+        <h2 className="rule-gold mb-6 inline-block text-xl">{t("contactFormHeading")}</h2>
+        <ContactForm locale={locale} />
+      </section>
     </div>
   );
 }

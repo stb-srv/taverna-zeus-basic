@@ -11,6 +11,7 @@ export type DashboardStats = {
   avgPrice: number | null;
   priciest: PricedItem | null;
   cheapest: PricedItem | null;
+  unreadMessages: number;
 };
 
 /**
@@ -20,10 +21,11 @@ export type DashboardStats = {
 export async function getDashboardStats(): Promise<DashboardStats> {
   const supabase = await createClient();
 
-  const [catCount, pageCount, itemsRes] = await Promise.all([
+  const [catCount, pageCount, itemsRes, unreadCount] = await Promise.all([
     supabase.from("menu_categories").select("id", { count: "exact", head: true }),
     supabase.from("pages").select("id", { count: "exact", head: true }),
     supabase.from("menu_items").select("name_de, price, is_active"),
+    supabase.from("contact_messages").select("id", { count: "exact", head: true }).is("read_at", null),
   ]);
 
   const items = itemsRes.data ?? [];
@@ -50,6 +52,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     avgPrice,
     priciest,
     cheapest,
+    unreadMessages: unreadCount.count ?? 0,
   };
 }
 

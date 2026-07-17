@@ -9,6 +9,7 @@ import {
   IconAverage,
   IconTrendUp,
   IconTrendDown,
+  IconMail,
 } from "./_components/widgets";
 
 export default async function AdminHome() {
@@ -46,6 +47,11 @@ export default async function AdminHome() {
           value={euro(s.avgPrice)}
           icon={<IconAverage />}
           hint={`${t("statAvgPriceHintPrefix")} ${s.pricedCount} ${t("statAvgPriceHintSuffix")}`}
+        />
+        <StatCard
+          label={t("statUnreadMessages")}
+          value={s.unreadMessages}
+          icon={<IconMail />}
         />
       </div>
 
