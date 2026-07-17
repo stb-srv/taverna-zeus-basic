@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { buildOsmEmbedUrl } from "@/lib/geocode";
+import { buildOsmEmbedUrl } from "@/app/admin/actions/geocode";
 
 const address = { street: "Marienplatz 8", zip: "80331", city: "München", country: "Deutschland" };
 

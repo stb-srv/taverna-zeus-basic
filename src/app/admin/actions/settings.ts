@@ -1,7 +1,7 @@
 "use server";
 
 import { i18nFromForm } from "@/i18n/fields";
-import { buildOsmEmbedUrl } from "@/lib/geocode";
+import { buildOsmEmbedUrl } from "./geocode";
 import { str, strOrNull } from "@/lib/form-data";
 import { fillTranslations, guard, revalidatePublic, type ActionState } from "./shared";
 
