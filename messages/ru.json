@@ -35,7 +35,19 @@
     "email": "Эл. почта",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "В целях защиты ваших данных карта загружается только после вашего согласия. При этом данные передаются в OpenStreetMap.",
-    "mapConsentButton": "Загрузить карту"
+    "mapConsentButton": "Загрузить карту",
+    "contactFormHeading": "Отправить сообщение",
+    "contactName": "Имя",
+    "contactEmail": "Электронная почта",
+    "contactPhone": "Телефон (необязательно)",
+    "contactMessage": "Послание",
+    "contactSubmit": "Отправка",
+    "contactSubmitting": "Отправляется..",
+    "contactSuccess": "Спасибо за сообщение! Мы свяжемся с вами как можно скорее.",
+    "contactErrorRequired": "Пожалуйста, заполните имя и сообщение.",
+    "contactErrorEmail": "Пожалуйста, введите действительный адрес электронной почты.",
+    "contactErrorRateLimited": "Слишком много сообщений за короткое время - пожалуйста, попробуйте еще раз позже.",
+    "contactErrorGeneric": "Сообщение не может быть отправлено. Пожалуйста, попробуйте еще раз позже."
   },
   "hours": {
     "closed": "Закрыто",
@@ -97,7 +109,8 @@
       "admins": "Админы",
       "viewSite": "Посмотреть сайт  the",
       "logout": "Отмена регистрации",
-      "languageLabel": "Язык администратора"
+      "languageLabel": "Язык администратора",
+      "messages": "Новости"
     },
     "login": {
       "title": "Meraki CMS",
@@ -138,7 +151,8 @@
       "pagesTitle": "Страницы",
       "pagesDesc": "Импринт, защита данных и другие страницы.",
       "translationsTitle": "Переводы",
-      "translationsDesc": "Состояние автоматических переводов, заполнение пробелов."
+      "translationsDesc": "Состояние автоматических переводов, заполнение пробелов.",
+      "statUnreadMessages": "Непрочитанные сообщения"
     },
     "translationsPanel": {
       "title": "Другие языки",
@@ -271,7 +285,13 @@
       "email": "Электронная почта",
       "mapEmbed": "Map Embed URL (OpenStreetMap)",
       "mapEmbedHint": "Оставьте пустой, затем карта автоматически генерируется с адреса выше, когда она сохраняется. В качестве альтернативы вставьте свой собственный URL-адрес — на openstreetmap.org: адрес поиска → на правой «Поделиться» → Чек-марки на «Маркер» → Формат «HTML» → Только URL-адрес из списка",
-      "mapEmbedHintSuffix": "вставить."
+      "mapEmbedHintSuffix": "вставить.",
+      "socialHeading": "Социальные медиа",
+      "instagram": "Instagram URL",
+      "facebook": "URL Facebook",
+      "tiktok": "TikTok URL",
+      "whatsapp": "Номер WhatsApp",
+      "enabled": "Активный"
     },
     "admins": {
       "title": "Админы",
@@ -333,6 +353,12 @@
       "createdSuffix": "создано ✓",
       "errorPrefix": "Ошибка:",
       "errorSavedAnywaySuffix": "Переводы все еще хранились."
+    },
+    "messages": {
+      "title": "Новости",
+      "subtitle": "Запросы через контактную форму сайта.",
+      "markAsRead": "Марк читается",
+      "noMessages": "Пока нет новостей."
     }
   }
 }

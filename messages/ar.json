@@ -35,7 +35,19 @@
     "email": "البريد الإلكتروني",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "لحماية بياناتك، يتم تحميل الخريطة فقط بعد موافقتك. وأثناء ذلك تُنقل بيانات إلى OpenStreetMap.",
-    "mapConsentButton": "تحميل الخريطة"
+    "mapConsentButton": "تحميل الخريطة",
+    "contactFormHeading": "رسالة",
+    "contactName": "الاسم",
+    "contactEmail": "البريد الإلكتروني",
+    "contactPhone": "Telephone (optional)",
+    "contactMessage": "الرسالة",
+    "contactSubmit": "إرسال",
+    "contactSubmitting": "هل أرسل..",
+    "contactSuccess": "شكرا لك على رسالتك سنتصل بك في أقرب وقت ممكن.",
+    "contactErrorRequired": "يرجى ملء الاسم والرسالة.",
+    "contactErrorEmail": "يرجى الدخول إلى عنوان بريد إلكتروني صحيح.",
+    "contactErrorRateLimited": "الكثير من الرسائل في وقت قصير - من فضلك حاول مرة أخرى فيما بعد.",
+    "contactErrorGeneric": "لا يمكن إرسال الرسالة حاول مرة أخرى لاحقاً."
   },
   "hours": {
     "closed": "مغلق",
@@ -97,7 +109,8 @@
       "admins": "Admins",
       "viewSite": "مشاهدة الموقع",
       "logout": "إزالة التسجيل",
-      "languageLabel": "اللغة المستخدمة"
+      "languageLabel": "اللغة المستخدمة",
+      "messages": "الأخبار"
     },
     "login": {
       "title": "Meraki CMS",
@@ -138,7 +151,8 @@
       "pagesTitle": "الصفحة",
       "pagesDesc": "Imprint, data protection and other pages.",
       "translationsTitle": "الترجمة التحريرية",
-      "translationsDesc": "State of automatic translations, fill gaps collected."
+      "translationsDesc": "State of automatic translations, fill gaps collected.",
+      "statUnreadMessages": "رسائل غير واضحة"
     },
     "translationsPanel": {
       "title": "لغات أخرى",
@@ -271,7 +285,13 @@
       "email": "البريد الإلكتروني",
       "mapEmbed": "Map Embed URL (OpenStreetMap)",
       "mapEmbedHint": "إتركْ فارغَ، ثمّ البطاقةَ تُولّدُ تلقائياً مِنْ العنوانِ فوق عندما يُوفّرُ. كبديل عن ذلك، تُدرج URL الخاص بك - على العنوان المفتوح.org: \" عنوان البحث \" على العنوان الصحيح \" Share \"  the علامات تحقق على \" Marker \" , Format \" HTML \" → Only the URL from the",
-      "mapEmbedHintSuffix": "يدرج."
+      "mapEmbedHintSuffix": "يدرج.",
+      "socialHeading": "وسائط الإعلام الاجتماعية",
+      "instagram": "Instagram URL",
+      "facebook": "Facebook URL",
+      "tiktok": "TikTok URL",
+      "whatsapp": "رقم ماساب",
+      "enabled": "النشاط"
     },
     "admins": {
       "title": "Admins",
@@ -333,6 +353,12 @@
       "createdSuffix": "created √",
       "errorPrefix": "Error:",
       "errorSavedAnywaySuffix": "ما زالت الترجمة مخزنة."
+    },
+    "messages": {
+      "title": "الأخبار",
+      "subtitle": "طلبات عبر استمارة الاتصال بالموقع.",
+      "markAsRead": "علامة على النحو التالي:",
+      "noMessages": "لا أخبار بعد."
     }
   }
 }

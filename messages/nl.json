@@ -35,7 +35,19 @@
     "email": "E-mail",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "Ter bescherming van uw gegevens wordt de kaart pas geladen na uw toestemming. Daarbij worden gegevens naar OpenStreetMap verzonden.",
-    "mapConsentButton": "Kaart laden"
+    "mapConsentButton": "Kaart laden",
+    "contactFormHeading": "Bericht versturen",
+    "contactName": "Naam",
+    "contactEmail": "E-mail",
+    "contactPhone": "Telefoon (facultatief)",
+    "contactMessage": "Bericht",
+    "contactSubmit": "Verzending",
+    "contactSubmitting": "Wordt verzonden..",
+    "contactSuccess": "Dank u voor uw bericht! Wij nemen zo spoedig mogelijk contact met u op.",
+    "contactErrorRequired": "Vul de naam en het bericht in.",
+    "contactErrorEmail": "Voer een geldig e-mailadres in.",
+    "contactErrorRateLimited": "Te veel berichten in een korte tijd, probeer het later opnieuw.",
+    "contactErrorGeneric": "Bericht kon niet verzonden worden. Probeer het later nog eens."
   },
   "hours": {
     "closed": "Gesloten",
@@ -97,7 +109,8 @@
       "admins": "Beheerders",
       "viewSite": "Bekijk de website",
       "logout": "Uitschrijving",
-      "languageLabel": "Beheerderstaal"
+      "languageLabel": "Beheerderstaal",
+      "messages": "Nieuws"
     },
     "login": {
       "title": "Meraki CMS",
@@ -138,7 +151,8 @@
       "pagesTitle": "Bladzijden",
       "pagesDesc": "Impressum, gegevensbescherming en andere pagina's.",
       "translationsTitle": "Vertalingen",
-      "translationsDesc": "Stand van de automatische vertalingen, opvullen van de verzamelde lacunes."
+      "translationsDesc": "Stand van de automatische vertalingen, opvullen van de verzamelde lacunes.",
+      "statUnreadMessages": "Ongelezen berichten"
     },
     "translationsPanel": {
       "title": "Andere talen",
@@ -271,7 +285,13 @@
       "email": "E-mail",
       "mapEmbed": "Kaart Embed URL (OpenStreetMap)",
       "mapEmbedHint": "Laat leeg, dan wordt de kaart automatisch gegenereerd vanaf het bovenstaande adres wanneer deze wordt opgeslagen. Alternatief, plaats uw eigen URL ",
-      "mapEmbedHintSuffix": "invoegen."
+      "mapEmbedHintSuffix": "invoegen.",
+      "socialHeading": "Sociale media",
+      "instagram": "Instagram-URL",
+      "facebook": "Facebook-URL",
+      "tiktok": "TikTok-URL",
+      "whatsapp": "WhatsApp-nummer",
+      "enabled": "Actief"
     },
     "admins": {
       "title": "Beheerders",
@@ -333,6 +353,12 @@
       "createdSuffix": "aangemaakt",
       "errorPrefix": "Fout:",
       "errorSavedAnywaySuffix": "Vertalingen werden nog opgeslagen."
+    },
+    "messages": {
+      "title": "Nieuws",
+      "subtitle": "Verzoeken via het contactformulier van de website.",
+      "markAsRead": "Markeren als gelezen",
+      "noMessages": "Nog geen nieuws."
     }
   }
 }

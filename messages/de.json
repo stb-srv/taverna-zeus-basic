@@ -35,7 +35,19 @@
     "email": "E-Mail",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "Zum Schutz Ihrer Daten wird die Karte erst nach Ihrer Zustimmung geladen. Dabei werden Daten an OpenStreetMap übertragen.",
-    "mapConsentButton": "Karte laden"
+    "mapConsentButton": "Karte laden",
+    "contactFormHeading": "Nachricht senden",
+    "contactName": "Name",
+    "contactEmail": "E-Mail",
+    "contactPhone": "Telefon (optional)",
+    "contactMessage": "Nachricht",
+    "contactSubmit": "Absenden",
+    "contactSubmitting": "Wird gesendet …",
+    "contactSuccess": "Danke für deine Nachricht! Wir melden uns so schnell wie möglich.",
+    "contactErrorRequired": "Bitte Name und Nachricht ausfüllen.",
+    "contactErrorEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
+    "contactErrorRateLimited": "Zu viele Nachrichten in kurzer Zeit — bitte versuche es später erneut.",
+    "contactErrorGeneric": "Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut."
   },
   "hours": {
     "closed": "Geschlossen",
@@ -93,6 +105,7 @@
       "hours": "Öffnungszeiten",
       "settings": "Standort & Kontakt",
       "pages": "Seiten",
+      "messages": "Nachrichten",
       "translations": "Übersetzungen",
       "admins": "Admins",
       "viewSite": "Website ansehen ↗",
@@ -125,6 +138,7 @@
       "statAvgPrice": "Ø Preis",
       "statAvgPriceHintPrefix": "über",
       "statAvgPriceHintSuffix": "Speisen mit Preis",
+      "statUnreadMessages": "Ungelesene Nachrichten",
       "mostExpensive": "Teuerste Speise",
       "cheapest": "Günstigste Speise",
       "noPricedDish": "Keine Speise mit Preis",
@@ -249,6 +263,12 @@
       "titleField": "Titel",
       "contentField": "Inhalt (Markdown)"
     },
+    "messages": {
+      "title": "Nachrichten",
+      "subtitle": "Anfragen über das Kontaktformular der Website.",
+      "markAsRead": "Als gelesen markieren",
+      "noMessages": "Noch keine Nachrichten."
+    },
     "hours": {
       "title": "Öffnungszeiten",
       "subtitle": "Zeiten pro Wochentag festlegen.",
@@ -271,7 +291,13 @@
       "email": "E-Mail",
       "mapEmbed": "Karten-Embed-URL (OpenStreetMap)",
       "mapEmbedHint": "Leer lassen, dann wird die Karte beim Speichern automatisch aus der Adresse oben erzeugt. Alternativ eine eigene URL einfügen — auf openstreetmap.org: Adresse suchen → rechts „Teilen“ → Häkchen bei „Marker setzen“ → Format „HTML“ → nur die URL aus dem",
-      "mapEmbedHintSuffix": "einfügen."
+      "mapEmbedHintSuffix": "einfügen.",
+      "socialHeading": "Social Media",
+      "instagram": "Instagram-URL",
+      "facebook": "Facebook-URL",
+      "tiktok": "TikTok-URL",
+      "whatsapp": "WhatsApp-Nummer",
+      "enabled": "Aktiv"
     },
     "admins": {
       "title": "Admins",

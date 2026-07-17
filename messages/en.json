@@ -35,7 +35,19 @@
     "email": "Email",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "To protect your data, the map is only loaded after your consent. Data will be transferred to OpenStreetMap.",
-    "mapConsentButton": "Load map"
+    "mapConsentButton": "Load map",
+    "contactFormHeading": "Send message",
+    "contactName": "Name",
+    "contactEmail": "E-mail",
+    "contactPhone": "Telephone (optional)",
+    "contactMessage": "Message",
+    "contactSubmit": "Dispatch",
+    "contactSubmitting": "Is sent ..",
+    "contactSuccess": "Thank you for your message! We will contact you as soon as possible.",
+    "contactErrorRequired": "Please fill in the name and message.",
+    "contactErrorEmail": "Please enter a valid email address.",
+    "contactErrorRateLimited": "Too many messages in a short time – please try again later.",
+    "contactErrorGeneric": "Message could not be sent. Please try again later."
   },
   "hours": {
     "closed": "Closed",
@@ -93,6 +105,7 @@
       "hours": "Opening hours",
       "settings": "Location & Contact",
       "pages": "Pages",
+      "messages": "Messages",
       "translations": "Translations",
       "admins": "Admins",
       "viewSite": "View the website ↗",
@@ -125,6 +138,7 @@
       "statAvgPrice": "Ø Price",
       "statAvgPriceHintPrefix": "over",
       "statAvgPriceHintSuffix": "Food with price",
+      "statUnreadMessages": "Unread messages",
       "mostExpensive": "The most expensive food",
       "cheapest": "Cheapest food",
       "noPricedDish": "No food with price",
@@ -249,6 +263,12 @@
       "titleField": "Title",
       "contentField": "Content (markdown)"
     },
+    "messages": {
+      "title": "Messages",
+      "subtitle": "Inquiries via the website's contact form.",
+      "markAsRead": "Mark as read",
+      "noMessages": "No messages yet."
+    },
     "hours": {
       "title": "Opening hours",
       "subtitle": "Set times per weekday.",
@@ -271,7 +291,13 @@
       "email": "E-mail",
       "mapEmbed": "Map Embed URL (OpenStreetMap)",
       "mapEmbedHint": "Leave blank, then the card is automatically generated from the address above when it is saved. Alternatively, insert your own URL — on openstreetmap.org: Search address → on the right “Share” → Check marks on “Marker” → Format “HTML” → Only the URL from the",
-      "mapEmbedHintSuffix": "insert."
+      "mapEmbedHintSuffix": "insert.",
+      "socialHeading": "Social Media",
+      "instagram": "Instagram URL",
+      "facebook": "Facebook URL",
+      "tiktok": "TikTok URL",
+      "whatsapp": "WhatsApp number",
+      "enabled": "Active"
     },
     "admins": {
       "title": "Admins",

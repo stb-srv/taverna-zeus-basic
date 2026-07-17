@@ -35,7 +35,19 @@
     "email": "Correo electrónico",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "Para proteger sus datos, el mapa solo se carga tras su consentimiento. Durante este proceso se transfieren datos a OpenStreetMap.",
-    "mapConsentButton": "Cargar mapa"
+    "mapConsentButton": "Cargar mapa",
+    "contactFormHeading": "Enviar mensaje",
+    "contactName": "Nombre",
+    "contactEmail": "E-mail",
+    "contactPhone": "Teléfono (opcional)",
+    "contactMessage": "Mensaje",
+    "contactSubmit": "Despacho",
+    "contactSubmitting": "Es enviado..",
+    "contactSuccess": "¡Gracias por tu mensaje! Nos pondremos en contacto con usted lo antes posible.",
+    "contactErrorRequired": "Por favor, llene el nombre y el mensaje.",
+    "contactErrorEmail": "Por favor, introduzca una dirección de correo electrónico válida.",
+    "contactErrorRateLimited": "Demasiados mensajes en poco tiempo – por favor vuelva a intentarlo más tarde.",
+    "contactErrorGeneric": "El mensaje no puede ser enviado. Por favor, intente de nuevo más tarde."
   },
   "hours": {
     "closed": "Cerrado",
@@ -97,7 +109,8 @@
       "admins": "Admins",
       "viewSite": "Ver el sitio web",
       "logout": "Desregistración",
-      "languageLabel": "Lenguaje de administrador"
+      "languageLabel": "Lenguaje de administrador",
+      "messages": "Noticias"
     },
     "login": {
       "title": "Meraki CMS",
@@ -138,7 +151,8 @@
       "pagesTitle": "Páginas",
       "pagesDesc": "Imprint, protección de datos y otras páginas.",
       "translationsTitle": "Traducciones",
-      "translationsDesc": "Estado de las traducciones automáticas, subsanar las lagunas recogidas."
+      "translationsDesc": "Estado de las traducciones automáticas, subsanar las lagunas recogidas.",
+      "statUnreadMessages": "Mensajes no leídos"
     },
     "translationsPanel": {
       "title": "Otros idiomas",
@@ -271,7 +285,13 @@
       "email": "E-mail",
       "mapEmbed": "Mapa URL (OpenStreetMap)",
       "mapEmbedHint": "Deja en blanco, entonces la tarjeta se genera automáticamente desde la dirección anterior cuando se guarda. Alternativamente, inserte su propia URL — en openstreetmap.org: Dirección de búsqueda → en la derecha “Share” → Marcas en “Marker” → Formato “HTML” → Sólo la URL de la",
-      "mapEmbedHintSuffix": "insertar."
+      "mapEmbedHintSuffix": "insertar.",
+      "socialHeading": "Social media",
+      "instagram": "URL de Instagram",
+      "facebook": "URL de Facebook",
+      "tiktok": "URL de TikTok",
+      "whatsapp": "Número de WhatsApp",
+      "enabled": "Activo"
     },
     "admins": {
       "title": "Admins",
@@ -333,6 +353,12 @@
       "createdSuffix": "creado ✓",
       "errorPrefix": "Error:",
       "errorSavedAnywaySuffix": "Las traducciones seguían almacenadas."
+    },
+    "messages": {
+      "title": "Noticias",
+      "subtitle": "Solicitudes vía el formulario de contacto del sitio web.",
+      "markAsRead": "Marcar como leído",
+      "noMessages": "Aún no hay noticias."
     }
   }
 }

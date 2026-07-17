@@ -35,7 +35,19 @@
     "email": "Email",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "Για την προστασία των δεδομένων σας, ο χάρτης φορτώνεται μόνο μετά τη συγκατάθεσή σας. Κατά τη διαδικασία αυτή μεταφέρονται δεδομένα στο OpenStreetMap.",
-    "mapConsentButton": "Φόρτωση χάρτη"
+    "mapConsentButton": "Φόρτωση χάρτη",
+    "contactFormHeading": "Αποστολή μηνύματος",
+    "contactName": "Όνομα",
+    "contactEmail": "Ηλεκτρονικό ταχυδρομείο",
+    "contactPhone": "Τηλέφωνο (προαιρετικό)",
+    "contactMessage": "Μήνυμα",
+    "contactSubmit": "Αποστολή",
+    "contactSubmitting": "Στέλνεται..",
+    "contactSuccess": "Σας ευχαριστώ για το μήνυμά σας! Θα επικοινωνήσουμε μαζί σας το συντομότερο δυνατόν.",
+    "contactErrorRequired": "Συμπληρώστε το όνομα και το μήνυμα.",
+    "contactErrorEmail": "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email.",
+    "contactErrorRateLimited": "Πάρα πολλά μηνύματα σε σύντομο χρονικό διάστημα – παρακαλώ προσπαθήστε ξανά αργότερα.",
+    "contactErrorGeneric": "Το μήνυμα δεν μπορεί να σταλεί. Παρακαλώ προσπαθήστε ξανά αργότερα."
   },
   "hours": {
     "closed": "Κλειστά",
@@ -97,7 +109,8 @@
       "admins": "Διοικητές",
       "viewSite": "Δείτε την ιστοσελίδα ↗",
       "logout": "Απονομή",
-      "languageLabel": "Γλώσσα διαχειριστή"
+      "languageLabel": "Γλώσσα διαχειριστή",
+      "messages": "Νέα"
     },
     "login": {
       "title": "Μεράκι CMS",
@@ -138,7 +151,8 @@
       "pagesTitle": "Σελίδες",
       "pagesDesc": "Εκτύπωση, προστασία δεδομένων και άλλες σελίδες.",
       "translationsTitle": "Μεταφράσεις",
-      "translationsDesc": "Κατάσταση αυτόματων μεταφράσεων, συμπλήρωση των κενών που συλλέγονται."
+      "translationsDesc": "Κατάσταση αυτόματων μεταφράσεων, συμπλήρωση των κενών που συλλέγονται.",
+      "statUnreadMessages": "Μη αναγνωσμένα μηνύματα"
     },
     "translationsPanel": {
       "title": "Άλλες γλώσσες",
@@ -271,7 +285,13 @@
       "email": "Ηλεκτρονικό ταχυδρομείο",
       "mapEmbed": "Ενσωματωμένο URL χάρτη (OpenStreetMap)",
       "mapEmbedHint": "Αφήστε το κενό, τότε η κάρτα δημιουργείται αυτόματα από την παραπάνω διεύθυνση όταν αποθηκευτεί. Εναλλακτικά, εισάγετε το δικό σας URL — στο openstreetmap.org: Διεύθυνση αναζήτησης → στα δεξιά “Share” → Ελέγξτε τα σημάδια στο “Marker” → Μορφή “HTML” → Μόνο το URL από το",
-      "mapEmbedHintSuffix": "εισαγωγή."
+      "mapEmbedHintSuffix": "εισαγωγή.",
+      "socialHeading": "Μέσα κοινωνικής δικτύωσης",
+      "instagram": "URL Instagram",
+      "facebook": "URL Facebook",
+      "tiktok": "URL TikTok",
+      "whatsapp": "Αριθμός εφαρμογής",
+      "enabled": "Ενεργό"
     },
     "admins": {
       "title": "Διοικητές",
@@ -333,6 +353,12 @@
       "createdSuffix": "δημιουργήθηκε ✓",
       "errorPrefix": "Σφάλμα:",
       "errorSavedAnywaySuffix": "Οι μεταφράσεις ήταν ακόμα αποθηκευμένες."
+    },
+    "messages": {
+      "title": "Νέα",
+      "subtitle": "Αιτήματα μέσω της φόρμας επικοινωνίας της ιστοσελίδας.",
+      "markAsRead": "Σημείωση ως αναγνωσμένο",
+      "noMessages": "Κανένα νέο ακόμα."
     }
   }
 }

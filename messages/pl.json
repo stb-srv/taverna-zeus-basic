@@ -35,7 +35,19 @@
     "email": "E-mail",
     "mapConsentTitle": "OpenStreetMap",
     "mapConsentText": "Aby chronić Twoje dane, mapa jest ładowana dopiero po Twojej zgodzie. Podczas tego procesu dane są przesyłane do OpenStreetMap.",
-    "mapConsentButton": "Załaduj mapę"
+    "mapConsentButton": "Załaduj mapę",
+    "contactFormHeading": "Wyślij wiadomość",
+    "contactName": "Nazwa",
+    "contactEmail": "E-mail",
+    "contactPhone": "Telefon (nieobowiązkowo)",
+    "contactMessage": "Wiadomość",
+    "contactSubmit": "Wysyłka",
+    "contactSubmitting": "Wysłano..",
+    "contactSuccess": "Dziękuję za wiadomość! Skontaktujemy się z tobą jak najszybciej.",
+    "contactErrorRequired": "Proszę wpisać nazwę i wiadomość.",
+    "contactErrorEmail": "Proszę podać poprawny adres e-mail.",
+    "contactErrorRateLimited": "Zbyt wiele wiadomości w krótkim czasie - proszę spróbować ponownie później.",
+    "contactErrorGeneric": "Wiadomość nie mogła być wysłana. Proszę spróbować później."
   },
   "hours": {
     "closed": "Zamknięte",
@@ -97,7 +109,8 @@
       "admins": "Podawanie",
       "viewSite": "Zobacz stronę internetową",
       "logout": "Wyłączenie rejestracji",
-      "languageLabel": "Język administracyjny"
+      "languageLabel": "Język administracyjny",
+      "messages": "Aktualności"
     },
     "login": {
       "title": "Meraki CMS",
@@ -138,7 +151,8 @@
       "pagesTitle": "Strony",
       "pagesDesc": "Nadruk, ochrona danych i inne strony.",
       "translationsTitle": "Tłumaczenia",
-      "translationsDesc": "Stan tłumaczeń automatycznych, wypełnić luki zebrane."
+      "translationsDesc": "Stan tłumaczeń automatycznych, wypełnić luki zebrane.",
+      "statUnreadMessages": "Nieprzeczytane wiadomości"
     },
     "translationsPanel": {
       "title": "Inne języki",
@@ -271,7 +285,13 @@
       "email": "E-mail",
       "mapEmbed": "Mapa Zamieszczone URL (OpenStreetMap)",
       "mapEmbedHint": "Pozostawić puste, a następnie karta jest automatycznie generowana z adresu powyżej, gdy jest zapisywana. Alternatywnie, należy umieścić własny URL - na openstreetmap.org: Adres wyszukiwania → po prawej stronie \"Udostępnij\" → Sprawdź znaki na \"Marker\" → Format \"HTML\" → Tylko URL z",
-      "mapEmbedHintSuffix": "wstawić."
+      "mapEmbedHintSuffix": "wstawić.",
+      "socialHeading": "Media społecznościowe",
+      "instagram": "Instagram URL",
+      "facebook": "URL Facebooka",
+      "tiktok": "URL TikTok",
+      "whatsapp": "WhatsApp numer",
+      "enabled": "Aktywne"
     },
     "admins": {
       "title": "Podawanie",
@@ -333,6 +353,12 @@
       "createdSuffix": "utworzony",
       "errorPrefix": "Błąd:",
       "errorSavedAnywaySuffix": "Tłumaczenia nadal były przechowywane."
+    },
+    "messages": {
+      "title": "Aktualności",
+      "subtitle": "Wnioski za pośrednictwem formularza kontaktowego strony internetowej.",
+      "markAsRead": "Zaznacz jako przeczytany",
+      "noMessages": "Jeszcze nic."
     }
   }
 }
