@@ -27,6 +27,9 @@ const LT = (process.env.LIBRETRANSLATE_URL ?? "http://localhost:5000").replace(/
 const LT_KEY = process.env.LIBRETRANSLATE_API_KEY;
 const SOURCE = "de";
 const TARGETS = ["en", "el", "ru", "pl", "nl", "ar", "es"];
+// Kept in sync by hand with TRANSLATE_CHUNK_SIZE in src/i18n/translate.ts — this
+// plain .mjs script can't import that server-only TS module directly (no
+// TS-runner devDependency in this project), so the client is duplicated here.
 const CHUNK = 20;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

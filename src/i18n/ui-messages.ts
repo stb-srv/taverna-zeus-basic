@@ -1,14 +1,11 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { DEFAULT_ENABLED_LOCALES, type Locale } from "@/i18n/routing";
 import type { Database } from "@/lib/supabase/types";
-import { translateBatch } from "./translate";
+import { translateBatch, TRANSLATE_CHUNK_SIZE } from "./translate";
 import { SOURCE_LOCALE } from "./fields";
 import deMessages from "../../messages/de.json";
 
 export type MessageTree = { [key: string]: string | MessageTree };
-
-/** Large batches trip proxy timeouts — translate in small chunks. */
-const CHUNK = 20;
 
 /** Flattens a nested message tree into [dotted path, value] pairs. */
 export function flattenMessages(tree: MessageTree, prefix = ""): [string, string][] {
@@ -97,8 +94,8 @@ export async function translateUiMessages(
   });
 
   let error: string | undefined;
-  for (let i = 0; i < entries.length; i += CHUNK) {
-    const chunk = entries.slice(i, i + CHUNK);
+  for (let i = 0; i < entries.length; i += TRANSLATE_CHUNK_SIZE) {
+    const chunk = entries.slice(i, i + TRANSLATE_CHUNK_SIZE);
     const { byLocale, ok, error: terr } = await translateBatch(
       chunk.map(([, v]) => v),
       SOURCE_LOCALE,

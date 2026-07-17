@@ -3,14 +3,11 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 import type { Locale } from "@/i18n/routing";
-import { translateBatch } from "./translate";
+import { translateBatch, TRANSLATE_CHUNK_SIZE } from "./translate";
 import { SOURCE_LOCALE, type I18nMap } from "./fields";
 import { missingForRow, TRANSLATABLE_TABLES } from "./translation-status";
 
 type Row = Record<string, unknown> & { id: string | number };
-
-/** Large batches trip proxy timeouts — translate in small chunks. */
-const CHUNK = 20;
 
 type Client = SupabaseClient<Database>;
 
@@ -107,8 +104,8 @@ export async function backfillMissingTranslations(
         }
       }
 
-      for (let i = 0; i < pending.length; i += CHUNK) {
-        const chunk = pending.slice(i, i + CHUNK);
+      for (let i = 0; i < pending.length; i += TRANSLATE_CHUNK_SIZE) {
+        const chunk = pending.slice(i, i + TRANSLATE_CHUNK_SIZE);
         const { byLocale, ok, error: terr } = await translateBatch(
           chunk.map((p) => p.source),
           SOURCE_LOCALE,

@@ -7,7 +7,7 @@ import {
 } from "@/i18n/ui-messages";
 import { translateBatch } from "@/i18n/translate";
 
-vi.mock("@/i18n/translate", () => ({ translateBatch: vi.fn() }));
+vi.mock("@/i18n/translate", () => ({ translateBatch: vi.fn(), TRANSLATE_CHUNK_SIZE: 20 }));
 
 const translateMock = vi.mocked(translateBatch);
 

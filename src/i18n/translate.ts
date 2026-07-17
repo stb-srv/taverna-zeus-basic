@@ -8,6 +8,9 @@ import type { Locale } from "@/i18n/routing";
 const ENDPOINT = (process.env.LIBRETRANSLATE_URL ?? "http://localhost:5000").replace(/\/+$/, "");
 const API_KEY = process.env.LIBRETRANSLATE_API_KEY;
 
+/** Large batches trip proxy timeouts — callers translate in chunks of this size. */
+export const TRANSLATE_CHUNK_SIZE = 20;
+
 export type BatchResult = {
   /** target locale → translated texts, aligned to the input order. */
   byLocale: Record<string, string[]>;
