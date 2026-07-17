@@ -24,6 +24,17 @@ ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL \
     NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY \
     NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 
+# Server Actions encrypt their closed-over data with a key generated fresh on
+# every `next build` by default. Without a fixed key, any client that still
+# has an older page open when a new build goes live gets
+# "Failed to find Server Action" on submit, since the new server can't
+# decrypt a reference encrypted by the previous build. Fixing this key keeps
+# it stable across deploys (see DEPLOY.md). Server-only — never inlined into
+# the client bundle, but still needed at build time (Next.js docs: "The key
+# is embedded in the build output and used automatically at runtime").
+ARG NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+ENV NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$NEXT_SERVER_ACTIONS_ENCRYPTION_KEY
+
 RUN npm run build
 
 # --- Stage 3: minimal runtime image

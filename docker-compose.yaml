@@ -22,7 +22,18 @@ services:
       args:
         NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
         NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+        # Coolify legt für den Service "app" automatisch SERVICE_FQDN_APP an
+        # (nackte Domain, ohne Schema), sobald in der UI eine Domain gesetzt
+        # ist — spart das manuelle Doppelt-Eintragen der Domain. Explizites
+        # NEXT_PUBLIC_SITE_URL (falls in Coolify gesetzt) hat immer Vorrang,
+        # z. B. für lokales `docker compose up --build` ohne Coolify.
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://${SERVICE_FQDN_APP}}
+        # Fixe Server-Actions-Verschlüsselung über Deploys hinweg — ohne das
+        # bekommt jeder Client, der beim nächsten Deploy noch eine alte Seite
+        # offen hat, "Failed to find Server Action" beim Absenden eines
+        # Formulars. Einmalig generieren (openssl rand -base64 32) und als
+        # Coolify-Secret dauerhaft setzen, NIE danach ändern.
+        NEXT_SERVER_ACTIONS_ENCRYPTION_KEY: ${NEXT_SERVER_ACTIONS_ENCRYPTION_KEY}
     environment:
       # ${VAR} -> erzeugt ein editierbares Feld in der Coolify-UI.
       # NEXT_PUBLIC_* absichtlich NICHT hier wiederholen: Next.js baut diese

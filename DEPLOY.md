@@ -25,7 +25,8 @@ Werte eintragen (aus Supabase-Dashboard / `.env.example`):
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | ja |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ja |
-| `NEXT_PUBLIC_SITE_URL` | ja (für Sitemap/robots.txt/OpenGraph, z. B. `https://taverna-zeus.de`) |
+| `NEXT_PUBLIC_SITE_URL` | optional — fällt automatisch auf `https://${SERVICE_FQDN_APP}` zurück (Coolifys auto-generierte Domain für den Service `app`, sobald in der UI eine Domain gesetzt ist). Nur manuell setzen, wenn eine davon abweichende Domain gebraucht wird. |
+| `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` | ja (siehe Warnkasten unten — einmalig generieren, nie ändern) |
 | `SUPABASE_SERVICE_ROLE_KEY` | ja |
 | `LIBRETRANSLATE_URL` | optional |
 | `LIBRETRANSLATE_API_KEY` | optional |
@@ -51,6 +52,19 @@ in den JS-Code eingebacken werden (auch der erlaubte Bild-Host in
 
 `SUPABASE_SERVICE_ROLE_KEY` ist ein Geheimnis mit vollen DB-Rechten — niemals
 mit `NEXT_PUBLIC_`-Prefix versehen und nicht als Build-Arg übergeben.
+
+> **`NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` — einmalig setzen, nie ändern.**
+> Next.js verschlüsselt Server-Actions-Daten mit einem Schlüssel, der bei
+> jedem `next build` standardmäßig neu erzeugt wird. Ohne diese Variable
+> bekommt jeder Client, der beim nächsten Deploy noch eine alte Seite offen
+> hat, beim Absenden eines Formulars `Failed to find Server Action` — genau
+> der Fehler, den man nach einem Redeploy sieht. Einmal generieren:
+> ```bash
+> openssl rand -base64 32
+> ```
+> Als Coolify-Secret eintragen und **für immer unverändert lassen** — ein
+> späteres Ändern reproduziert exakt dasselbe Problem für alle, die gerade
+> eine Seite offen haben.
 
 ## 3. Netzwerk / Port / Domain
 
@@ -110,6 +124,7 @@ docker build \
   --build-arg NEXT_PUBLIC_SUPABASE_URL=... \
   --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=... \
   --build-arg NEXT_PUBLIC_SITE_URL=... \
+  --build-arg NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=... \
   -t taverna-zeus .
 
 docker run --rm -p 3000:3000 --env-file .env taverna-zeus
