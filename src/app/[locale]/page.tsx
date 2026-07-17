@@ -32,10 +32,7 @@ export default async function HomePage({
         <div className="absolute -left-24 top-1/4 h-72 w-72 rounded-full bg-gold/20 blur-3xl" />
 
         <div className="relative z-10 mx-auto max-w-2xl px-4">
-          <p className="text-sm font-medium uppercase tracking-[0.35em] text-gold drop-shadow">
-            {t("greeting")}
-          </p>
-          <h1 className="mt-5 font-display text-5xl font-semibold leading-[1.05] drop-shadow-lg sm:text-7xl">
+          <h1 className="font-display text-5xl font-semibold leading-[1.05] drop-shadow-lg sm:text-7xl">
             {name}
           </h1>
           <p className="mt-4 font-display text-lg italic text-white/85 sm:text-xl">{t("tagline")}</p>
