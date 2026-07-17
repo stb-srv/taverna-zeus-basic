@@ -15,6 +15,36 @@ export type BatchResult = {
   error?: string;
 };
 
+export type LibreTranslateHealth = {
+  /** Whether LIBRETRANSLATE_URL was explicitly set (vs. the localhost fallback). */
+  configured: boolean;
+  reachable: boolean;
+  url: string;
+  error?: string;
+};
+
+/**
+ * Lightweight reachability probe for the admin translations page. Hits
+ * `/languages` (cheap, no translation performed) with a short timeout so an
+ * unreachable or misconfigured LibreTranslate is visible immediately instead
+ * of only showing up later as untranslated content stuck in German.
+ */
+export async function checkLibreTranslateHealth(): Promise<LibreTranslateHealth> {
+  const configured = Boolean(process.env.LIBRETRANSLATE_URL);
+  try {
+    const res = await fetch(`${ENDPOINT}/languages`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(4000),
+    });
+    if (!res.ok) {
+      return { configured, reachable: false, url: ENDPOINT, error: `HTTP ${res.status}` };
+    }
+    return { configured, reachable: true, url: ENDPOINT };
+  } catch (e) {
+    return { configured, reachable: false, url: ENDPOINT, error: (e as Error).message };
+  }
+}
+
 /**
  * Translates `texts` from `source` into each of `targets` (one request per
  * target; LibreTranslate accepts an array for `q`). Tolerant by design: on any

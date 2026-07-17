@@ -4,6 +4,7 @@ import { DEFAULT_ENABLED_LOCALES, localeNames, routing, type Locale } from "@/i1
 import { getEnabledLocales } from "@/i18n/locale-state";
 import { collectTranslationStatus } from "@/i18n/backfill";
 import { missingUiLocales } from "@/i18n/ui-messages";
+import { checkLibreTranslateHealth } from "@/i18n/translate";
 import BackfillButton from "./BackfillButton";
 import LocalesForm from "./LocalesForm";
 
@@ -11,6 +12,7 @@ export default async function TranslationsAdminPage() {
   const supabase = await createClient();
   const enabled = await getEnabledLocales();
   const status = await collectTranslationStatus(supabase, enabled);
+  const health = await checkLibreTranslateHealth();
   const t = await getTranslations("admin.translationsPage");
 
   const total = status.reduce((n, s) => n + s.total, 0);
@@ -36,6 +38,23 @@ export default async function TranslationsAdminPage() {
           {enabled.length} {t("of")} {routing.locales.length} {t("availableActive")} {t("sourceLanguageNote")}
         </p>
         <LocalesForm enabled={enabled} />
+      </section>
+
+      <section className="card-soft mt-6 p-6 hover:translate-y-0">
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-lg">{t("serviceTitle")}</h2>
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-medium ${
+              health.reachable ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
+            }`}
+          >
+            {health.reachable ? t("serviceReachable") : t("serviceUnreachable")}
+          </span>
+        </div>
+        <p className="mt-1 text-sm text-muted">
+          {health.configured ? health.url : `${health.url} (${t("serviceDefaultHint")})`}
+          {health.error ? ` — ${health.error}` : ""}
+        </p>
       </section>
 
       {uiGoals.length > 0 && (

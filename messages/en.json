@@ -314,7 +314,11 @@
       "completeSuffix": "complete",
       "incompleteSuffix": "incomplete",
       "missingSuffix": "missing",
-      "footerHint": "Note: Machine-generated texts can be post-edited per entry in the “Other languages” section of the respective form. Manually entered values are never overwritten."
+      "footerHint": "Note: Machine-generated texts can be post-edited per entry in the “Other languages” section of the respective form. Manually entered values are never overwritten.",
+      "serviceTitle": "Translation Service (LibreTranslate)",
+      "serviceReachable": "Accessible",
+      "serviceUnreachable": "Not achievable",
+      "serviceDefaultHint": "Standard, LIBRETRANSLATE URL not set"
     },
     "localesForm": {
       "hint": "When a new language is activated, surface text and content are automatically translated via LibreTranslate. When deactivated, existing translations remain.",

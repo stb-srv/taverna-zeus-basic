@@ -314,7 +314,11 @@
       "completeSuffix": "completa",
       "incompleteSuffix": "incompleto",
       "missingSuffix": "desaparecido",
-      "footerHint": "Nota: Los textos generados por la máquina se pueden editar después por entrada en la sección “Otros idiomas” del formulario respectivo. Los valores introducidos manualmente nunca son sobrescritos."
+      "footerHint": "Nota: Los textos generados por la máquina se pueden editar después por entrada en la sección “Otros idiomas” del formulario respectivo. Los valores introducidos manualmente nunca son sobrescritos.",
+      "serviceTitle": "Servicio de Traducción (LibreTranslate)",
+      "serviceReachable": "Accesible",
+      "serviceUnreachable": "No alcanzable",
+      "serviceDefaultHint": "Estándar, URL LIBRETRANSLATE no se establece"
     },
     "localesForm": {
       "hint": "Cuando se activa un nuevo idioma, el texto superficial y el contenido se traducen automáticamente a través de LibreTranslate. Cuando se desactivan, las traducciones existentes permanecen.",

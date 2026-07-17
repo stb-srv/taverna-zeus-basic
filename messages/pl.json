@@ -314,7 +314,11 @@
       "completeSuffix": "kompletny",
       "incompleteSuffix": "niekompletne",
       "missingSuffix": "brak",
-      "footerHint": "Uwaga: Teksty generowane przez maszyny mogą być edytowane post- na wpis w sekcji \"Inne języki\" odpowiedniego formularza. Ręcznie wprowadzone wartości nigdy nie są nadpisane."
+      "footerHint": "Uwaga: Teksty generowane przez maszyny mogą być edytowane post- na wpis w sekcji \"Inne języki\" odpowiedniego formularza. Ręcznie wprowadzone wartości nigdy nie są nadpisane.",
+      "serviceTitle": "Usługi tłumaczeniowe (LibreTranslate)",
+      "serviceReachable": "Dostępny",
+      "serviceUnreachable": "Nieosiągalne",
+      "serviceDefaultHint": "Standardowy, LIBRETRANSLATE URL nie jest ustawiony"
     },
     "localesForm": {
       "hint": "Po uruchomieniu nowego języka tekst powierzchniowy i treść są automatycznie tłumaczone za pośrednictwem LibreTranslate. Po wyłączeniu istniejące tłumaczenia pozostają.",

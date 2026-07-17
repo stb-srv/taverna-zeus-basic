@@ -314,7 +314,11 @@
       "completeSuffix": "voltooid",
       "incompleteSuffix": "onvoltooid",
       "missingSuffix": "ontbrekend",
-      "footerHint": "Opmerking: Machine-gegenereerde teksten kunnen worden gepost-edited per vermelding in de  Handmatig ingevoerde waarden worden nooit overschreven."
+      "footerHint": "Opmerking: Machine-gegenereerde teksten kunnen worden gepost-edited per vermelding in de  Handmatig ingevoerde waarden worden nooit overschreven.",
+      "serviceTitle": "Vertaaldienst (LibreTranslate)",
+      "serviceReachable": "Toegankelijk",
+      "serviceUnreachable": "Niet haalbaar",
+      "serviceDefaultHint": "Standaard, LIBRETRANSLATE URL niet ingesteld"
     },
     "localesForm": {
       "hint": "Wanneer een nieuwe taal wordt geactiveerd, worden oppervlaktetekst en inhoud automatisch vertaald via LibreTranslate. Indien uitgeschakeld blijven bestaande vertalingen over.",
