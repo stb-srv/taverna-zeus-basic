@@ -57,6 +57,7 @@ export async function submitContactMessage(
 
   const ip = await getClientIp();
   if (isRateLimited(ip)) {
+    console.warn(`[contact] rate limited: ip=${ip}`);
     return { error: t("contactErrorRateLimited") };
   }
 
@@ -68,17 +69,24 @@ export async function submitContactMessage(
   if (!name || !message) return { error: t("contactErrorRequired") };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: t("contactErrorEmail") };
 
-  const supabase = await createClient();
-  const { error } = await supabase.from("contact_messages").insert({
-    name,
-    email,
-    phone,
-    message,
-    locale,
-  });
-  if (error) return { error: t("contactErrorGeneric") };
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from("contact_messages").insert({
+      name,
+      email,
+      phone,
+      message,
+      locale,
+    });
+    if (error) {
+      console.error("[contact] insert failed:", error.code, error.message, error.details);
+      return { error: t("contactErrorGeneric") };
+    }
 
-  await sendContactNotification({ name, email, phone, message, locale });
-
-  return { ok: true };
+    await sendContactNotification({ name, email, phone, message, locale });
+    return { ok: true };
+  } catch (e) {
+    console.error("[contact] unexpected error:", e);
+    return { error: t("contactErrorGeneric") };
+  }
 }
