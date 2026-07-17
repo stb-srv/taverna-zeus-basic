@@ -25,9 +25,12 @@ Werte eintragen (aus Supabase-Dashboard / `.env.example`):
 |---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | ja |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | ja |
+| `NEXT_PUBLIC_SITE_URL` | ja (für Sitemap/robots.txt/OpenGraph, z. B. `https://taverna-zeus.de`) |
 | `SUPABASE_SERVICE_ROLE_KEY` | ja |
 | `LIBRETRANSLATE_URL` | optional |
 | `LIBRETRANSLATE_API_KEY` | optional |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` / `SMTP_FROM` | optional (E-Mail-Benachrichtigung bei neuen Kontaktanfragen) |
+| `CONTACT_NOTIFY_EMAIL` | optional (Empfänger der Kontaktformular-Benachrichtigung) |
 
 Die Felder erscheinen automatisch, sobald Coolify die `docker-compose.yaml`
 eingelesen hat (jede `${VAR}`-Referenz wird ein editierbares Feld). Erscheint
@@ -106,6 +109,7 @@ Ohne Compose, nur Dockerfile:
 docker build \
   --build-arg NEXT_PUBLIC_SUPABASE_URL=... \
   --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=... \
+  --build-arg NEXT_PUBLIC_SITE_URL=... \
   -t taverna-zeus .
 
 docker run --rm -p 3000:3000 --env-file .env taverna-zeus
