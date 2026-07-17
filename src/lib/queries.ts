@@ -89,6 +89,16 @@ export async function getNavPages() {
   return data ?? [];
 }
 
+/** Every published page (nav or not) — used to build the sitemap. */
+export async function getPublishedPages() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("pages")
+    .select("slug, updated_at")
+    .eq("is_published", true);
+  return data ?? [];
+}
+
 /** A single published page by slug (Impressum, Datenschutz, or custom pages). */
 export async function getPage(slug: string) {
   const supabase = await createClient();
