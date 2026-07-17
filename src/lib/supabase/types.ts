@@ -371,6 +371,7 @@ export type Database = {
           id: number
           name: string
           phone: string | null
+          social_links: Json
           ui_messages: Json
           updated_at: string
         }
@@ -390,6 +391,7 @@ export type Database = {
           id?: number
           name?: string
           phone?: string | null
+          social_links?: Json
           ui_messages?: Json
           updated_at?: string
         }
@@ -409,6 +411,7 @@ export type Database = {
           id?: number
           name?: string
           phone?: string | null
+          social_links?: Json
           ui_messages?: Json
           updated_at?: string
         }

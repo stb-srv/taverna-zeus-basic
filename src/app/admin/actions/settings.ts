@@ -7,6 +7,20 @@ import { fillTranslations, guard, revalidatePublic, type ActionState } from "./s
 
 export type { ActionState } from "./shared";
 
+/** Fixed set of platforms editable in the settings form (Feature: Social-Media-Links). */
+export const SOCIAL_PLATFORMS = ["instagram", "facebook", "tiktok", "whatsapp"] as const;
+export type SocialPlatform = (typeof SOCIAL_PLATFORMS)[number];
+export type SocialLinks = Record<SocialPlatform, { url: string; enabled: boolean }>;
+
+function socialLinksFromForm(fd: FormData): SocialLinks {
+  return Object.fromEntries(
+    SOCIAL_PLATFORMS.map((p) => [
+      p,
+      { url: str(fd, `social_${p}_url`), enabled: fd.get(`social_${p}_enabled`) === "on" },
+    ]),
+  ) as SocialLinks;
+}
+
 export async function updateSettings(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {
     const supabase = await guard();
@@ -34,6 +48,7 @@ export async function updateSettings(_prev: ActionState, fd: FormData): Promise<
         email: strOrNull(fd, "email"),
         google_maps_embed: mapEmbed,
         hero_image_url: strOrNull(fd, "hero_image_url"),
+        social_links: socialLinksFromForm(fd),
       })
       .eq("id", 1);
     if (error) return { error: error.message };

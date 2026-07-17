@@ -2,7 +2,13 @@
 
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
-import { updateSettings, type ActionState } from "@/app/admin/actions/settings";
+import {
+  updateSettings,
+  SOCIAL_PLATFORMS,
+  type ActionState,
+  type SocialPlatform,
+  type SocialLinks,
+} from "@/app/admin/actions/settings";
 import { inputCls, labelCls, btnPrimary } from "@/components/admin/ui-classes";
 import ImageUpload from "@/components/admin/ImageUpload";
 import TranslationsPanel from "@/components/admin/TranslationsPanel";
@@ -11,6 +17,13 @@ import type { Database } from "@/lib/supabase/types";
 type Settings = Database["public"]["Tables"]["restaurant_settings"]["Row"];
 type I18n = Record<string, string>;
 const initial: ActionState = {};
+
+const PLATFORM_INPUT_TYPE: Record<SocialPlatform, "url" | "tel"> = {
+  instagram: "url",
+  facebook: "url",
+  tiktok: "url",
+  whatsapp: "tel",
+};
 
 export default function SettingsForm({ settings }: { settings: Settings | null }) {
   const [state, action, pending] = useActionState(updateSettings, initial);
@@ -86,6 +99,34 @@ export default function SettingsForm({ settings }: { settings: Settings | null }
             {t("mapEmbedHint")} <code>src=&quot;…&quot;</code> {t("mapEmbedHintSuffix")}
           </p>
         </div>
+      </section>
+
+      <section className="card-soft space-y-4 p-6 hover:translate-y-0">
+        <h2 className="font-display text-lg">{t("socialHeading")}</h2>
+        {SOCIAL_PLATFORMS.map((platform) => {
+          const entry = (s?.social_links as SocialLinks | null)?.[platform];
+          return (
+            <div key={platform} className="flex flex-wrap items-end gap-3">
+              <div className="flex-1">
+                <label className={labelCls}>{t(platform)}</label>
+                <input
+                  name={`social_${platform}_url`}
+                  type={PLATFORM_INPUT_TYPE[platform]}
+                  defaultValue={entry?.url ?? ""}
+                  className={inputCls}
+                />
+              </div>
+              <label className="flex items-center gap-2 pb-2 text-sm">
+                <input
+                  type="checkbox"
+                  name={`social_${platform}_enabled`}
+                  defaultChecked={entry?.enabled ?? false}
+                />
+                {t("enabled")}
+              </label>
+            </div>
+          );
+        })}
       </section>
 
       <div className="flex items-center gap-4">

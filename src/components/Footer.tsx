@@ -1,13 +1,16 @@
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import SocialLinks from "./SocialLinks";
+import type { Json } from "@/lib/supabase/types";
 
 type Props = {
   restaurantName: string;
   phone: string | null;
   email: string | null;
+  socialLinks?: Json | null;
 };
 
-export default async function Footer({ restaurantName, phone, email }: Props) {
+export default async function Footer({ restaurantName, phone, email, socialLinks }: Props) {
   const t = await getTranslations();
   const year = new Date().getFullYear();
 
@@ -41,6 +44,9 @@ export default async function Footer({ restaurantName, phone, email }: Props) {
                 {email}
               </a>
             )}
+          </div>
+          <div className="mt-3">
+            <SocialLinks links={socialLinks} />
           </div>
         </div>
 
