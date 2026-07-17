@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { logout } from "../auth-actions";
+import { logout } from "../../actions/admins";
 
 /** Idle timeout before automatic logout, and how long before that to warn. */
 const TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes

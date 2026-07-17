@@ -2,8 +2,8 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/supabase/auth";
 import { hasServiceRole } from "@/lib/supabase/admin";
-import AddAdmin from "./AddAdmin";
-import AdminRow from "./AdminRow";
+import AddAdmin from "./_components/AddAdmin";
+import AdminRow from "./_components/AdminRow";
 
 export default async function AdminsPage() {
   const supabase = await createClient();

@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { updateSettings, type ActionState } from "@/app/admin/actions/settings";
-import { inputCls, labelCls, btnPrimary } from "@/components/admin/ui";
+import { inputCls, labelCls, btnPrimary } from "@/components/admin/ui-classes";
 import ImageUpload from "@/components/admin/ImageUpload";
 import TranslationsPanel from "@/components/admin/TranslationsPanel";
 import type { Database } from "@/lib/supabase/types";

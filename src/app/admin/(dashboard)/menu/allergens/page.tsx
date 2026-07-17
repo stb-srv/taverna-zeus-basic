@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { btnGhost } from "@/components/admin/ui";
-import AllergenRow from "./AllergenRow";
-import AddAllergen from "./AddAllergen";
-import AdditiveRow from "./AdditiveRow";
-import AddAdditive from "./AddAdditive";
+import { btnGhost } from "@/components/admin/ui-classes";
+import AllergenRow from "./_components/AllergenRow";
+import AddAllergen from "./_components/AddAllergen";
+import AdditiveRow from "./_components/AdditiveRow";
+import AddAdditive from "./_components/AddAdditive";
 
 export default async function AllergensAdminPage() {
   const supabase = await createClient();

@@ -7,7 +7,7 @@ import {
   updateEnabledLocales,
   type LocalesState,
 } from "@/app/admin/actions/translations";
-import { btnPrimary } from "@/components/admin/ui";
+import { btnPrimary } from "@/components/admin/ui-classes";
 
 const initial: LocalesState = {};
 

@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { getItemFormOptions } from "../../data";
-import ItemForm from "../../ItemForm";
+import { getItemFormOptions } from "../../_components/data";
+import ItemForm from "../../_components/ItemForm";
 
 export default async function EditItemPage({
   params,

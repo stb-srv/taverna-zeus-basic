@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { deletePage } from "@/app/admin/actions/pages";
-import { btnPrimary, btnGhost, btnDanger } from "@/components/admin/ui";
+import { btnPrimary, btnGhost, btnDanger } from "@/components/admin/ui-classes";
 
 export default async function PagesAdminPage() {
   const supabase = await createClient();

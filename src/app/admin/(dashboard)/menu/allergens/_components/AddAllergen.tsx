@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { saveAllergen, type ActionState } from "@/app/admin/actions/allergens";
-import { inputCls, btnPrimary } from "@/components/admin/ui";
+import { inputCls, btnPrimary } from "@/components/admin/ui-classes";
 
 const initial: ActionState = {};
 

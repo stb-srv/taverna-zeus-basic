@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { getItemFormOptions } from "../../data";
-import ItemForm from "../../ItemForm";
+import { getItemFormOptions } from "../../_components/data";
+import ItemForm from "../../_components/ItemForm";
 
 export default async function NewItemPage() {
   const { categories, allergens, additives } = await getItemFormOptions();

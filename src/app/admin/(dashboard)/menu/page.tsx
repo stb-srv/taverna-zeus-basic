@@ -2,8 +2,8 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { deleteItem } from "@/app/admin/actions/menu";
-import { btnPrimary, btnGhost, btnDanger } from "@/components/admin/ui";
-import MenuTransfer from "./MenuTransfer";
+import { btnPrimary, btnGhost, btnDanger } from "@/components/admin/ui-classes";
+import MenuTransfer from "./_components/MenuTransfer";
 
 export default async function MenuAdminPage() {
   const supabase = await createClient();

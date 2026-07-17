@@ -5,8 +5,8 @@ import { getEnabledLocales } from "@/i18n/locale-state";
 import { collectTranslationStatus } from "@/i18n/backfill";
 import { missingUiLocales } from "@/i18n/ui-messages";
 import { checkLibreTranslateHealth } from "@/i18n/translate";
-import BackfillButton from "./BackfillButton";
-import LocalesForm from "./LocalesForm";
+import TranslateAllButton from "./_components/TranslateAllButton";
+import LocalesForm from "./_components/LocalesForm";
 
 export default async function TranslationsAdminPage() {
   const supabase = await createClient();
@@ -101,7 +101,7 @@ export default async function TranslationsAdminPage() {
               : `${withGaps} ${withGaps === 1 ? t("entryHasGaps") : t("entriesHaveGapsNoun")} ${t("entriesHaveGapsSuffix")}`}
           </p>
         </div>
-        {withGaps > 0 && <BackfillButton />}
+        {withGaps > 0 && <TranslateAllButton />}
       </div>
 
       <div className="mt-6 space-y-4">

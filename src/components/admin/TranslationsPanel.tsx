@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { localeNames, rtlLocales } from "@/i18n/routing";
 import { retranslate } from "@/app/admin/actions/translations";
 import { useEnabledLocales } from "./EnabledLocalesContext";
-import { inputCls, btnGhost } from "./ui";
+import { inputCls, btnGhost } from "./ui-classes";
 
 export type TranslField = {
   /** Field base name, e.g. "name" → inputs are submitted as `name_<locale>`. */

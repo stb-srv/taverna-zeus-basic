@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { btnGhost } from "@/components/admin/ui";
-import AddCategory from "./AddCategory";
-import CategoryRow from "./CategoryRow";
+import { btnGhost } from "@/components/admin/ui-classes";
+import AddCategory from "./_components/AddCategory";
+import CategoryRow from "./_components/CategoryRow";
 
 export default async function CategoriesAdminPage() {
   const supabase = await createClient();

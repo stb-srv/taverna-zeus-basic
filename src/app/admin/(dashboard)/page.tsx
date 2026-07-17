@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { getDashboardStats, euro } from "./_home/data";
+import { getDashboardStats, euro } from "./_components/data";
 import {
   StatCard,
   PriceHighlightCard,
@@ -9,7 +9,7 @@ import {
   IconAverage,
   IconTrendUp,
   IconTrendDown,
-} from "./_home/widgets";
+} from "./_components/widgets";
 
 export default async function AdminHome() {
   const s = await getDashboardStats();

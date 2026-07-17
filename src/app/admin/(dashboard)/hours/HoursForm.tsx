@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import { updateHours, type ActionState } from "@/app/admin/actions/hours";
-import { inputCls, btnPrimary } from "@/components/admin/ui";
+import { inputCls, btnPrimary } from "@/components/admin/ui-classes";
 import type { Database } from "@/lib/supabase/types";
 
 type Hours = Database["public"]["Tables"]["opening_hours"]["Row"];

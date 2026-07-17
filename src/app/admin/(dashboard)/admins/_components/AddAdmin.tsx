@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
-import { createAdminUser, type State } from "../../user-actions";
-import { inputCls, btnPrimary } from "@/components/admin/ui";
+import { createAdminUser, type ActionState } from "../../../actions/admins";
+import { inputCls, btnPrimary } from "@/components/admin/ui-classes";
 
-const initial: State = {};
+const initial: ActionState = {};
 
 export default function AddAdmin({ disabled }: { disabled?: boolean }) {
   const [state, action, pending] = useActionState(createAdminUser, initial);

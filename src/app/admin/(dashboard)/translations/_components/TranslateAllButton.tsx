@@ -6,12 +6,12 @@ import {
   translateAllMissing,
   type TranslateAllState,
 } from "@/app/admin/actions/translations";
-import { btnPrimary } from "@/components/admin/ui";
+import { btnPrimary } from "@/components/admin/ui-classes";
 
 const initial: TranslateAllState = {};
 
 /** Triggers the bulk LibreTranslate backfill and shows the outcome. */
-export default function BackfillButton() {
+export default function TranslateAllButton() {
   const [state, action, pending] = useActionState(translateAllMissing, initial);
   const t = useTranslations("admin.backfillButton");
 

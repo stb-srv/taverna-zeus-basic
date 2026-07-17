@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { requireUser } from "@/lib/supabase/auth";
-import { logout } from "../auth-actions";
-import Sidebar from "./Sidebar";
-import IdleLogout from "./IdleLogout";
+import { logout } from "../actions/admins";
+import Sidebar from "./_components/Sidebar";
+import IdleLogout from "./_components/IdleLogout";
 import AdminLanguageSwitcher from "@/components/admin/AdminLanguageSwitcher";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {

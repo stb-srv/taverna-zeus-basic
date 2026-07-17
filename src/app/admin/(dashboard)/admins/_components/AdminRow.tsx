@@ -2,11 +2,10 @@
 
 import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
-import { changeAdminPassword, type State } from "../../user-actions";
-import { removeAdmin } from "@/app/admin/actions/admins";
-import { inputCls, btnGhost, btnDanger } from "@/components/admin/ui";
+import { changeAdminPassword, removeAdmin, type ActionState } from "@/app/admin/actions/admins";
+import { inputCls, btnGhost, btnDanger } from "@/components/admin/ui-classes";
 
-const initial: State = {};
+const initial: ActionState = {};
 
 export default function AdminRow({
   email,

@@ -2,10 +2,10 @@
 
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
-import { login, type LoginState } from "../auth-actions";
+import { login, type ActionState } from "../actions/admins";
 import AdminLanguageSwitcher from "@/components/admin/AdminLanguageSwitcher";
 
-const initial: LoginState = {};
+const initial: ActionState = {};
 
 export default function LoginPage() {
   const [state, formAction, pending] = useActionState(login, initial);
