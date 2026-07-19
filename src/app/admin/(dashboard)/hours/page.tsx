@@ -14,8 +14,8 @@ export default async function HoursPage() {
     <div>
       <h1 className="mb-1 font-display text-3xl">{t("title")}</h1>
       <p className="mb-6 text-sm text-muted">{t("subtitle")}</p>
-      <HoursForm hours={hours} />
-      <div className="mt-10">
+      <div className="grid gap-8 lg:grid-cols-2">
+        <HoursForm hours={hours} />
         <KitchenHoursForm hours={kitchenHours} enabled={settings?.kitchen_hours_enabled ?? false} />
       </div>
     </div>

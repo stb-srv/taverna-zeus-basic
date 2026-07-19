@@ -2,7 +2,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getSettings, getOpeningHours, getKitchenHours } from "@/lib/queries";
 import OpeningHours from "@/components/OpeningHours";
-import KitchenHours from "@/components/KitchenHours";
 import MapEmbed from "@/components/MapEmbed";
 import ContactForm from "./ContactForm";
 
@@ -73,13 +72,7 @@ export default async function LocationPage({
 
           <section className="card-soft p-6">
             <h2 className="rule-gold mb-6 inline-block text-xl">{t("openingHours")}</h2>
-            <OpeningHours hours={hours} />
-            {settings?.kitchen_hours_enabled && (
-              <div className="mt-6">
-                <h3 className="mb-3 text-sm font-medium text-muted">{t("kitchenHours")}</h3>
-                <KitchenHours hours={kitchenHours} />
-              </div>
-            )}
+            <OpeningHours hours={hours} kitchenHours={settings?.kitchen_hours_enabled ? kitchenHours : []} />
           </section>
         </div>
 

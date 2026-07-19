@@ -4,7 +4,6 @@ import type { Locale } from "@/i18n/routing";
 import { getSettings, getOpeningHours, getKitchenHours } from "@/lib/queries";
 import { localized } from "@/i18n/localized-content";
 import OpeningHours from "@/components/OpeningHours";
-import KitchenHours from "@/components/KitchenHours";
 import Reviews from "@/components/Reviews";
 
 export default async function HomePage({
@@ -69,13 +68,7 @@ export default async function HomePage({
       <section className="mx-auto -mt-10 grid max-w-5xl gap-8 px-4 pb-20 md:grid-cols-2">
         <div className="card-soft p-7">
           <h2 className="rule-gold mb-8 inline-block text-2xl">{t("openingHours")}</h2>
-          <OpeningHours hours={hours} />
-          {settings?.kitchen_hours_enabled && (
-            <div className="mt-6">
-              <h3 className="mb-3 text-sm font-medium text-muted">{t("kitchenHours")}</h3>
-              <KitchenHours hours={kitchenHours} />
-            </div>
-          )}
+          <OpeningHours hours={hours} kitchenHours={settings?.kitchen_hours_enabled ? kitchenHours : []} />
         </div>
 
         <div className="card-soft p-7">

@@ -13,7 +13,6 @@
     "findUs": "So finden Sie uns",
     "contact": "Kontakt",
     "viewLocation": "Standort & Anfahrt",
-    "kitchenHours": "Küchenzeiten",
     "reviewsHeading": "Was Gäste sagen",
     "reviewsCount": "{count, plural, =0 {Keine Bewertungen} =1 {1 Bewertung} other {# Bewertungen}}"
   },
@@ -51,11 +50,11 @@
     "contactErrorEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
     "contactErrorRateLimited": "Zu viele Nachrichten in kurzer Zeit — bitte versuche es später erneut.",
     "contactErrorGeneric": "Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut.",
-    "reservationNotice": "Tischreservierungen sind ausschließlich telefonisch möglich.",
-    "kitchenHours": "Küchenzeiten"
+    "reservationNotice": "Tischreservierungen sind ausschließlich telefonisch möglich."
   },
   "hours": {
     "closed": "Geschlossen",
+    "kitchenHoursLabel": "Küchenöffnungszeiten",
     "days": {
       "1": "Montag",
       "2": "Dienstag",
