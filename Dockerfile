@@ -54,6 +54,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+# On-disk fallback for UI messages when Supabase is unreachable (see
+# src/i18n/ui-messages-cache.ts). docker-compose.yaml mounts a named volume
+# here so the cache survives redeploys, not just container restarts — Docker
+# copies a fresh volume's initial content from the image, so the ownership
+# set here carries over to the volume on first mount.
+RUN mkdir -p /app/.cache/ui-messages && chown -R nextjs:nodejs /app/.cache
+
 USER nextjs
 EXPOSE 3000
 

@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { DEFAULT_ENABLED_LOCALES, type Locale } from "@/i18n/routing";
+import { type Locale } from "@/i18n/routing";
 import type { Database } from "@/lib/supabase/types";
 import { translateBatch, TRANSLATE_CHUNK_SIZE } from "./translate";
 import { SOURCE_LOCALE } from "./fields";
@@ -113,28 +113,24 @@ export async function translateUiMessages(
   return { messages: out, error };
 }
 
-/** Enabled locales beyond the bundled set that are still missing any UI text. */
+/** Enabled locales beyond German that are still missing any UI text. */
 export function missingUiLocales(uiMessages: unknown, targets: readonly Locale[]): Locale[] {
   const map = (uiMessages && typeof uiMessages === "object" ? uiMessages : {}) as Record<
     string,
     unknown
   >;
-  return targets.filter(
-    (l) =>
-      !(DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(l) &&
-      missingUiKeys(map[l]).length > 0,
-  );
+  return targets.filter((l) => l !== SOURCE_LOCALE && missingUiKeys(map[l]).length > 0);
 }
 
 export type UiBackfillResult = { translated: Locale[]; errors: string[] };
 
 /**
- * Fills `ui_messages` for every enabled locale beyond the bundled default
- * set that's still missing any key — same idea as `backfillMissingTranslations`
- * for content, but for the admin/site UI strings themselves, and gap-filled at
- * the individual key level so a locale that got partially translated last
- * time (e.g. a namespace stranded by a proxy timeout) picks up exactly where
- * it left off. Persists after each locale rather than once at the end, so a
+ * Fills `ui_messages` for every enabled locale beyond German that's still
+ * missing any key — same idea as `backfillMissingTranslations` for content,
+ * but for the admin/site UI strings themselves, and gap-filled at the
+ * individual key level so a locale that got partially translated last time
+ * (e.g. a namespace stranded by a proxy timeout) picks up exactly where it
+ * left off. Persists after each locale rather than once at the end, so a
  * timeout partway through a multi-locale run doesn't lose earlier progress.
  */
 export async function backfillMissingUiMessages(
@@ -144,7 +140,7 @@ export async function backfillMissingUiMessages(
   const translated: Locale[] = [];
   const errors: string[] = [];
 
-  const goals = targets.filter((l) => !(DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(l));
+  const goals = targets.filter((l) => l !== SOURCE_LOCALE);
   if (goals.length === 0) return { translated, errors };
 
   for (const loc of goals) {

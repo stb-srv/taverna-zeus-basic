@@ -59,6 +59,14 @@ services:
     # Coolify routet über seinen Proxy auf diesen Container-Port (Domain in der UI setzen).
     expose:
       - "3000"
+    # Cache der UI-Texte (src/i18n/ui-messages-cache.ts) als Fallback, falls
+    # Supabase mal nicht erreichbar ist. Named Volume statt reinem
+    # Container-Dateisystem, damit der Cache auch einen Redeploy übersteht
+    # (Coolify erstellt beim Docker-Compose-Deploy automatisch persistenten
+    # Storage für jedes hier deklarierte Volume — kein manueller Schritt in
+    # der Coolify-UI nötig).
+    volumes:
+      - ui_messages_cache:/app/.cache
     healthcheck:
       # Node ist im Image garantiert vorhanden (anders als curl; wget nur via
       # busybox). fetch ist in Node 22 global. Exit 0 nur bei HTTP 2xx.
@@ -92,5 +100,6 @@ services:
   #   volumes:
   #     - libretranslate_models:/home/libretranslate/.local
 
-# volumes:
-#   libretranslate_models:
+volumes:
+  ui_messages_cache:
+  # libretranslate_models:

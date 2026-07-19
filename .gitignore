@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# local dev fallback cache for UI messages (src/i18n/ui-messages-cache.ts)
+/.cache/
+
 # supabase CLI local cache
 /supabase/.temp/
 

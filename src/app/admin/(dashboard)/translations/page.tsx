@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { DEFAULT_ENABLED_LOCALES, localeNames, routing, type Locale } from "@/i18n/routing";
+import { localeNames, routing } from "@/i18n/routing";
 import { getEnabledLocales } from "@/i18n/locale-state";
 import { collectTranslationStatus } from "@/i18n/backfill";
 import { missingUiLocales } from "@/i18n/ui-messages";
@@ -19,7 +19,7 @@ export default async function TranslationsAdminPage() {
   const withGaps = status.reduce((n, s) => n + s.gaps.length, 0);
   const done = total - withGaps;
 
-  const uiGoals = enabled.filter((l) => !(DEFAULT_ENABLED_LOCALES as readonly Locale[]).includes(l));
+  const uiGoals = enabled.filter((l) => l !== routing.defaultLocale);
   const { data: settingsRow } = await supabase
     .from("restaurant_settings")
     .select("ui_messages")

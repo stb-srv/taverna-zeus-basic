@@ -53,12 +53,17 @@ export async function getAdminLocale(): Promise<Locale> {
   return routing.defaultLocale;
 }
 
+export type UiMessagesResult = { messages: Record<string, unknown>; ok: boolean };
+
 /**
- * DB-stored, machine-translated UI messages for locales without a bundled
- * `messages/<locale>.json`. Empty object when none exist (callers fall back
- * to the German base). Cached per request.
+ * DB-stored, machine-translated UI messages for every locale but the German
+ * source. `ok: false` means the DB itself was unreachable (as opposed to
+ * reachable-but-untranslated, which is `ok: true` with an empty object) —
+ * `resolveMessages` uses that distinction to fall back to the on-disk cache
+ * only on a real outage, not just a locale that hasn't been translated yet.
+ * Cached per request.
  */
-export const getUiMessages = cache(async (locale: Locale): Promise<Record<string, unknown>> => {
+export const getUiMessages = cache(async (locale: Locale): Promise<UiMessagesResult> => {
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
@@ -66,14 +71,15 @@ export const getUiMessages = cache(async (locale: Locale): Promise<Record<string
       .select("ui_messages")
       .eq("id", 1)
       .maybeSingle();
-    if (error) return {};
+    if (error) return { messages: {}, ok: false };
     const all = data?.ui_messages;
     const forLocale =
       all && typeof all === "object" ? (all as Record<string, unknown>)[locale] : null;
-    return forLocale && typeof forLocale === "object"
-      ? (forLocale as Record<string, unknown>)
-      : {};
+    return {
+      messages: forLocale && typeof forLocale === "object" ? (forLocale as Record<string, unknown>) : {},
+      ok: true,
+    };
   } catch {
-    return {};
+    return { messages: {}, ok: false };
   }
 });

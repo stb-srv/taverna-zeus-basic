@@ -20,7 +20,13 @@ export const routing = defineRouting({
 
 export type Locale = (typeof routing.locales)[number];
 
-/** Enabled out of the box — these ship with bundled UI message files. */
+/**
+ * Enabled out of the box, and the fallback set `getEnabledLocales()` returns
+ * if `restaurant_settings` itself is unreachable — only German ("de") is
+ * bundled as a static file; every locale's UI text (including these) lives
+ * in the DB, machine-translated via LibreTranslate and mirrored to an
+ * on-disk cache (see ui-messages-cache.ts) for when Supabase is down.
+ */
 export const DEFAULT_ENABLED_LOCALES: readonly Locale[] = [
   "de", "en", "el", "ru", "pl", "nl", "ar", "es",
 ];

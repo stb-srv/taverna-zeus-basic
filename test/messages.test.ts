@@ -19,31 +19,21 @@ function keyPaths(obj: Record<string, unknown>, prefix = ""): string[] {
 }
 
 describe("messages", () => {
-  const reference = keyPaths(loadMessages(routing.defaultLocale)).sort();
-
-  it("has a bundled messages file for every default-enabled locale", () => {
-    for (const locale of DEFAULT_ENABLED_LOCALES) {
-      expect(() => loadMessages(locale), `messages/${locale}.json`).not.toThrow();
-    }
+  // German is the only bundled locale — every other locale is machine-translated
+  // and stored in restaurant_settings.ui_messages (see src/i18n/ui-messages.ts).
+  it("has a bundled messages file for the default locale", () => {
+    expect(() => loadMessages(routing.defaultLocale)).not.toThrow();
   });
 
-  for (const locale of DEFAULT_ENABLED_LOCALES) {
-    it(`messages/${locale}.json has exactly the same keys as ${routing.defaultLocale}.json`, () => {
-      expect(keyPaths(loadMessages(locale)).sort()).toEqual(reference);
+  it("has no empty message values in the bundled locale", () => {
+    const messages = loadMessages(routing.defaultLocale);
+    const empty = keyPaths(messages).filter((path) => {
+      const value = path
+        .split(".")
+        .reduce<unknown>((o, k) => (o as Record<string, unknown>)[k], messages);
+      return typeof value === "string" && value.trim() === "";
     });
-  }
-
-  it("has no empty message values in any bundled locale", () => {
-    for (const locale of DEFAULT_ENABLED_LOCALES) {
-      const messages = loadMessages(locale);
-      const empty = keyPaths(messages).filter((path) => {
-        const value = path
-          .split(".")
-          .reduce<unknown>((o, k) => (o as Record<string, unknown>)[k], messages);
-        return typeof value === "string" && value.trim() === "";
-      });
-      expect(empty, `empty values in messages/${locale}.json`).toEqual([]);
-    }
+    expect(empty, `empty values in messages/${routing.defaultLocale}.json`).toEqual([]);
   });
 });
 
