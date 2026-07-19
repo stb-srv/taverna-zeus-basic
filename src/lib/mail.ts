@@ -21,9 +21,14 @@ export async function sendContactNotification(msg: ContactMessage): Promise<void
   if (!SMTP_HOST || !CONTACT_NOTIFY_EMAIL) return; // not configured — skip silently
 
   try {
+    const port = Number(SMTP_PORT ?? 587);
     const transport = nodemailer.createTransport({
       host: SMTP_HOST,
-      port: Number(SMTP_PORT ?? 587),
+      port,
+      // Nodemailer leitet `secure` NICHT automatisch aus dem Port ab — Port 465
+      // braucht implizites TLS (secure: true), sonst schlägt der Verbindungsaufbau
+      // bei den meisten Providern (Strato, IONOS, GMX, ...) fehl.
+      secure: port === 465,
       auth: SMTP_USER ? { user: SMTP_USER, pass: SMTP_PASSWORD } : undefined,
     });
     await transport.sendMail({

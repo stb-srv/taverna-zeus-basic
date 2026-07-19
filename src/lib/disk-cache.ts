@@ -1,4 +1,5 @@
 import "server-only";
+import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -28,7 +29,11 @@ export async function writeDiskCache<T>(namespace: string, key: string, data: T)
   try {
     await mkdir(dir(namespace), { recursive: true });
     const target = filePath(namespace, key);
-    const tmp = `${target}.tmp-${process.pid}`;
+    // Must be unique per call, not per process: in the container the app runs
+    // as PID 1, so `process.pid` is identical for every concurrent request and
+    // concurrent writes to the same key raced on the same tmp path — the loser's
+    // rename then failed with ENOENT because the winner had already consumed it.
+    const tmp = `${target}.tmp-${randomUUID()}`;
     await writeFile(tmp, JSON.stringify(data));
     await rename(tmp, target);
   } catch (e) {

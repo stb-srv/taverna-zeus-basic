@@ -8,6 +8,21 @@
 # in eine .env, die docker compose beim Build und zur Laufzeit einliest.
 #
 # Lokal:  docker compose up --build   (Werte aus einer .env neben dieser Datei)
+#
+# WICHTIG zu den scheinbar doppelten Feldern in Coolify: Für jede Variable aus
+# `build.args` (unten) legt Coolify im Tab „Environment Variables" ZWEI
+# Zeilen an — eine mit Häkchen „Available at Buildtime" (das ist die einzig
+# wirksame für NEXT_PUBLIC_*, da diese Werte nur beim `next build` ins Bundle
+# eingebacken werden) und eine zweite, rein für die Laufzeit (`environment:`),
+# die von Next.js nie gelesen wird. Nur die Buildtime-Zeile ausfüllen; die
+# Runtime-Zeile für dieselbe Variable leer lassen bzw. ignorieren. Ein falscher
+# Wert in der Buildtime-Zeile (z. B. ein alter/rotierter Anon-Key oder aus
+# Versehen der Service-Role-Key) fällt NICHT sofort auf, weil bereits gecachte
+# Seiten (Disk-Cache) weiter funktionieren — betrifft aber sofort jede neue
+# Supabase-Anfrage (z. B. RLS-Fehler 42501 beim Kontaktformular-Insert, leere
+# Bewertungen). Nach jeder Änderung an einer Buildtime-Variable: „Redeploy"
+# mit tatsächlichem Rebuild auslösen, ein reiner Container-Restart genügt
+# nicht (der Wert steckt im bereits gebauten Image).
 
 services:
   app:
