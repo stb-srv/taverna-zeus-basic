@@ -5,7 +5,32 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1
 
 ## 2026-07-19
 
+### Behoben
+
+- **SMTP-Benachrichtigung fürs Kontaktformular schlug in Produktion immer
+  fehl**: `nodemailer` leitet `secure` nicht automatisch vom Port ab — bei
+  Port 465 (implizites TLS, üblich bei deutschen Providern) scheiterte der
+  Verbindungsaufbau dadurch grundsätzlich, sichtbar nur in den Server-Logs.
+- **Wiederkehrender Disk-Cache-Fehler** (`ENOENT … rename settings.json.tmp-1`):
+  Die Temp-Datei beim Schreiben hieß `*.tmp-${process.pid}`, im Container läuft
+  die App aber als PID 1 — identisch für alle gleichzeitigen Requests.
+  Parallele Schreibversuche auf denselben Cache-Schlüssel rissen sich
+  gegenseitig die Temp-Datei weg. Jetzt eine echte UUID pro Schreibvorgang.
+- **Kontaktformular-Test schlug mit „row-level security policy“ fehl, sobald
+  im selben Browser eine aktive Admin-Session lief**: `contact_messages`
+  erlaubte das Einfügen bisher nur der `anon`-Rolle; eine neue Policy erlaubt
+  es jetzt auch `authenticated`.
+- Klarstellender Kommentar in `docker-compose.yaml`: Coolify legt pro
+  `NEXT_PUBLIC_*`-Variable zwei Felder an (Build- und Laufzeit) — nur das
+  Build-Feld wirkt sich aus, das zweite Feld bleibt wirkungslos und sollte
+  nicht mit dem korrekten Wert verwechselt werden.
+
 ### Hinzugefügt
+
+- **Spam-Schutz-Log im Admin**: Unter „Nachrichten“ zeigt eine neue Sektion,
+  wie oft die stillen Bot-Fallen im Kontaktformular (Honeypot-Feld,
+  Mindestausfüllzeit) gegriffen haben, getrennt nach Grund, mit Option zum
+  Leeren des Logs. Neue Tabelle `spam_blocks` (nur für Admins lesbar).
 
 - **Reservierungshinweis**: Auf der Standort-Seite steht jetzt direkt über dem
   Kontaktformular, dass Tischreservierungen ausschließlich telefonisch möglich
