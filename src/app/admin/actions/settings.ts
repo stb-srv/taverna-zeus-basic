@@ -3,14 +3,10 @@
 import { i18nFromForm } from "@/i18n/fields";
 import { buildOsmEmbedUrl } from "./geocode";
 import { str, strOrNull } from "@/lib/form-data";
+import { SOCIAL_PLATFORMS, type SocialLinks } from "@/lib/social-platforms";
 import { fillTranslations, guard, revalidatePublic, type ActionState } from "./shared";
 
 export type { ActionState } from "./shared";
-
-/** Fixed set of platforms editable in the settings form (Feature: Social-Media-Links). */
-export const SOCIAL_PLATFORMS = ["instagram", "facebook", "tiktok", "whatsapp"] as const;
-export type SocialPlatform = (typeof SOCIAL_PLATFORMS)[number];
-export type SocialLinks = Record<SocialPlatform, { url: string; enabled: boolean }>;
 
 function socialLinksFromForm(fd: FormData): SocialLinks {
   return Object.fromEntries(

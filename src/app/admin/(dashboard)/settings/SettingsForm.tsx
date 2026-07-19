@@ -2,13 +2,8 @@
 
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
-import {
-  updateSettings,
-  SOCIAL_PLATFORMS,
-  type ActionState,
-  type SocialPlatform,
-  type SocialLinks,
-} from "@/app/admin/actions/settings";
+import { updateSettings, type ActionState } from "@/app/admin/actions/settings";
+import { SOCIAL_PLATFORMS, type SocialPlatform, type SocialLinks } from "@/lib/social-platforms";
 import { inputCls, labelCls, btnPrimary } from "@/components/admin/ui-classes";
 import ImageUpload from "@/components/admin/ImageUpload";
 import TranslationsPanel from "@/components/admin/TranslationsPanel";
