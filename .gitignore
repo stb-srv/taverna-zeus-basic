@@ -52,6 +52,9 @@ yarn-error.log*
 skills-lock.json
 .claudeignore
 
+# ad-hoc local debug/test scripts (never shipped, never committed)
+/debug/
+
 # vercel
 .vercel
 
