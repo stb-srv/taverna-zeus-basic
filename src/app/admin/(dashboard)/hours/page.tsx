@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getOpeningHours, getKitchenHours, getSettings } from "@/lib/queries";
 import HoursForm from "./_components/HoursForm";
-import KitchenHoursForm from "./_components/KitchenHoursForm";
 
 export default async function HoursPage() {
   const [hours, kitchenHours, settings] = await Promise.all([
@@ -14,10 +13,7 @@ export default async function HoursPage() {
     <div>
       <h1 className="mb-1 font-display text-3xl">{t("title")}</h1>
       <p className="mb-6 text-sm text-muted">{t("subtitle")}</p>
-      <div className="grid gap-8 lg:grid-cols-2">
-        <HoursForm hours={hours} />
-        <KitchenHoursForm hours={kitchenHours} enabled={settings?.kitchen_hours_enabled ?? false} />
-      </div>
+      <HoursForm hours={hours} kitchenHours={kitchenHours} kitchenHoursEnabled={settings?.kitchen_hours_enabled ?? false} />
     </div>
   );
 }

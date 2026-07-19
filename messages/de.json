@@ -283,7 +283,6 @@
       "title": "Öffnungszeiten",
       "subtitle": "Zeiten pro Wochentag festlegen.",
       "hint": "Hinweis: Der Editor verwaltet eine Zeitspanne pro Tag. Mehrere Spannen (z. B. Mittagspause) können bei Bedarf ergänzt werden.",
-      "kitchenHoursTitle": "Küchenzeiten",
       "kitchenHoursEnabled": "Küchenzeiten aktivieren",
       "kitchenHoursHint": "Wenn aktiviert, werden separate Öffnungszeiten für die Küche unterhalb der allgemeinen Öffnungszeiten angezeigt."
     },
