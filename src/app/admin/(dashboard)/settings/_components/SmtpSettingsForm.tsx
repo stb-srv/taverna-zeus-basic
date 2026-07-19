@@ -6,7 +6,7 @@ import { updateSmtpSettings, testSmtpConnection, type ActionState } from "@/app/
 import { inputCls, labelCls, btnPrimary, btnGhost } from "@/components/admin/ui-classes";
 
 // Bewusst ohne das echte Passwort (siehe page.tsx) — nur ein Bool-Flag, ob eines gesetzt ist.
-type SmtpSettings = {
+export type SmtpSettings = {
   host: string | null;
   port: number | null;
   username: string | null;
@@ -33,7 +33,7 @@ export default function SmtpSettingsForm({ settings }: { settings: SmtpSettings 
       <form action={saveAction} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className={labelCls}>{t("smtpHost")}</label>
+            <label className={labelCls}>{t("smtpHost")} *</label>
             <input name="host" defaultValue={s?.host ?? ""} placeholder="mail.example.com" className={inputCls} />
           </div>
           <div>
@@ -64,8 +64,9 @@ export default function SmtpSettingsForm({ settings }: { settings: SmtpSettings 
             <input name="from_address" type="email" defaultValue={s?.from_address ?? ""} className={inputCls} />
           </div>
           <div>
-            <label className={labelCls}>{t("smtpNotifyEmail")}</label>
+            <label className={labelCls}>{t("smtpNotifyEmail")} *</label>
             <input name="notify_email" type="email" defaultValue={s?.notify_email ?? ""} className={inputCls} />
+            <p className="mt-1 text-xs text-muted">{t("smtpNotifyEmailHint")}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">

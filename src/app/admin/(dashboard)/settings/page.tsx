@@ -1,8 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { getSettings } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
-import SettingsForm from "./_components/SettingsForm";
-import SmtpSettingsForm from "./_components/SmtpSettingsForm";
+import SettingsTabs from "./_components/SettingsTabs";
 
 export default async function SettingsPage() {
   const settings = await getSettings();
@@ -23,10 +22,7 @@ export default async function SettingsPage() {
     <div>
       <h1 className="mb-1 font-display text-3xl">{t("title")}</h1>
       <p className="mb-6 text-sm text-muted">{t("subtitle")}</p>
-      <SettingsForm settings={settings} />
-      <div className="mt-8">
-        <SmtpSettingsForm settings={smtpSettingsForClient} />
-      </div>
+      <SettingsTabs settings={settings} smtpSettings={smtpSettingsForClient} />
     </div>
   );
 }

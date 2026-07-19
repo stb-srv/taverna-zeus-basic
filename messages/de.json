@@ -291,6 +291,10 @@
     "settings": {
       "title": "Standort & Kontakt",
       "subtitle": "Adresse, Kontaktdaten, Karte und Hero-Bild.",
+      "tab_location": "Standort & Kontakt",
+      "tab_social": "Social Media",
+      "tab_smtp": "SMTP",
+      "tab_closure": "Betriebsferien",
       "generalHeading": "Allgemein",
       "restaurantName": "Name des Restaurants",
       "descriptionDe": "Beschreibung (DE)",
@@ -327,6 +331,7 @@
       "smtpPasswordUnchangedHint": "•••••••• (leer lassen = unverändert)",
       "smtpFrom": "Absender-Adresse",
       "smtpNotifyEmail": "Benachrichtigung an",
+      "smtpNotifyEmailHint": "Pflichtfeld — an diese Adresse geht die Benachrichtigung bei neuen Kontaktanfragen. Ohne sie bleibt SMTP inaktiv, auch wenn Server/Zugangsdaten gesetzt sind.",
       "smtpTestButton": "Test-E-Mail senden",
       "smtpTesting": "Wird gesendet …",
       "smtpTestSuccess": "Test-E-Mail erfolgreich versendet."
