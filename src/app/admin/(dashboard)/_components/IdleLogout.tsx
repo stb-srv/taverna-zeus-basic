@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl";
 import { logout } from "../../actions/admins";
 
 /** Idle timeout before automatic logout, and how long before that to warn. */
-const TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
-const WARN_BEFORE_MS = 60 * 1000; // show the warning 1 minute before (at 29 min)
+const TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
+const WARN_BEFORE_MS = 20 * 1000; // show the warning 20s before
 const STORAGE_KEY = "meraki:last-activity";
 
 /**
