@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { Fragment, useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { updateHours, type ActionState } from "@/app/admin/actions/hours";
 import { inputCls, btnPrimary } from "@/components/admin/ui-classes";
@@ -35,6 +35,21 @@ export default function HoursForm({
   const kitchenByDay = new Map<number, KitchenHours>();
   for (const h of kitchenHours) if (!kitchenByDay.has(h.day_of_week)) kitchenByDay.set(h.day_of_week, h);
 
+  // Tracked in React (not just defaultChecked) so a closed day can hide its
+  // kitchen row live, without a page reload — a closed day never needs its
+  // own separate kitchen-closed checkbox on top.
+  const [closedDays, setClosedDays] = useState<Set<number>>(
+    () => new Set(days.filter((d) => byDay.get(d)?.is_closed ?? false)),
+  );
+  const toggleClosed = (day: number, closed: boolean) => {
+    setClosedDays((prev) => {
+      const next = new Set(prev);
+      if (closed) next.add(day);
+      else next.delete(day);
+      return next;
+    });
+  };
+
   return (
     <form action={action} className="max-w-xl space-y-4">
       <label className="flex items-center gap-2 text-sm">
@@ -48,66 +63,96 @@ export default function HoursForm({
       </label>
       <p className="text-xs text-muted">{t("kitchenHoursHint")}</p>
 
-      <div className="card-soft divide-y divide-border p-2 hover:translate-y-0">
-        {days.map((day) => {
-          const row = byDay.get(day);
-          const closed = row?.is_closed ?? false;
-          const kRow = kitchenByDay.get(day);
-          const kClosed = kRow?.is_closed ?? false;
-          return (
-            <div key={day} className="space-y-2 p-3">
-              <div className="grid grid-cols-[1fr_auto] items-center gap-4 sm:grid-cols-[140px_auto_1fr]">
-                <span className="font-medium">{tDays(String(day))}</span>
-                <label className="flex items-center gap-2 text-sm text-muted">
-                  <input type="checkbox" name={`closed_${day}`} defaultChecked={closed} />
-                  {tHours("closed")}
-                </label>
-                <div className="flex items-center gap-2 justify-self-end sm:justify-self-start">
-                  <input
-                    type="time"
-                    name={`open_${day}`}
-                    defaultValue={row?.open_time?.slice(0, 5) ?? "11:30"}
-                    className={`${inputCls} w-32`}
-                  />
-                  <span className="text-muted">–</span>
-                  <input
-                    type="time"
-                    name={`close_${day}`}
-                    defaultValue={row?.close_time?.slice(0, 5) ?? "22:00"}
-                    className={`${inputCls} w-32`}
-                  />
-                </div>
-              </div>
+      <div className="card-soft overflow-x-auto p-2 hover:translate-y-0">
+        <table className="w-full text-sm">
+          <colgroup>
+            <col className="w-28" />
+            <col className="w-24" />
+            <col />
+          </colgroup>
+          <tbody>
+            {days.map((day) => {
+              const row = byDay.get(day);
+              const closed = closedDays.has(day);
+              const kRow = kitchenByDay.get(day);
+              const kClosed = kRow?.is_closed ?? false;
+              // Kein separates "geschlossen" nötig, wenn der Tag ohnehin
+              // komplett zu hat — daher immer im Formular gemountet (damit
+              // Speichern nichts löscht), aber nur bei offenem Tag sichtbar.
+              const showKitchenRow = kitchenEnabled;
+              const kitchenRowVisible = showKitchenRow && !closed;
 
-              {/* Bleibt im Formular gemountet (nur per CSS versteckt), auch
-                  wenn "Küchenzeiten aktivieren" aus ist — sonst würde ein
-                  Speichern bei deaktivierten Küchenzeiten die hinterlegten
-                  Zeiten löschen statt sie nur auszublenden. */}
-              <div className={`grid grid-cols-[1fr_auto] items-center gap-4 pl-4 sm:grid-cols-[140px_auto_1fr] ${kitchenEnabled ? "" : "hidden"}`}>
-                <span className="text-xs text-muted">{tHours("kitchenHoursLabel")}</span>
-                <label className="flex items-center gap-2 text-xs text-muted">
-                  <input type="checkbox" name={`kclosed_${day}`} defaultChecked={kClosed} />
-                  {tHours("closed")}
-                </label>
-                <div className="flex items-center gap-2 justify-self-end sm:justify-self-start">
-                  <input
-                    type="time"
-                    name={`kopen_${day}`}
-                    defaultValue={kRow?.open_time?.slice(0, 5) ?? "14:00"}
-                    className={`${inputCls} w-32`}
-                  />
-                  <span className="text-muted">–</span>
-                  <input
-                    type="time"
-                    name={`kclose_${day}`}
-                    defaultValue={kRow?.close_time?.slice(0, 5) ?? "21:30"}
-                    className={`${inputCls} w-32`}
-                  />
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              return (
+                <Fragment key={day}>
+                  <tr className={kitchenRowVisible ? "" : "border-b border-border/60 last:border-0"}>
+                    <td className="py-2 pr-2 font-medium">{tDays(String(day))}</td>
+                    <td className="py-2 pr-2">
+                      <label className="flex items-center gap-1.5 whitespace-nowrap text-xs text-muted">
+                        <input
+                          type="checkbox"
+                          name={`closed_${day}`}
+                          checked={closed}
+                          onChange={(e) => toggleClosed(day, e.target.checked)}
+                        />
+                        {tHours("closed")}
+                      </label>
+                    </td>
+                    <td className="py-2">
+                      <div className={`flex items-center gap-2 ${closed ? "opacity-40" : ""}`}>
+                        <input
+                          type="time"
+                          name={`open_${day}`}
+                          disabled={closed}
+                          defaultValue={row?.open_time?.slice(0, 5) ?? "11:30"}
+                          className={`${inputCls} w-full`}
+                        />
+                        <span className="text-muted">–</span>
+                        <input
+                          type="time"
+                          name={`close_${day}`}
+                          disabled={closed}
+                          defaultValue={row?.close_time?.slice(0, 5) ?? "22:00"}
+                          className={`${inputCls} w-full`}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+
+                  {/* Bleibt im Formular gemountet (nur per CSS versteckt),
+                      auch wenn "Küchenzeiten aktivieren" aus ist oder der Tag
+                      geschlossen ist — sonst würde Speichern die hinterlegten
+                      Küchenzeiten löschen statt sie nur auszublenden. */}
+                  <tr className={`border-b border-border/60 last:border-0 ${showKitchenRow && !closed ? "" : "hidden"}`}>
+                    <td colSpan={2} className="py-1.5 pr-2 text-xs text-muted">
+                      {tHours("kitchenHoursLabel")}
+                    </td>
+                    <td className="py-1.5">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="time"
+                          name={`kopen_${day}`}
+                          defaultValue={kRow?.open_time?.slice(0, 5) ?? "14:00"}
+                          className={`${inputCls} w-full`}
+                        />
+                        <span className="text-muted">–</span>
+                        <input
+                          type="time"
+                          name={`kclose_${day}`}
+                          defaultValue={kRow?.close_time?.slice(0, 5) ?? "21:30"}
+                          className={`${inputCls} w-full`}
+                        />
+                        <label className="flex items-center gap-1.5 whitespace-nowrap text-xs text-muted">
+                          <input type="checkbox" name={`kclosed_${day}`} defaultChecked={kClosed} />
+                          {tHours("closed")}
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
 
       <p className="text-xs text-muted">{t("hint")}</p>
