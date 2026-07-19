@@ -27,6 +27,15 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1
 
 ### Hinzugefügt
 
+- **SMTP-Einstellungen im Admin**: Unter „Standort & Kontakt“ lassen sich
+  Server, Port, Benutzer, Passwort, Absender und Empfänger-Adresse für die
+  Kontaktformular-Benachrichtigung jetzt direkt eintragen, statt nur über
+  Coolify-Umgebungsvariablen — inklusive „Test-E-Mail senden“-Button, der
+  sofort eine echte Mail verschickt und Erfolg/Fehler direkt anzeigt. Die
+  Umgebungsvariablen bleiben als Fallback bestehen, falls nichts eingetragen
+  ist. Neue Tabelle `smtp_settings`, nur für Admins weder von `anon` noch
+  vom öffentlichen Kontaktformular-Kontext lesbar (Zugriff dort ausschließlich
+  über den Service-Role-Client).
 - **Spam-Schutz-Log im Admin**: Unter „Nachrichten“ zeigt eine neue Sektion,
   wie oft die stillen Bot-Fallen im Kontaktformular (Honeypot-Feld,
   Mindestausfüllzeit) gegriffen haben, getrennt nach Grund, mit Option zum
