@@ -21,6 +21,7 @@ export async function updateSettings(_prev: ActionState, fd: FormData): Promise<
   try {
     const supabase = await guard();
     const descI18n = i18nFromForm((k) => str(fd, k), "description");
+    const closureMessageI18n = i18nFromForm((k) => str(fd, k), "closure_banner_message");
     const address = {
       street: strOrNull(fd, "address_street"),
       zip: strOrNull(fd, "address_zip"),
@@ -45,11 +46,17 @@ export async function updateSettings(_prev: ActionState, fd: FormData): Promise<
         google_maps_embed: mapEmbed,
         hero_image_url: strOrNull(fd, "hero_image_url"),
         social_links: socialLinksFromForm(fd),
+        closure_banner_enabled: fd.get("closure_banner_enabled") === "on",
+        closure_banner_from: strOrNull(fd, "closure_banner_from"),
+        closure_banner_until: strOrNull(fd, "closure_banner_until"),
+        closure_banner_message_de: str(fd, "closure_banner_message_de"),
+        closure_banner_message_i18n: closureMessageI18n,
       })
       .eq("id", 1);
     if (error) return { error: error.message };
     await fillTranslations(supabase, "restaurant_settings", 1, {
       description: { i18n: descI18n, source: str(fd, "description_de") },
+      closure_banner_message: { i18n: closureMessageI18n, source: str(fd, "closure_banner_message_de") },
     });
     revalidatePublic();
     return { ok: true };

@@ -12,7 +12,10 @@
     "openingHours": "Godziny otwarcia",
     "findUs": "Jak nas znaleźć",
     "contact": "Kontakt",
-    "viewLocation": "Lokalizacja i dojazd"
+    "viewLocation": "Lokalizacja i dojazd",
+    "kitchenHours": "Godziny pracy kuchni",
+    "reviewsHeading": "Co mówią goście",
+    "reviewsCount": "{count, plural, =0 {Brak opinii} =1 {1 opinia} other {# opinii}}"
   },
   "menu": {
     "title": "Menu",
@@ -47,7 +50,9 @@
     "contactErrorRequired": "Proszę wpisać nazwę i wiadomość.",
     "contactErrorEmail": "Proszę podać poprawny adres e-mail.",
     "contactErrorRateLimited": "Zbyt wiele wiadomości w krótkim czasie - proszę spróbować ponownie później.",
-    "contactErrorGeneric": "Wiadomość nie mogła być wysłana. Proszę spróbować później."
+    "contactErrorGeneric": "Wiadomość nie mogła być wysłana. Proszę spróbować później.",
+    "reservationNotice": "Rezerwacje stolików możliwe są wyłącznie telefonicznie.",
+    "kitchenHours": "Godziny pracy kuchni"
   },
   "hours": {
     "closed": "Zamknięte",
@@ -105,6 +110,7 @@
       "hours": "Godziny otwarcia",
       "settings": "Lokalizacja i kontakt",
       "pages": "Strony",
+      "reviews": "Opinie",
       "translations": "Tłumaczenia",
       "admins": "Podawanie",
       "viewSite": "Zobacz stronę internetową",
@@ -266,7 +272,10 @@
     "hours": {
       "title": "Godziny otwarcia",
       "subtitle": "Określa czas w tygodniu.",
-      "hint": "Uwaga: Edytor zarządza jednym czasem dziennie. W razie potrzeby można uzupełnić wiele połączeń (np. przerwa na lunch)."
+      "hint": "Uwaga: Edytor zarządza jednym czasem dziennie. W razie potrzeby można uzupełnić wiele połączeń (np. przerwa na lunch).",
+      "kitchenHoursTitle": "Godziny pracy kuchni",
+      "kitchenHoursEnabled": "Włącz godziny pracy kuchni",
+      "kitchenHoursHint": "Po włączeniu osobne godziny pracy kuchni będą wyświetlane poniżej ogólnych godzin otwarcia."
     },
     "settings": {
       "title": "Lokalizacja i kontakt",
@@ -291,7 +300,13 @@
       "facebook": "URL Facebooka",
       "tiktok": "URL TikTok",
       "whatsapp": "WhatsApp numer",
-      "enabled": "Aktywne"
+      "enabled": "Aktywne",
+      "closureBannerHeading": "Powiadomienie o urlopie",
+      "closureBannerEnabled": "Włącz powiadomienie",
+      "closureBannerFrom": "Od",
+      "closureBannerUntil": "Do",
+      "closureBannerMessageDe": "Tekst powiadomienia (DE)",
+      "closureBannerHint": "Powiadomienie pojawia się automatycznie na stronie, dopóki dzisiejsza data mieści się w wybranym zakresie."
     },
     "admins": {
       "title": "Podawanie",
@@ -359,6 +374,33 @@
       "subtitle": "Wnioski za pośrednictwem formularza kontaktowego strony internetowej.",
       "markAsRead": "Zaznacz jako przeczytany",
       "noMessages": "Jeszcze nic."
+    },
+    "reviews": {
+      "title": "Opinie",
+      "subtitle": "Zarządzaj opiniami klientów wyświetlanymi na stronie.",
+      "newReview": "+ Nowa opinia",
+      "newReviewTitle": "Nowa opinia",
+      "editReview": "Edytuj opinię",
+      "noReviews": "Brak opinii.",
+      "authorName": "Imię",
+      "rating": "Gwiazdki",
+      "reviewDate": "Data",
+      "source": "Źródło",
+      "reviewTextDe": "Tekst opinii (DE)",
+      "published": "opublikowane",
+      "sortOrder": "Kolejność",
+      "deleteConfirm": "Na pewno usunąć tę opinię?"
+    },
+    "gallery": {
+      "sectionTitle": "Galeria zdjęć",
+      "sectionHint": "Zarządzaj zdjęciami dla tej strony. Pojawiają się publicznie pod treścią.",
+      "saveFirstHint": "Najpierw zapisz stronę, aby dodać zdjęcia.",
+      "uploadLabel": "Dodaj zdjęcie",
+      "altPlaceholder": "Tekst alternatywny (opis dostępności)",
+      "moveUp": "Przesuń w górę",
+      "moveDown": "Przesuń w dół",
+      "deleteConfirm": "Na pewno usunąć to zdjęcie?",
+      "noImages": "Brak zdjęć."
     }
   }
 }

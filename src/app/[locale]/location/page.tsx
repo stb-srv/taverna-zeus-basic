@@ -1,7 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { getSettings, getOpeningHours } from "@/lib/queries";
+import { getSettings, getOpeningHours, getKitchenHours } from "@/lib/queries";
 import OpeningHours from "@/components/OpeningHours";
+import KitchenHours from "@/components/KitchenHours";
 import MapEmbed from "@/components/MapEmbed";
 import ContactForm from "./ContactForm";
 
@@ -19,7 +20,11 @@ export default async function LocationPage({
   setRequestLocale(locale);
   const t = await getTranslations("location");
 
-  const [settings, hours] = await Promise.all([getSettings(), getOpeningHours()]);
+  const [settings, hours, kitchenHours] = await Promise.all([
+    getSettings(),
+    getOpeningHours(),
+    getKitchenHours(),
+  ]);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-14">
@@ -69,6 +74,12 @@ export default async function LocationPage({
           <section className="card-soft p-6">
             <h2 className="rule-gold mb-6 inline-block text-xl">{t("openingHours")}</h2>
             <OpeningHours hours={hours} />
+            {settings?.kitchen_hours_enabled && (
+              <div className="mt-6">
+                <h3 className="mb-3 text-sm font-medium text-muted">{t("kitchenHours")}</h3>
+                <KitchenHours hours={kitchenHours} />
+              </div>
+            )}
           </section>
         </div>
 
@@ -79,6 +90,7 @@ export default async function LocationPage({
 
       <section className="card-soft mt-8 max-w-xl p-6">
         <h2 className="rule-gold mb-6 inline-block text-xl">{t("contactFormHeading")}</h2>
+        <p className="mb-4 text-sm text-muted">{t("reservationNotice")}</p>
         <ContactForm locale={locale} />
       </section>
     </div>

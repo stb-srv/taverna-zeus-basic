@@ -1,9 +1,11 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { getSettings, getOpeningHours } from "@/lib/queries";
+import { getSettings, getOpeningHours, getKitchenHours } from "@/lib/queries";
 import { localized } from "@/i18n/localized-content";
 import OpeningHours from "@/components/OpeningHours";
+import KitchenHours from "@/components/KitchenHours";
+import Reviews from "@/components/Reviews";
 
 export default async function HomePage({
   params,
@@ -14,7 +16,11 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations("home");
 
-  const [settings, hours] = await Promise.all([getSettings(), getOpeningHours()]);
+  const [settings, hours, kitchenHours] = await Promise.all([
+    getSettings(),
+    getOpeningHours(),
+    getKitchenHours(),
+  ]);
   const name = settings?.name ?? "Taverna Zeus";
   const description = settings ? localized(settings, "description", locale) : "";
   const hero = settings?.hero_image_url;
@@ -64,6 +70,12 @@ export default async function HomePage({
         <div className="card-soft p-7">
           <h2 className="rule-gold mb-8 inline-block text-2xl">{t("openingHours")}</h2>
           <OpeningHours hours={hours} />
+          {settings?.kitchen_hours_enabled && (
+            <div className="mt-6">
+              <h3 className="mb-3 text-sm font-medium text-muted">{t("kitchenHours")}</h3>
+              <KitchenHours hours={kitchenHours} />
+            </div>
+          )}
         </div>
 
         <div className="card-soft p-7">
@@ -102,6 +114,8 @@ export default async function HomePage({
           </Link>
         </div>
       </section>
+
+      <Reviews locale={locale} />
     </>
   );
 }

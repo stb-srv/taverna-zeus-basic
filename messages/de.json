@@ -12,7 +12,10 @@
     "openingHours": "Öffnungszeiten",
     "findUs": "So finden Sie uns",
     "contact": "Kontakt",
-    "viewLocation": "Standort & Anfahrt"
+    "viewLocation": "Standort & Anfahrt",
+    "kitchenHours": "Küchenzeiten",
+    "reviewsHeading": "Was Gäste sagen",
+    "reviewsCount": "{count, plural, =0 {Keine Bewertungen} =1 {1 Bewertung} other {# Bewertungen}}"
   },
   "menu": {
     "title": "Speisekarte",
@@ -47,7 +50,9 @@
     "contactErrorRequired": "Bitte Name und Nachricht ausfüllen.",
     "contactErrorEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
     "contactErrorRateLimited": "Zu viele Nachrichten in kurzer Zeit — bitte versuche es später erneut.",
-    "contactErrorGeneric": "Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut."
+    "contactErrorGeneric": "Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut.",
+    "reservationNotice": "Tischreservierungen sind ausschließlich telefonisch möglich.",
+    "kitchenHours": "Küchenzeiten"
   },
   "hours": {
     "closed": "Geschlossen",
@@ -106,6 +111,7 @@
       "settings": "Standort & Kontakt",
       "pages": "Seiten",
       "messages": "Nachrichten",
+      "reviews": "Bewertungen",
       "translations": "Übersetzungen",
       "admins": "Admins",
       "viewSite": "Website ansehen ↗",
@@ -272,7 +278,10 @@
     "hours": {
       "title": "Öffnungszeiten",
       "subtitle": "Zeiten pro Wochentag festlegen.",
-      "hint": "Hinweis: Der Editor verwaltet eine Zeitspanne pro Tag. Mehrere Spannen (z. B. Mittagspause) können bei Bedarf ergänzt werden."
+      "hint": "Hinweis: Der Editor verwaltet eine Zeitspanne pro Tag. Mehrere Spannen (z. B. Mittagspause) können bei Bedarf ergänzt werden.",
+      "kitchenHoursTitle": "Küchenzeiten",
+      "kitchenHoursEnabled": "Küchenzeiten aktivieren",
+      "kitchenHoursHint": "Wenn aktiviert, werden separate Öffnungszeiten für die Küche unterhalb der allgemeinen Öffnungszeiten angezeigt."
     },
     "settings": {
       "title": "Standort & Kontakt",
@@ -297,7 +306,13 @@
       "facebook": "Facebook-URL",
       "tiktok": "TikTok-URL",
       "whatsapp": "WhatsApp-Nummer",
-      "enabled": "Aktiv"
+      "enabled": "Aktiv",
+      "closureBannerHeading": "Betriebsferien-Hinweis",
+      "closureBannerEnabled": "Hinweis aktivieren",
+      "closureBannerFrom": "Von",
+      "closureBannerUntil": "Bis",
+      "closureBannerMessageDe": "Hinweistext (DE)",
+      "closureBannerHint": "Der Hinweis erscheint automatisch auf der Website, solange das heutige Datum im gewählten Zeitraum liegt."
     },
     "admins": {
       "title": "Admins",
@@ -359,6 +374,33 @@
       "createdSuffix": "erstellt ✓",
       "errorPrefix": "Fehler:",
       "errorSavedAnywaySuffix": "Übersetzungen wurden trotzdem gespeichert."
+    },
+    "reviews": {
+      "title": "Bewertungen",
+      "subtitle": "Kundenbewertungen verwalten, die auf der Website angezeigt werden.",
+      "newReview": "+ Neue Bewertung",
+      "newReviewTitle": "Neue Bewertung",
+      "editReview": "Bewertung bearbeiten",
+      "noReviews": "Noch keine Bewertungen.",
+      "authorName": "Name",
+      "rating": "Sterne",
+      "reviewDate": "Datum",
+      "source": "Quelle",
+      "reviewTextDe": "Bewertungstext (DE)",
+      "published": "veröffentlicht",
+      "sortOrder": "Reihenfolge",
+      "deleteConfirm": "Bewertung wirklich löschen?"
+    },
+    "gallery": {
+      "sectionTitle": "Bildergalerie",
+      "sectionHint": "Fotos für diese Seite verwalten. Erscheinen öffentlich unterhalb des Inhalts.",
+      "saveFirstHint": "Seite zuerst speichern, um Bilder hinzuzufügen.",
+      "uploadLabel": "Bild hinzufügen",
+      "altPlaceholder": "Alt-Text (Beschreibung für Barrierefreiheit)",
+      "moveUp": "Nach oben",
+      "moveDown": "Nach unten",
+      "deleteConfirm": "Bild wirklich löschen?",
+      "noImages": "Noch keine Bilder."
     }
   }
 }

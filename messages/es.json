@@ -12,7 +12,10 @@
     "openingHours": "Horario",
     "findUs": "Cómo encontrarnos",
     "contact": "Contacto",
-    "viewLocation": "Ubicación y cómo llegar"
+    "viewLocation": "Ubicación y cómo llegar",
+    "kitchenHours": "Horario de cocina",
+    "reviewsHeading": "Lo que dicen los clientes",
+    "reviewsCount": "{count, plural, =0 {Sin reseñas} =1 {1 reseña} other {# reseñas}}"
   },
   "menu": {
     "title": "Carta",
@@ -47,7 +50,9 @@
     "contactErrorRequired": "Por favor, llene el nombre y el mensaje.",
     "contactErrorEmail": "Por favor, introduzca una dirección de correo electrónico válida.",
     "contactErrorRateLimited": "Demasiados mensajes en poco tiempo – por favor vuelva a intentarlo más tarde.",
-    "contactErrorGeneric": "El mensaje no puede ser enviado. Por favor, intente de nuevo más tarde."
+    "contactErrorGeneric": "El mensaje no puede ser enviado. Por favor, intente de nuevo más tarde.",
+    "reservationNotice": "Las reservas de mesa solo son posibles por teléfono.",
+    "kitchenHours": "Horario de cocina"
   },
   "hours": {
     "closed": "Cerrado",
@@ -105,6 +110,7 @@
       "hours": "Horario de apertura",
       "settings": "Ubicación & Contacto",
       "pages": "Páginas",
+      "reviews": "Reseñas",
       "translations": "Traducciones",
       "admins": "Admins",
       "viewSite": "Ver el sitio web",
@@ -266,7 +272,10 @@
     "hours": {
       "title": "Horario de apertura",
       "subtitle": "Establece tiempos por día de semana.",
-      "hint": "Nota: El editor administra un período de tiempo por día. Se pueden complementar múltiples lapsos (por ejemplo, descanso para el almuerzo) si es necesario."
+      "hint": "Nota: El editor administra un período de tiempo por día. Se pueden complementar múltiples lapsos (por ejemplo, descanso para el almuerzo) si es necesario.",
+      "kitchenHoursTitle": "Horario de cocina",
+      "kitchenHoursEnabled": "Activar horario de cocina",
+      "kitchenHoursHint": "Si está activado, se mostrará un horario de cocina independiente debajo del horario general."
     },
     "settings": {
       "title": "Ubicación & Contacto",
@@ -291,7 +300,13 @@
       "facebook": "URL de Facebook",
       "tiktok": "URL de TikTok",
       "whatsapp": "Número de WhatsApp",
-      "enabled": "Activo"
+      "enabled": "Activo",
+      "closureBannerHeading": "Aviso de cierre por vacaciones",
+      "closureBannerEnabled": "Activar aviso",
+      "closureBannerFrom": "Desde",
+      "closureBannerUntil": "Hasta",
+      "closureBannerMessageDe": "Texto del aviso (DE)",
+      "closureBannerHint": "El aviso aparece automáticamente en el sitio web mientras la fecha actual esté dentro del rango seleccionado."
     },
     "admins": {
       "title": "Admins",
@@ -359,6 +374,33 @@
       "subtitle": "Solicitudes vía el formulario de contacto del sitio web.",
       "markAsRead": "Marcar como leído",
       "noMessages": "Aún no hay noticias."
+    },
+    "reviews": {
+      "title": "Reseñas",
+      "subtitle": "Gestiona las reseñas de clientes que se muestran en el sitio web.",
+      "newReview": "+ Nueva reseña",
+      "newReviewTitle": "Nueva reseña",
+      "editReview": "Editar reseña",
+      "noReviews": "Aún no hay reseñas.",
+      "authorName": "Nombre",
+      "rating": "Estrellas",
+      "reviewDate": "Fecha",
+      "source": "Fuente",
+      "reviewTextDe": "Texto de la reseña (DE)",
+      "published": "publicada",
+      "sortOrder": "Orden",
+      "deleteConfirm": "¿Eliminar esta reseña?"
+    },
+    "gallery": {
+      "sectionTitle": "Galería de fotos",
+      "sectionHint": "Gestiona las fotos de esta página. Aparecen públicamente debajo del contenido.",
+      "saveFirstHint": "Guarda primero la página para añadir fotos.",
+      "uploadLabel": "Añadir foto",
+      "altPlaceholder": "Texto alternativo (descripción de accesibilidad)",
+      "moveUp": "Subir",
+      "moveDown": "Bajar",
+      "deleteConfirm": "¿Eliminar esta foto?",
+      "noImages": "Aún no hay fotos."
     }
   }
 }

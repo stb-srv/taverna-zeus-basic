@@ -124,6 +124,60 @@ export default function SettingsForm({ settings }: { settings: Settings | null }
         })}
       </section>
 
+      <section className="card-soft space-y-4 p-6 hover:translate-y-0">
+        <h2 className="font-display text-lg">{t("closureBannerHeading")}</h2>
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            name="closure_banner_enabled"
+            defaultChecked={s?.closure_banner_enabled ?? false}
+          />
+          {t("closureBannerEnabled")}
+        </label>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className={labelCls}>{t("closureBannerFrom")}</label>
+            <input
+              type="date"
+              name="closure_banner_from"
+              defaultValue={s?.closure_banner_from ?? ""}
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label className={labelCls}>{t("closureBannerUntil")}</label>
+            <input
+              type="date"
+              name="closure_banner_until"
+              defaultValue={s?.closure_banner_until ?? ""}
+              className={inputCls}
+            />
+          </div>
+        </div>
+        <div>
+          <label className={labelCls}>{t("closureBannerMessageDe")}</label>
+          <textarea
+            name="closure_banner_message_de"
+            defaultValue={s?.closure_banner_message_de ?? ""}
+            rows={3}
+            className={inputCls}
+          />
+        </div>
+        <p className="mt-1 text-xs text-muted">{t("closureBannerHint")}</p>
+        <TranslationsPanel
+          kind="settings"
+          id={s ? String(s.id) : undefined}
+          fields={[
+            {
+              name: "closure_banner_message",
+              label: t("closureBannerMessageDe"),
+              multiline: true,
+              values: (s?.closure_banner_message_i18n as I18n) ?? {},
+            },
+          ]}
+        />
+      </section>
+
       <div className="flex items-center gap-4">
         <button type="submit" disabled={pending} className={btnPrimary}>
           {pending ? tc("saving") : tc("save")}

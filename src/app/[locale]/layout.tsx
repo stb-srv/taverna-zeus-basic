@@ -10,8 +10,10 @@ import { fontVars } from "@/lib/fonts";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
+import ClosureBanner from "@/components/ClosureBanner";
 import FloatingActions from "@/components/FloatingActions";
 import ThemeScript from "@/components/ThemeScript";
+import StructuredData from "@/components/StructuredData";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -93,9 +95,11 @@ export default async function LocaleLayout({
     >
       <head>
         <ThemeScript />
+        <StructuredData locale={locale as Locale} />
       </head>
       <body className="flex min-h-screen flex-col">
         <NextIntlClientProvider>
+          <ClosureBanner locale={locale as Locale} />
           <Nav restaurantName={name} locales={enabled} pages={pages} />
           <main className="flex-1">{children}</main>
           <Footer

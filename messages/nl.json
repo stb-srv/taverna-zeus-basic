@@ -12,7 +12,10 @@
     "openingHours": "Openingstijden",
     "findUs": "Zo vindt u ons",
     "contact": "Contact",
-    "viewLocation": "Locatie & route"
+    "viewLocation": "Locatie & route",
+    "kitchenHours": "Keukentijden",
+    "reviewsHeading": "Wat gasten zeggen",
+    "reviewsCount": "{count, plural, =0 {Geen beoordelingen} =1 {1 beoordeling} other {# beoordelingen}}"
   },
   "menu": {
     "title": "Menu",
@@ -47,7 +50,9 @@
     "contactErrorRequired": "Vul de naam en het bericht in.",
     "contactErrorEmail": "Voer een geldig e-mailadres in.",
     "contactErrorRateLimited": "Te veel berichten in een korte tijd, probeer het later opnieuw.",
-    "contactErrorGeneric": "Bericht kon niet verzonden worden. Probeer het later nog eens."
+    "contactErrorGeneric": "Bericht kon niet verzonden worden. Probeer het later nog eens.",
+    "reservationNotice": "Tafelreserveringen zijn alleen telefonisch mogelijk.",
+    "kitchenHours": "Keukentijden"
   },
   "hours": {
     "closed": "Gesloten",
@@ -105,6 +110,7 @@
       "hours": "Openingstijden",
       "settings": "Locatie & contact",
       "pages": "Bladzijden",
+      "reviews": "Beoordelingen",
       "translations": "Vertalingen",
       "admins": "Beheerders",
       "viewSite": "Bekijk de website",
@@ -266,7 +272,10 @@
     "hours": {
       "title": "Openingstijden",
       "subtitle": "Stel tijden in per weekdag.",
-      "hint": "Opmerking: De editor beheert één tijdsperiode per dag. Meerdere overspanningen (bv. lunchpauze) kunnen indien nodig worden aangevuld."
+      "hint": "Opmerking: De editor beheert één tijdsperiode per dag. Meerdere overspanningen (bv. lunchpauze) kunnen indien nodig worden aangevuld.",
+      "kitchenHoursTitle": "Keukentijden",
+      "kitchenHoursEnabled": "Keukentijden inschakelen",
+      "kitchenHoursHint": "Indien ingeschakeld, worden aparte keukentijden onder de algemene openingstijden getoond."
     },
     "settings": {
       "title": "Locatie & contact",
@@ -291,7 +300,13 @@
       "facebook": "Facebook-URL",
       "tiktok": "TikTok-URL",
       "whatsapp": "WhatsApp-nummer",
-      "enabled": "Actief"
+      "enabled": "Actief",
+      "closureBannerHeading": "Vakantiemelding",
+      "closureBannerEnabled": "Melding inschakelen",
+      "closureBannerFrom": "Van",
+      "closureBannerUntil": "Tot",
+      "closureBannerMessageDe": "Meldingstekst (DE)",
+      "closureBannerHint": "De melding verschijnt automatisch op de website zolang de huidige datum binnen de gekozen periode valt."
     },
     "admins": {
       "title": "Beheerders",
@@ -359,6 +374,33 @@
       "subtitle": "Verzoeken via het contactformulier van de website.",
       "markAsRead": "Markeren als gelezen",
       "noMessages": "Nog geen nieuws."
+    },
+    "reviews": {
+      "title": "Beoordelingen",
+      "subtitle": "Beheer klantbeoordelingen die op de website worden getoond.",
+      "newReview": "+ Nieuwe beoordeling",
+      "newReviewTitle": "Nieuwe beoordeling",
+      "editReview": "Beoordeling bewerken",
+      "noReviews": "Nog geen beoordelingen.",
+      "authorName": "Naam",
+      "rating": "Sterren",
+      "reviewDate": "Datum",
+      "source": "Bron",
+      "reviewTextDe": "Beoordelingstekst (DE)",
+      "published": "gepubliceerd",
+      "sortOrder": "Volgorde",
+      "deleteConfirm": "Deze beoordeling echt verwijderen?"
+    },
+    "gallery": {
+      "sectionTitle": "Fotogalerij",
+      "sectionHint": "Beheer foto's voor deze pagina. Ze verschijnen openbaar onder de inhoud.",
+      "saveFirstHint": "Sla de pagina eerst op om foto's toe te voegen.",
+      "uploadLabel": "Foto toevoegen",
+      "altPlaceholder": "Alt-tekst (beschrijving voor toegankelijkheid)",
+      "moveUp": "Omhoog verplaatsen",
+      "moveDown": "Omlaag verplaatsen",
+      "deleteConfirm": "Deze foto echt verwijderen?",
+      "noImages": "Nog geen foto's."
     }
   }
 }

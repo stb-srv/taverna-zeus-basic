@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import PageForm from "../PageForm";
+import PageForm from "../_components/PageForm";
 
 export default async function NewPage() {
   const t = await getTranslations("admin.pages");

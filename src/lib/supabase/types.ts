@@ -110,6 +110,66 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_images: {
+        Row: {
+          alt_de: string | null
+          alt_en: string | null
+          alt_i18n: Json
+          context_key: string
+          created_at: string
+          id: string
+          image_url: string
+          sort_order: number
+        }
+        Insert: {
+          alt_de?: string | null
+          alt_en?: string | null
+          alt_i18n?: Json
+          context_key: string
+          created_at?: string
+          id?: string
+          image_url: string
+          sort_order?: number
+        }
+        Update: {
+          alt_de?: string | null
+          alt_en?: string | null
+          alt_i18n?: Json
+          context_key?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      kitchen_hours: {
+        Row: {
+          close_time: string | null
+          day_of_week: number
+          id: string
+          is_closed: boolean
+          open_time: string | null
+          sort_order: number
+        }
+        Insert: {
+          close_time?: string | null
+          day_of_week: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string | null
+          sort_order?: number
+        }
+        Update: {
+          close_time?: string | null
+          day_of_week?: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
       languages: {
         Row: {
           code: string
@@ -393,6 +453,12 @@ export type Database = {
           address_country: string | null
           address_street: string | null
           address_zip: string | null
+          closure_banner_enabled: boolean
+          closure_banner_from: string | null
+          closure_banner_message_de: string | null
+          closure_banner_message_en: string | null
+          closure_banner_message_i18n: Json
+          closure_banner_until: string | null
           created_at: string
           description_de: string | null
           description_en: string | null
@@ -402,6 +468,7 @@ export type Database = {
           google_maps_embed: string | null
           hero_image_url: string | null
           id: number
+          kitchen_hours_enabled: boolean
           name: string
           phone: string | null
           social_links: Json
@@ -413,6 +480,12 @@ export type Database = {
           address_country?: string | null
           address_street?: string | null
           address_zip?: string | null
+          closure_banner_enabled?: boolean
+          closure_banner_from?: string | null
+          closure_banner_message_de?: string | null
+          closure_banner_message_en?: string | null
+          closure_banner_message_i18n?: Json
+          closure_banner_until?: string | null
           created_at?: string
           description_de?: string | null
           description_en?: string | null
@@ -422,6 +495,7 @@ export type Database = {
           google_maps_embed?: string | null
           hero_image_url?: string | null
           id?: number
+          kitchen_hours_enabled?: boolean
           name?: string
           phone?: string | null
           social_links?: Json
@@ -433,6 +507,12 @@ export type Database = {
           address_country?: string | null
           address_street?: string | null
           address_zip?: string | null
+          closure_banner_enabled?: boolean
+          closure_banner_from?: string | null
+          closure_banner_message_de?: string | null
+          closure_banner_message_en?: string | null
+          closure_banner_message_i18n?: Json
+          closure_banner_until?: string | null
           created_at?: string
           description_de?: string | null
           description_en?: string | null
@@ -442,11 +522,54 @@ export type Database = {
           google_maps_embed?: string | null
           hero_image_url?: string | null
           id?: number
+          kitchen_hours_enabled?: boolean
           name?: string
           phone?: string | null
           social_links?: Json
           ui_messages?: Json
           updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          author_name: string
+          created_at: string
+          id: string
+          is_published: boolean
+          rating: number
+          review_date: string | null
+          review_text_de: string | null
+          review_text_en: string | null
+          review_text_i18n: Json
+          sort_order: number
+          source: string
+        }
+        Insert: {
+          author_name: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          rating: number
+          review_date?: string | null
+          review_text_de?: string | null
+          review_text_en?: string | null
+          review_text_i18n?: Json
+          sort_order?: number
+          source?: string
+        }
+        Update: {
+          author_name?: string
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          rating?: number
+          review_date?: string | null
+          review_text_de?: string | null
+          review_text_en?: string | null
+          review_text_i18n?: Json
+          sort_order?: number
+          source?: string
         }
         Relationships: []
       }

@@ -3,6 +3,39 @@
 Alle nennenswerten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/).
 
+## 2026-07-19
+
+### Hinzugefügt
+
+- **Reservierungshinweis**: Auf der Standort-Seite steht jetzt direkt über dem
+  Kontaktformular, dass Tischreservierungen ausschließlich telefonisch möglich
+  sind — zuvor konnte das Formular fälschlich als Reservierungsweg missverstanden
+  werden.
+- **Küchenöffnungszeiten**: Neue, von den normalen Öffnungszeiten unabhängige
+  Zeittabelle (`kitchen_hours`), im Admin unter „Öffnungszeiten“ pflegbar und
+  per Checkbox ein-/ausschaltbar. Erscheint öffentlich direkt unterhalb der
+  normalen Öffnungszeiten auf Startseite und Standort-Seite, sobald aktiviert.
+- **Urlaubs-/Feiertags-Banner**: Im Admin unter „Einstellungen“ lässt sich ein
+  Zeitraum (z. B. 20.08.–04.09.) plus Text hinterlegen; das Banner erscheint
+  automatisch sitzweit, solange das heutige Datum (Europe/Berlin, inklusive
+  Start- und Endtag) im Zeitraum liegt — kein manuelles Ein-/Ausschalten nötig.
+- **Bewertungen**: Neuer Admin-Bereich „Bewertungen“ zur manuellen Pflege
+  echter Kundenbewertungen (Autor, Sterne, Datum, Text, Quelle,
+  Veröffentlichungsstatus). Veröffentlichte Bewertungen erscheinen auf der
+  Startseite (Durchschnitt + Anzahl) und fließen in die neuen sitzweiten
+  `schema.org/Restaurant`-Strukturdaten (JSON-LD) ein — inklusive
+  `aggregateRating`, Adresse, Öffnungszeiten und `sameAs`-Links zu den
+  aktivierten Social-Media-Profilen.
+- **Bildergalerie pro Seite**: Admin-CMS-Seiten können jetzt optional eine
+  Bildergalerie erhalten (Mehrfach-Upload, Alt-Text mit automatischer
+  Übersetzung, Auf-/Absortieren, Löschen). Das Datenmodell nutzt einen
+  generischen `context_key` (`page:<id>`), sodass sich künftig auch Start-
+  oder Standort-Seite ohne Schemaänderung anschließen lassen.
+- Neue Tabellen `kitchen_hours`, `reviews`, `gallery_images` und neue Spalten
+  auf `restaurant_settings` (`kitchen_hours_enabled`, `closure_banner_*`),
+  neuer Storage-Bucket `gallery-images` — alle vier Migrationen gegen die
+  Produktivdatenbank ausgeführt und verifiziert.
+
 ## 2026-07-13
 
 ### Behoben

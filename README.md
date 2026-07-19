@@ -9,20 +9,32 @@ ohne externes CMS.
 **Öffentliche Website**
 
 - Startseite, Speisekarte (mit Allergenen & Zusatzstoffen), Standort, CMS-Seiten
-  (z. B. Impressum, Datenschutz)
+  (z. B. Impressum, Datenschutz), optional mit Bildergalerie pro Seite
 - Mehrsprachig über [next-intl](https://next-intl.dev): 8 Sprachen ab Werk,
   bis zu 20 im Admin aktivierbar — Deutsch ist die Quellsprache, maschinelle
   Übersetzungen kommen aus einer selbst gehosteten LibreTranslate-Instanz
 - DSGVO-freundlich: Cookie-Banner mit Zwei-Klick-Lösung; die Standort-Karte ist eine
   **OpenStreetMap**-Einbettung (kein Google) und lädt erst nach Zustimmung
+- Hinweis auf der Standort-Seite, dass Tischreservierungen nur telefonisch möglich sind
+- Eigene, unabhängig ein-/ausschaltbare Küchenöffnungszeiten neben den normalen
+  Öffnungszeiten (Startseite & Standort)
+- Automatisches Urlaubs-/Feiertags-Banner: Zeitraum + Text im Admin hinterlegen,
+  erscheint selbstständig während dieses Zeitraums (Europe/Berlin)
+- Manuell gepflegte Bewertungen mit Anzeige auf der Startseite sowie sitzweite
+  `schema.org/Restaurant`-Strukturdaten (JSON-LD, inkl. `aggregateRating`) für
+  Suchmaschinen
 
 **Admin-Bereich** (`/admin`, Login via Supabase Auth)
 
 - Speisekarte: Kategorien & Gerichte inkl. Bilder, Allergene, Zusatzstoffe,
   Import/Export als JSON oder ZIP-Bundle mit Bildern
-- Öffnungszeiten, CMS-Seiten (Markdown), Admin-Verwaltung
-- Einstellungen: Name, Adresse, Kontakt, Hero-Bild — die Standort-Karte wird
-  automatisch aus der Adresse erzeugt (Geocoding via Nominatim, serverseitig)
+- Öffnungszeiten (inkl. separater Küchenöffnungszeiten), CMS-Seiten (Markdown,
+  optional mit Bildergalerie), Admin-Verwaltung
+- Bewertungen: Autor, Sterne, Datum, Text — Anzeige auf der Startseite und in
+  den JSON-LD-Strukturdaten
+- Einstellungen: Name, Adresse, Kontakt, Hero-Bild, Urlaubs-/Feiertags-Banner —
+  die Standort-Karte wird automatisch aus der Adresse erzeugt (Geocoding via
+  Nominatim, serverseitig)
 - Übersetzungen: Statusübersicht (was ist übersetzt, was fehlt), Lücken per Klick
   gesammelt übersetzen, Sprachen aktivieren/deaktivieren — beim Aktivieren einer
   neuen Sprache werden Oberflächentexte und Inhalte automatisch übersetzt

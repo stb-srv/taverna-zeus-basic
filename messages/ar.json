@@ -12,7 +12,10 @@
     "openingHours": "ساعات العمل",
     "findUs": "كيف تجدنا",
     "contact": "اتصل بنا",
-    "viewLocation": "الموقع والوصول"
+    "viewLocation": "الموقع والوصول",
+    "kitchenHours": "أوقات المطبخ",
+    "reviewsHeading": "ماذا يقول الضيوف",
+    "reviewsCount": "{count, plural, =0 {لا توجد تقييمات} =1 {تقييم واحد} other {# تقييمات}}"
   },
   "menu": {
     "title": "القائمة",
@@ -47,7 +50,9 @@
     "contactErrorRequired": "يرجى ملء الاسم والرسالة.",
     "contactErrorEmail": "يرجى الدخول إلى عنوان بريد إلكتروني صحيح.",
     "contactErrorRateLimited": "الكثير من الرسائل في وقت قصير - من فضلك حاول مرة أخرى فيما بعد.",
-    "contactErrorGeneric": "لا يمكن إرسال الرسالة حاول مرة أخرى لاحقاً."
+    "contactErrorGeneric": "لا يمكن إرسال الرسالة حاول مرة أخرى لاحقاً.",
+    "reservationNotice": "لا يمكن حجز الطاولات إلا عبر الهاتف.",
+    "kitchenHours": "أوقات المطبخ"
   },
   "hours": {
     "closed": "مغلق",
@@ -105,6 +110,7 @@
       "hours": "ساعات الافتتاح",
       "settings": "جهة الاتصال",
       "pages": "الصفحة",
+      "reviews": "التقييمات",
       "translations": "الترجمة التحريرية",
       "admins": "Admins",
       "viewSite": "مشاهدة الموقع",
@@ -266,7 +272,10 @@
     "hours": {
       "title": "ساعات الافتتاح",
       "subtitle": "حددوا أوقات الأسبوع.",
-      "hint": "ملاحظة: يتولى رئيس التحرير إدارة فترة زمنية واحدة في اليوم. ويمكن استكمال العواطف المتعددة (مثل استراحة الغداء) إذا لزم الأمر."
+      "hint": "ملاحظة: يتولى رئيس التحرير إدارة فترة زمنية واحدة في اليوم. ويمكن استكمال العواطف المتعددة (مثل استراحة الغداء) إذا لزم الأمر.",
+      "kitchenHoursTitle": "أوقات المطبخ",
+      "kitchenHoursEnabled": "تفعيل أوقات المطبخ",
+      "kitchenHoursHint": "عند التفعيل، تظهر أوقات مطبخ منفصلة أسفل ساعات العمل العامة."
     },
     "settings": {
       "title": "جهة الاتصال",
@@ -291,7 +300,13 @@
       "facebook": "Facebook URL",
       "tiktok": "TikTok URL",
       "whatsapp": "رقم ماساب",
-      "enabled": "النشاط"
+      "enabled": "النشاط",
+      "closureBannerHeading": "إشعار الإغلاق للعطلة",
+      "closureBannerEnabled": "تفعيل الإشعار",
+      "closureBannerFrom": "من",
+      "closureBannerUntil": "إلى",
+      "closureBannerMessageDe": "نص الإشعار (DE)",
+      "closureBannerHint": "يظهر الإشعار تلقائيًا على الموقع طالما أن تاريخ اليوم يقع ضمن النطاق المحدد."
     },
     "admins": {
       "title": "Admins",
@@ -359,6 +374,33 @@
       "subtitle": "طلبات عبر استمارة الاتصال بالموقع.",
       "markAsRead": "علامة على النحو التالي:",
       "noMessages": "لا أخبار بعد."
+    },
+    "reviews": {
+      "title": "التقييمات",
+      "subtitle": "إدارة تقييمات العملاء المعروضة على الموقع.",
+      "newReview": "+ تقييم جديد",
+      "newReviewTitle": "تقييم جديد",
+      "editReview": "تعديل التقييم",
+      "noReviews": "لا توجد تقييمات بعد.",
+      "authorName": "الاسم",
+      "rating": "النجوم",
+      "reviewDate": "التاريخ",
+      "source": "المصدر",
+      "reviewTextDe": "نص التقييم (DE)",
+      "published": "منشور",
+      "sortOrder": "الترتيب",
+      "deleteConfirm": "هل تريد حقًا حذف هذا التقييم؟"
+    },
+    "gallery": {
+      "sectionTitle": "معرض الصور",
+      "sectionHint": "إدارة الصور لهذه الصفحة. تظهر للعامة أسفل المحتوى.",
+      "saveFirstHint": "احفظ الصفحة أولاً لإضافة الصور.",
+      "uploadLabel": "إضافة صورة",
+      "altPlaceholder": "النص البديل (وصف لإمكانية الوصول)",
+      "moveUp": "تحريك لأعلى",
+      "moveDown": "تحريك لأسفل",
+      "deleteConfirm": "هل تريد حقًا حذف هذه الصورة؟",
+      "noImages": "لا توجد صور بعد."
     }
   }
 }

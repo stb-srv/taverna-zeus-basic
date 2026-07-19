@@ -75,6 +75,8 @@ describe("TRANSLATABLE_TABLES", () => {
       "restaurant_settings",
       "allergens",
       "additives",
+      "reviews",
+      "gallery_images",
     ]);
   });
 });

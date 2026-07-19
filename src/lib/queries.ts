@@ -22,6 +22,17 @@ export async function getOpeningHours() {
   return data ?? [];
 }
 
+/** Kitchen hours ordered Mon→Sun, then by sort order (shown when restaurant_settings.kitchen_hours_enabled is true). */
+export async function getKitchenHours() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("kitchen_hours")
+    .select("*")
+    .order("day_of_week", { ascending: true })
+    .order("sort_order", { ascending: true });
+  return data ?? [];
+}
+
 async function fetchRawMenu() {
   const supabase = await createClient();
   const { data } = await supabase
@@ -109,4 +120,34 @@ export async function getPage(slug: string) {
     .eq("is_published", true)
     .maybeSingle();
   return data;
+}
+
+/** Published reviews in sort order — sole source for both the on-site display and the JSON-LD aggregateRating. */
+export async function getPublishedReviews() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("reviews")
+    .select("*")
+    .eq("is_published", true)
+    .order("sort_order", { ascending: true });
+  return data ?? [];
+}
+
+/** Average rating (1 decimal) + count over a set of reviews. Pure so it can be unit-tested without a DB round trip. */
+export function computeReviewStats(reviews: { rating: number }[]): { count: number; average: number | null } {
+  const count = reviews.length;
+  if (count === 0) return { count: 0, average: null };
+  const sum = reviews.reduce((total, r) => total + r.rating, 0);
+  return { count, average: Math.round((sum / count) * 10) / 10 };
+}
+
+/** Gallery images for a given context (e.g. `page:<page-id>`), in sort order. */
+export async function getGalleryImages(contextKey: string) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("gallery_images")
+    .select("*")
+    .eq("context_key", contextKey)
+    .order("sort_order", { ascending: true });
+  return data ?? [];
 }

@@ -12,7 +12,10 @@
     "openingHours": "Opening Hours",
     "findUs": "How to find us",
     "contact": "Contact",
-    "viewLocation": "Location & Directions"
+    "viewLocation": "Location & Directions",
+    "kitchenHours": "Kitchen hours",
+    "reviewsHeading": "What guests say",
+    "reviewsCount": "{count, plural, =0 {No reviews} =1 {1 review} other {# reviews}}"
   },
   "menu": {
     "title": "Menu",
@@ -47,7 +50,9 @@
     "contactErrorRequired": "Please fill in the name and message.",
     "contactErrorEmail": "Please enter a valid email address.",
     "contactErrorRateLimited": "Too many messages in a short time – please try again later.",
-    "contactErrorGeneric": "Message could not be sent. Please try again later."
+    "contactErrorGeneric": "Message could not be sent. Please try again later.",
+    "reservationNotice": "Table reservations are only possible by phone.",
+    "kitchenHours": "Kitchen hours"
   },
   "hours": {
     "closed": "Closed",
@@ -106,6 +111,7 @@
       "settings": "Location & Contact",
       "pages": "Pages",
       "messages": "Messages",
+      "reviews": "Reviews",
       "translations": "Translations",
       "admins": "Admins",
       "viewSite": "View the website ↗",
@@ -272,7 +278,10 @@
     "hours": {
       "title": "Opening hours",
       "subtitle": "Set times per weekday.",
-      "hint": "Note: The editor manages one time period per day. Multiple spans (e.g. lunch break) can be supplemented if necessary."
+      "hint": "Note: The editor manages one time period per day. Multiple spans (e.g. lunch break) can be supplemented if necessary.",
+      "kitchenHoursTitle": "Kitchen hours",
+      "kitchenHoursEnabled": "Enable kitchen hours",
+      "kitchenHoursHint": "When enabled, separate kitchen hours are shown below the general opening hours."
     },
     "settings": {
       "title": "Location & Contact",
@@ -297,7 +306,13 @@
       "facebook": "Facebook URL",
       "tiktok": "TikTok URL",
       "whatsapp": "WhatsApp number",
-      "enabled": "Active"
+      "enabled": "Active",
+      "closureBannerHeading": "Vacation closure notice",
+      "closureBannerEnabled": "Enable notice",
+      "closureBannerFrom": "From",
+      "closureBannerUntil": "Until",
+      "closureBannerMessageDe": "Notice text (DE)",
+      "closureBannerHint": "The notice appears automatically on the website while today's date falls within the selected range."
     },
     "admins": {
       "title": "Admins",
@@ -359,6 +374,33 @@
       "createdSuffix": "created ✓",
       "errorPrefix": "Error:",
       "errorSavedAnywaySuffix": "Translations were still stored."
+    },
+    "reviews": {
+      "title": "Reviews",
+      "subtitle": "Manage customer reviews shown on the website.",
+      "newReview": "+ New review",
+      "newReviewTitle": "New review",
+      "editReview": "Edit review",
+      "noReviews": "No reviews yet.",
+      "authorName": "Name",
+      "rating": "Stars",
+      "reviewDate": "Date",
+      "source": "Source",
+      "reviewTextDe": "Review text (DE)",
+      "published": "published",
+      "sortOrder": "Order",
+      "deleteConfirm": "Really delete this review?"
+    },
+    "gallery": {
+      "sectionTitle": "Photo gallery",
+      "sectionHint": "Manage photos for this page. They appear publicly below the content.",
+      "saveFirstHint": "Save the page first to add photos.",
+      "uploadLabel": "Add photo",
+      "altPlaceholder": "Alt text (accessibility description)",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "deleteConfirm": "Really delete this photo?",
+      "noImages": "No photos yet."
     }
   }
 }

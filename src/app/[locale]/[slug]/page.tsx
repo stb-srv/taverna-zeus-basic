@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { getPage } from "@/lib/queries";
+import { getPage, getGalleryImages } from "@/lib/queries";
 import { localized } from "@/i18n/localized-content";
 import Markdown from "@/components/Markdown";
+import Gallery from "@/components/Gallery";
 
 /**
  * Renders any published CMS page by its slug (e.g. /de/ueber-uns). Static
@@ -29,11 +30,13 @@ export default async function CustomPage({
   setRequestLocale(locale);
   const page = await getPage(slug);
   if (!page) notFound();
+  const images = await getGalleryImages(`page:${page.id}`);
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-14">
       <h1 className="text-gradient mb-8 text-5xl">{localized(page, "title", locale)}</h1>
       <Markdown content={localized(page, "content", locale)} />
+      <Gallery images={images} locale={locale} />
     </article>
   );
 }

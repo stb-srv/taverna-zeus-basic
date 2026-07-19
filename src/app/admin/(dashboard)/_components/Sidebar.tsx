@@ -24,6 +24,7 @@ export default function Sidebar() {
         { href: "/admin/settings", label: t("settings"), icon: <IconPin /> },
         { href: "/admin/pages", label: t("pages"), icon: <IconPage /> },
         { href: "/admin/messages", label: t("messages"), icon: <IconMail /> },
+        { href: "/admin/reviews", label: t("reviews"), icon: <IconStar /> },
         { href: "/admin/translations", label: t("translations"), icon: <IconGlobe /> },
       ],
     },
@@ -145,6 +146,9 @@ function IconMail() {
       <path d="m4 6 8 7 8-7" />
     </>,
   );
+}
+function IconStar() {
+  return svg(<path d="m12 3 2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.2-5.4 3.2 1.3-6-4.6-4.1 6.1-.6Z" />);
 }
 function IconUsers() {
   return svg(

@@ -14,7 +14,9 @@ export type TranslatableTable =
   | "pages"
   | "restaurant_settings"
   | "allergens"
-  | "additives";
+  | "additives"
+  | "reviews"
+  | "gallery_images";
 
 /** Supabase client as returned by `guard()`. */
 export type AdminClient = Awaited<ReturnType<typeof createClient>>;

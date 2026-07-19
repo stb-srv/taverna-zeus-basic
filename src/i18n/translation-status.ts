@@ -10,9 +10,16 @@ export const TRANSLATABLE_TABLES = [
   { table: "menu_items", label: "Speisen", fields: ["name", "description"], labelField: "name_de" },
   { table: "menu_categories", label: "Kategorien", fields: ["name", "description"], labelField: "name_de" },
   { table: "pages", label: "Seiten", fields: ["title", "content"], labelField: "title_de" },
-  { table: "restaurant_settings", label: "Einstellungen", fields: ["description"], labelField: "name" },
+  {
+    table: "restaurant_settings",
+    label: "Einstellungen",
+    fields: ["description", "closure_banner_message"],
+    labelField: "name",
+  },
   { table: "allergens", label: "Allergene", fields: ["name"], labelField: "name_de" },
   { table: "additives", label: "Zusatzstoffe", fields: ["name"], labelField: "name_de" },
+  { table: "reviews", label: "Bewertungen", fields: ["review_text"], labelField: "author_name" },
+  { table: "gallery_images", label: "Galerie", fields: ["alt"], labelField: "context_key" },
 ] as const;
 
 export type TranslatableTableConfig = (typeof TRANSLATABLE_TABLES)[number];
