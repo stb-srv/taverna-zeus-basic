@@ -573,6 +573,39 @@ export type Database = {
         }
         Relationships: []
       }
+      smtp_settings: {
+        Row: {
+          from_address: string | null
+          host: string | null
+          id: number
+          notify_email: string | null
+          password: string | null
+          port: number | null
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          from_address?: string | null
+          host?: string | null
+          id?: number
+          notify_email?: string | null
+          password?: string | null
+          port?: number | null
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          from_address?: string | null
+          host?: string | null
+          id?: number
+          notify_email?: string | null
+          password?: string | null
+          port?: number | null
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
       spam_blocks: {
         Row: {
           created_at: string

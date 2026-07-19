@@ -65,6 +65,8 @@ services:
       - LIBRETRANSLATE_API_KEY=${LIBRETRANSLATE_API_KEY:-}
       # SMTP für Kontaktformular-Benachrichtigungen (optional, best-effort —
       # ohne SMTP_HOST/CONTACT_NOTIFY_EMAIL wird der Versand einfach übersprungen).
+      # Nur noch Fallback: im Admin unter „Standort & Kontakt" eingetragene
+      # Werte (Tabelle smtp_settings) haben Vorrang, siehe src/lib/mail.ts.
       - SMTP_HOST=${SMTP_HOST:-}
       - SMTP_PORT=${SMTP_PORT:-}
       - SMTP_USER=${SMTP_USER:-}

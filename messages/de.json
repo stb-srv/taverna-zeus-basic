@@ -317,7 +317,19 @@
       "closureBannerFrom": "Von",
       "closureBannerUntil": "Bis",
       "closureBannerMessageDe": "Hinweistext (DE)",
-      "closureBannerHint": "Der Hinweis erscheint automatisch auf der Website, solange das heutige Datum im gewählten Zeitraum liegt."
+      "closureBannerHint": "Der Hinweis erscheint automatisch auf der Website, solange das heutige Datum im gewählten Zeitraum liegt.",
+      "smtpHeading": "SMTP (E-Mail-Benachrichtigung)",
+      "smtpHint": "Für die Benachrichtigung bei neuen Kontaktanfragen. Ohne Server hier oder in den Umgebungsvariablen wird der Versand einfach übersprungen — die Nachricht bleibt trotzdem gespeichert.",
+      "smtpHost": "Server (Host)",
+      "smtpPort": "Port",
+      "smtpUser": "Benutzername",
+      "smtpPassword": "Passwort",
+      "smtpPasswordUnchangedHint": "•••••••• (leer lassen = unverändert)",
+      "smtpFrom": "Absender-Adresse",
+      "smtpNotifyEmail": "Benachrichtigung an",
+      "smtpTestButton": "Test-E-Mail senden",
+      "smtpTesting": "Wird gesendet …",
+      "smtpTestSuccess": "Test-E-Mail erfolgreich versendet."
     },
     "admins": {
       "title": "Admins",
