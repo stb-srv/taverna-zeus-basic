@@ -573,6 +573,30 @@ export type Database = {
         }
         Relationships: []
       }
+      spam_blocks: {
+        Row: {
+          created_at: string
+          id: number
+          ip: string | null
+          locale: string | null
+          reason: string
+        }
+        Insert: {
+          created_at?: string
+          id?: never
+          ip?: string | null
+          locale?: string | null
+          reason: string
+        }
+        Update: {
+          created_at?: string
+          id?: never
+          ip?: string | null
+          locale?: string | null
+          reason?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

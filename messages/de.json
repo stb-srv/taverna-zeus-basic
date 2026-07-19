@@ -273,7 +273,12 @@
       "title": "Nachrichten",
       "subtitle": "Anfragen über das Kontaktformular der Website.",
       "markAsRead": "Als gelesen markieren",
-      "noMessages": "Noch keine Nachrichten."
+      "noMessages": "Noch keine Nachrichten.",
+      "spamTitle": "Spam-Schutz",
+      "spamSubtitle": "{count, plural, =0 {Noch keine blockierten Versuche} =1 {1 blockierter Versuch insgesamt} other {# blockierte Versuche insgesamt}}",
+      "spamReasonHoneypot": "Honeypot-Feld ausgefüllt",
+      "spamReasonTooFast": "Zu schnell abgeschickt",
+      "spamClear": "Log leeren"
     },
     "hours": {
       "title": "Öffnungszeiten",

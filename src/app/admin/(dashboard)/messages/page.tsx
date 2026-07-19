@@ -1,14 +1,16 @@
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { markAsRead, deleteMessage } from "@/app/admin/actions/messages";
+import { markAsRead, deleteMessage, clearSpamLog } from "@/app/admin/actions/messages";
 import { btnGhost, btnDanger } from "@/components/admin/ui-classes";
 
 export default async function MessagesAdminPage() {
   const supabase = await createClient();
-  const { data: messages } = await supabase
-    .from("contact_messages")
-    .select("*")
-    .order("created_at", { ascending: false });
+  const [{ data: messages }, { count: honeypotCount }, { count: tooFastCount }] = await Promise.all([
+    supabase.from("contact_messages").select("*").order("created_at", { ascending: false }),
+    supabase.from("spam_blocks").select("id", { count: "exact", head: true }).eq("reason", "honeypot"),
+    supabase.from("spam_blocks").select("id", { count: "exact", head: true }).eq("reason", "too_fast"),
+  ]);
+  const spamTotal = (honeypotCount ?? 0) + (tooFastCount ?? 0);
   const t = await getTranslations("admin.messages");
   const tc = await getTranslations("admin.common");
 
@@ -58,6 +60,28 @@ export default async function MessagesAdminPage() {
           <li className="p-4 text-sm text-muted">{t("noMessages")}</li>
         )}
       </ul>
+
+      <div className="mt-10">
+        <h2 className="font-display text-xl">{t("spamTitle")}</h2>
+        <p className="mt-1 text-sm text-muted">{t("spamSubtitle", { count: spamTotal })}</p>
+        <div className="mt-4 grid grid-cols-2 gap-4 sm:max-w-sm">
+          <div className="card-soft p-4 hover:translate-y-0">
+            <div className="text-2xl font-semibold">{honeypotCount ?? 0}</div>
+            <div className="text-xs text-muted">{t("spamReasonHoneypot")}</div>
+          </div>
+          <div className="card-soft p-4 hover:translate-y-0">
+            <div className="text-2xl font-semibold">{tooFastCount ?? 0}</div>
+            <div className="text-xs text-muted">{t("spamReasonTooFast")}</div>
+          </div>
+        </div>
+        {spamTotal > 0 && (
+          <form action={clearSpamLog} className="mt-4">
+            <button type="submit" className={btnGhost}>
+              {t("spamClear")}
+            </button>
+          </form>
+        )}
+      </div>
     </div>
   );
 }

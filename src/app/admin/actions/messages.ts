@@ -18,3 +18,9 @@ export async function deleteMessage(fd: FormData) {
   await supabase.from("contact_messages").delete().eq("id", Number(str(fd, "id")));
   revalidatePath("/admin/messages");
 }
+
+export async function clearSpamLog() {
+  const supabase = await guard();
+  await supabase.from("spam_blocks").delete().gte("id", 0);
+  revalidatePath("/admin/messages");
+}

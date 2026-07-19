@@ -36,15 +36,27 @@ async function getClientIp(): Promise<string> {
   return h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
 }
 
+/** Best-effort record of a triggered bot trap, so /admin/messages can show how often it fires. Never throws. */
+async function logSpamBlock(reason: "honeypot" | "too_fast", ip: string, locale: string): Promise<void> {
+  try {
+    const supabase = await createClient();
+    await supabase.from("spam_blocks").insert({ reason, ip, locale });
+  } catch (e) {
+    console.error("[contact] Spam-Log fehlgeschlagen:", e);
+  }
+}
+
 export async function submitContactMessage(
   _prev: ContactState,
   fd: FormData,
 ): Promise<ContactState> {
   const locale = (strOrNull(fd, "locale") ?? "de") as Locale;
   const t = await getTranslations({ locale, namespace: "location" });
+  const ip = await getClientIp();
 
   // Honeypot: real visitors never fill this hidden field.
   if (str(fd, "website") !== "") {
+    await logSpamBlock("honeypot", ip, locale);
     return { ok: true };
   }
 
@@ -52,10 +64,10 @@ export async function submitContactMessage(
   // render timestamp, so a submit faster than MIN_FILL_TIME_MS is not human.
   const renderedAt = Number(str(fd, "form_rendered_at"));
   if (!renderedAt || Date.now() - renderedAt < MIN_FILL_TIME_MS) {
+    await logSpamBlock("too_fast", ip, locale);
     return { ok: true };
   }
 
-  const ip = await getClientIp();
   if (isRateLimited(ip)) {
     console.warn(`[contact] rate limited: ip=${ip}`);
     return { error: t("contactErrorRateLimited") };
