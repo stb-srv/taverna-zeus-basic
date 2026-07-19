@@ -83,16 +83,16 @@ export default async function LocationPage({
           </section>
         </div>
 
-        <div>
+        <div className="space-y-6">
           <MapEmbed embedUrl={settings?.google_maps_embed ?? null} />
+
+          <section className="card-soft p-6">
+            <h2 className="rule-gold mb-6 inline-block text-xl">{t("contactFormHeading")}</h2>
+            <p className="mb-4 text-sm text-muted">{t("reservationNotice")}</p>
+            <ContactForm locale={locale} />
+          </section>
         </div>
       </div>
-
-      <section className="card-soft mt-8 max-w-xl p-6">
-        <h2 className="rule-gold mb-6 inline-block text-xl">{t("contactFormHeading")}</h2>
-        <p className="mb-4 text-sm text-muted">{t("reservationNotice")}</p>
-        <ContactForm locale={locale} />
-      </section>
     </div>
   );
 }
