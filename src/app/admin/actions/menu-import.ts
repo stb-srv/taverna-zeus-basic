@@ -7,6 +7,9 @@ import { guard, revalidatePublic, type ActionState, type AdminClient } from "./s
 
 export type { ActionState } from "./shared";
 
+// Raster formats only. SVG is intentionally excluded: it can carry inline
+// <script>, and the file lands in a public Storage bucket served by its own
+// URL — an unnecessary phishing/abuse vector for menu photos.
 const IMAGE_MIME: Record<string, string> = {
   jpg: "image/jpeg",
   jpeg: "image/jpeg",
@@ -14,7 +17,6 @@ const IMAGE_MIME: Record<string, string> = {
   webp: "image/webp",
   gif: "image/gif",
   avif: "image/avif",
-  svg: "image/svg+xml",
 };
 
 /**
@@ -50,9 +52,12 @@ async function readImportPayload(
     for (const [name, bytes] of Object.entries(entries)) {
       if (!name.startsWith("images/") || bytes.length === 0) continue;
       const ext = (name.split(".").pop() ?? "jpg").toLowerCase();
+      const contentType = IMAGE_MIME[ext];
+      // Skip anything that isn't an allowed raster image (e.g. a renamed SVG).
+      if (!contentType) continue;
       const dest = `imported/${crypto.randomUUID()}.${ext}`;
       const { error } = await supabase.storage.from("menu-images").upload(dest, bytes, {
-        contentType: IMAGE_MIME[ext] ?? "application/octet-stream",
+        contentType,
         upsert: false,
       });
       if (!error) {

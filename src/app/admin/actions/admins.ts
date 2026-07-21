@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getUser, requireAdmin } from "@/lib/supabase/auth";
@@ -14,6 +15,32 @@ export type { ActionState } from "./shared";
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Brute-force brake for the admin login. In-memory, per-instance — like the
+// contact form's limiter (single long-lived Node process, resets on redeploy).
+// Keyed by client IP; five failed attempts within the window trigger a cooldown.
+const LOGIN_WINDOW_MS = 10 * 60 * 1000;
+const LOGIN_MAX_ATTEMPTS = 5;
+const loginAttempts = new Map<string, number[]>();
+
+async function loginClientIp(): Promise<string> {
+  const h = await headers();
+  return h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+}
+
+function registerLoginFailure(ip: string): void {
+  const now = Date.now();
+  const recent = (loginAttempts.get(ip) ?? []).filter((t) => now - t < LOGIN_WINDOW_MS);
+  recent.push(now);
+  loginAttempts.set(ip, recent);
+}
+
+function isLoginBlocked(ip: string): boolean {
+  const now = Date.now();
+  const recent = (loginAttempts.get(ip) ?? []).filter((t) => now - t < LOGIN_WINDOW_MS);
+  loginAttempts.set(ip, recent);
+  return recent.length >= LOGIN_MAX_ATTEMPTS;
+}
+
 export async function login(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
@@ -23,12 +50,21 @@ export async function login(_prev: ActionState, formData: FormData): Promise<Act
     return { error: t("errorMissingFields") };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) {
+  const ip = await loginClientIp();
+  if (isLoginBlocked(ip)) {
+    console.warn(`[login] rate limited: ip=${ip}`);
     return { error: t("errorInvalid") };
   }
 
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    registerLoginFailure(ip);
+    return { error: t("errorInvalid") };
+  }
+
+  // Successful login clears the counter so a legitimate user isn't penalised.
+  loginAttempts.delete(ip);
   redirect("/admin");
 }
 
@@ -79,6 +115,16 @@ export async function changeAdminPassword(_prev: ActionState, fd: FormData): Pro
     const password = String(fd.get("password") ?? "");
     if (password.length < 8) return { error: t("passwordTooShort") };
 
+    // Only reset passwords for accounts on the admins allowlist — never an
+    // arbitrary auth user that may belong to another app in the same project.
+    const supabaseGuard = await createClient();
+    const { data: isAllowlisted } = await supabaseGuard
+      .from("admins")
+      .select("email")
+      .eq("email", email)
+      .maybeSingle();
+    if (!isAllowlisted) return { error: t("accountNotFound") };
+
     const admin = createAdminClient();
     // Locate the auth user by email (paginated; fine for a small team).
     const { data, error: lErr } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
@@ -118,10 +164,10 @@ export async function addAdmin(_prev: ActionState, fd: FormData): Promise<Action
 export async function removeAdmin(fd: FormData) {
   const user = await getUser();
   if (!user) throw new Error("Nicht angemeldet");
+  const supabase = await guard(); // must be an admin to remove admins
   const email = String(fd.get("email") ?? "").toLowerCase();
   // Prevent locking yourself out.
   if (email === (user.email ?? "").toLowerCase()) return;
-  const supabase = await createClient();
   await supabase.from("admins").delete().eq("email", email);
   revalidatePath("/admin/admins");
 }

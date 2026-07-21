@@ -21,11 +21,24 @@ export type TranslatableTable =
 /** Supabase client as returned by `guard()`. */
 export type AdminClient = Awaited<ReturnType<typeof createClient>>;
 
-/** Asserts an authenticated admin session and returns a Supabase client. */
+/**
+ * Asserts an authenticated **admin** session and returns a Supabase client.
+ * Checks membership in the `admins` allowlist — not merely that someone is
+ * logged in — so it is safe even for tables whose RLS is not itself gated on
+ * `is_admin()` (e.g. `contact_messages`). Throws (rather than redirecting) so
+ * callers can surface the error via their `ActionState` return.
+ */
 export async function guard(): Promise<AdminClient> {
   const user = await getUser();
   if (!user) throw new Error("Nicht angemeldet");
-  return createClient();
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("admins")
+    .select("email")
+    .eq("email", (user.email ?? "").toLowerCase())
+    .maybeSingle();
+  if (!data) throw new Error("Keine Admin-Berechtigung.");
+  return supabase;
 }
 
 /** Refresh the public site after a content change. */
