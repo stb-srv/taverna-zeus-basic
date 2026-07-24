@@ -73,6 +73,11 @@ services:
       - SMTP_PASSWORD=${SMTP_PASSWORD:-}
       - SMTP_FROM=${SMTP_FROM:-}
       - CONTACT_NOTIFY_EMAIL=${CONTACT_NOTIFY_EMAIL:-}
+      # Google-Bewertungen (optional). Mit Key läuft 1×/Tag automatisch ein
+      # Import der Google-Bewertungen (Places API New). CRON_SECRET schützt
+      # optional den /api/cron/google-reviews-Endpoint.
+      - GOOGLE_PLACES_API_KEY=${GOOGLE_PLACES_API_KEY:-}
+      - CRON_SECRET=${CRON_SECRET:-}
     # Coolify routet über seinen Proxy auf diesen Container-Port (Domain in der UI setzen).
     expose:
       - "3000"

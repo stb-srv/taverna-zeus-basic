@@ -4,9 +4,36 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { i18nFromForm } from "@/i18n/fields";
 import { intOr, str, strOrNull } from "@/lib/form-data";
+import { syncGoogleReviews } from "@/lib/google-reviews";
 import { fillTranslations, guard, revalidatePublic, type ActionState } from "./shared";
 
 export type { ActionState } from "./shared";
+
+export type GoogleSyncState = {
+  ok?: boolean;
+  imported?: number;
+  reason?: string;
+};
+
+/**
+ * Manueller Anstoß des Google-Bewertungs-Imports über den Admin-Button
+ * (force: true umgeht die 24h-Sperre). Der reguläre Import läuft automatisch
+ * 1×/Tag über den in-process Scheduler.
+ */
+export async function importGoogleReviews(
+  _prev: GoogleSyncState,
+  _fd: FormData,
+): Promise<GoogleSyncState> {
+  try {
+    await guard();
+  } catch {
+    return { ok: false, reason: "forbidden" };
+  }
+  const res = await syncGoogleReviews({ force: true });
+  revalidatePublic();
+  revalidatePath("/admin/reviews");
+  return { ok: res.ok, imported: res.imported, reason: res.reason };
+}
 
 export async function saveReview(_prev: ActionState, fd: FormData): Promise<ActionState> {
   try {

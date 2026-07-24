@@ -466,6 +466,8 @@ export type Database = {
           email: string | null
           enabled_locales: Json
           google_maps_embed: string | null
+          google_place_id: string | null
+          google_reviews_synced_at: string | null
           hero_image_url: string | null
           id: number
           kitchen_hours_enabled: boolean
@@ -493,6 +495,8 @@ export type Database = {
           email?: string | null
           enabled_locales?: Json
           google_maps_embed?: string | null
+          google_place_id?: string | null
+          google_reviews_synced_at?: string | null
           hero_image_url?: string | null
           id?: number
           kitchen_hours_enabled?: boolean
@@ -520,6 +524,8 @@ export type Database = {
           email?: string | null
           enabled_locales?: Json
           google_maps_embed?: string | null
+          google_place_id?: string | null
+          google_reviews_synced_at?: string | null
           hero_image_url?: string | null
           id?: number
           kitchen_hours_enabled?: boolean
@@ -536,6 +542,7 @@ export type Database = {
           author_name: string
           created_at: string
           email: string | null
+          external_id: string | null
           first_name: string | null
           id: string
           is_published: boolean
@@ -553,6 +560,7 @@ export type Database = {
           author_name: string
           created_at?: string
           email?: string | null
+          external_id?: string | null
           first_name?: string | null
           id?: string
           is_published?: boolean
@@ -570,6 +578,7 @@ export type Database = {
           author_name?: string
           created_at?: string
           email?: string | null
+          external_id?: string | null
           first_name?: string | null
           id?: string
           is_published?: boolean

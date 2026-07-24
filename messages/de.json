@@ -443,6 +443,11 @@
       "photoDelete": "Foto löschen",
       "photoDeleteConfirm": "Foto wirklich löschen?",
       "photoCount": "{count, plural, =1 {1 Foto} other {# Fotos}}",
+      "googleSync": "Google-Bewertungen abrufen",
+      "googleSyncing": "Wird abgerufen …",
+      "googleSyncDone": "{count, plural, =0 {Keine neuen Bewertungen} =1 {1 neue Bewertung importiert} other {# neue Bewertungen importiert}}",
+      "googleSyncNoKey": "Kein Google-API-Key konfiguriert (GOOGLE_PLACES_API_KEY).",
+      "googleSyncError": "Abruf fehlgeschlagen — bitte Logs prüfen.",
       "sortOrder": "Reihenfolge",
       "deleteConfirm": "Bewertung wirklich löschen?"
     },

@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnGhost } from "@/components/admin/ui-classes";
 import { approveReview } from "@/app/admin/actions/reviews";
 import DeleteReviewButton from "./DeleteReviewButton";
+import GoogleSyncButton from "./GoogleSyncButton";
 
 export default async function ReviewsAdminPage() {
   const supabase = await createClient();
@@ -18,9 +19,12 @@ export default async function ReviewsAdminPage() {
           <h1 className="font-display text-3xl">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted">{t("subtitle")}</p>
         </div>
-        <Link href="/admin/reviews/new" className={btnPrimary}>
-          {t("newReview")}
-        </Link>
+        <div className="flex items-center gap-3">
+          <GoogleSyncButton />
+          <Link href="/admin/reviews/new" className={btnPrimary}>
+            {t("newReview")}
+          </Link>
+        </div>
       </div>
 
       <ul className="divide-y divide-border rounded-xl border border-border bg-card">
