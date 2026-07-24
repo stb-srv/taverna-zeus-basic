@@ -33,6 +33,11 @@ export default async function ReviewsAdminPage() {
                 {"☆".repeat(5 - r.rating)}
               </span>
               {r.review_date && <span className="ml-2 text-xs text-muted">{r.review_date}</span>}
+              {(r.photo_urls ?? []).length > 0 && (
+                <span className="ml-2 text-xs text-muted">
+                  {t("photoCount", { count: (r.photo_urls ?? []).length })}
+                </span>
+              )}
               {r.is_published ? (
                 <span className="ml-2 rounded bg-accent-soft px-1.5 py-0.5 text-xs text-muted">
                   {t("published")}

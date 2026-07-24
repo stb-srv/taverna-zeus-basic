@@ -1,8 +1,16 @@
+import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { getPublishedReviews, computeReviewStats } from "@/lib/queries";
 import { localized } from "@/i18n/localized-content";
 import ReviewSubmitForm from "./ReviewSubmitForm";
+
+// Nur Fotos aus dem eigenen review-images-Bucket rendern: photo_urls könnte
+// per direktem REST-Insert Fremd-URLs enthalten, und ein nicht gewhitelisteter
+// Host würde next/image beim Rendern crashen lassen.
+const storagePrefix = process.env.NEXT_PUBLIC_SUPABASE_URL
+  ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/review-images/`
+  : null;
 
 export async function generateMetadata() {
   const t = await getTranslations("reviews");
@@ -43,6 +51,23 @@ export default async function ReviewsPage({
                 {"☆".repeat(5 - r.rating)}
               </div>
               <p className="mb-3 text-sm text-foreground/90">{localized(r, "review_text", locale)}</p>
+              {storagePrefix && (r.photo_urls ?? []).some((u) => u.startsWith(storagePrefix)) && (
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {(r.photo_urls ?? [])
+                    .filter((u) => u.startsWith(storagePrefix))
+                    .map((url) => (
+                      <a
+                        key={url}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative block h-16 w-16 overflow-hidden rounded-lg border border-border"
+                      >
+                        <Image src={url} alt="" fill sizes="64px" className="object-cover" />
+                      </a>
+                    ))}
+                </div>
+              )}
               <p className="text-sm font-medium">{r.author_name}</p>
             </article>
           ))}

@@ -106,6 +106,7 @@ type ReviewSubmission = {
   rating: number;
   text: string;
   locale: string | null;
+  photoCount?: number;
 };
 
 /**
@@ -126,7 +127,7 @@ export async function sendReviewNotification(review: ReviewSubmission): Promise<
       subject: `Neue Bewertung wartet auf Freischaltung: ${review.rating}★ von ${review.firstName}`,
       text:
         `Name: ${review.firstName} ${review.lastName ?? ""}`.trimEnd() +
-        `\nE-Mail: ${review.email}\nSterne: ${review.rating}/5\nSprache: ${review.locale ?? "-"}\n\n${review.text}\n\nFreischalten unter /admin/reviews`,
+        `\nE-Mail: ${review.email}\nSterne: ${review.rating}/5\nSprache: ${review.locale ?? "-"}\nFotos: ${review.photoCount ?? 0}\n\n${review.text}\n\nFreischalten unter /admin/reviews`,
     });
   } catch (e) {
     console.error("[reviews] SMTP-Benachrichtigung fehlgeschlagen:", e);

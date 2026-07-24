@@ -83,9 +83,53 @@ export async function approveReview(fd: FormData) {
   revalidatePath("/admin/reviews");
 }
 
+/**
+ * Removes a single submitted photo from a review (moderation): filters the
+ * URL out of photo_urls and best-effort deletes the storage object via the
+ * admin session client (delete policy on the bucket, like gallery-images).
+ */
+export async function deleteReviewPhoto(fd: FormData) {
+  const supabase = await guard();
+  const id = str(fd, "id");
+  const url = str(fd, "url");
+
+  const { data } = await supabase.from("reviews").select("photo_urls").eq("id", id).single();
+  if (!data) return;
+  await supabase
+    .from("reviews")
+    .update({ photo_urls: (data.photo_urls ?? []).filter((u) => u !== url) })
+    .eq("id", id);
+
+  const path = url.split("/").pop();
+  if (path) {
+    try {
+      await supabase.storage.from("review-images").remove([path]);
+    } catch (e) {
+      console.error("[admin/reviews] Storage-Cleanup fehlgeschlagen:", e);
+    }
+  }
+  revalidatePublic();
+  revalidatePath("/admin/reviews");
+}
+
 export async function deleteReview(fd: FormData) {
   const supabase = await guard();
-  await supabase.from("reviews").delete().eq("id", str(fd, "id"));
+  const id = str(fd, "id");
+  const { data } = await supabase.from("reviews").select("photo_urls").eq("id", id).single();
+  await supabase.from("reviews").delete().eq("id", id);
+
+  // Zugehörige Foto-Objekte best-effort mit entfernen, damit keine Waisen im
+  // Bucket zurückbleiben (Muster wie deleteGalleryImage).
+  const paths = (data?.photo_urls ?? [])
+    .map((u) => u.split("/").pop())
+    .filter((p): p is string => Boolean(p));
+  if (paths.length > 0) {
+    try {
+      await supabase.storage.from("review-images").remove(paths);
+    } catch (e) {
+      console.error("[admin/reviews] Storage-Cleanup fehlgeschlagen:", e);
+    }
+  }
   revalidatePublic();
   revalidatePath("/admin/reviews");
 }

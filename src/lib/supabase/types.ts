@@ -540,6 +540,7 @@ export type Database = {
           id: string
           is_published: boolean
           last_name: string | null
+          photo_urls: string[]
           rating: number
           review_date: string | null
           review_text_de: string | null
@@ -556,6 +557,7 @@ export type Database = {
           id?: string
           is_published?: boolean
           last_name?: string | null
+          photo_urls?: string[]
           rating: number
           review_date?: string | null
           review_text_de?: string | null
@@ -572,6 +574,7 @@ export type Database = {
           id?: string
           is_published?: boolean
           last_name?: string | null
+          photo_urls?: string[]
           rating?: number
           review_date?: string | null
           review_text_de?: string | null

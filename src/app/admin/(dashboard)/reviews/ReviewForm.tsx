@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useActionState } from "react";
 import { useTranslations } from "next-intl";
-import { saveReview, type ActionState } from "@/app/admin/actions/reviews";
+import { saveReview, deleteReviewPhoto, type ActionState } from "@/app/admin/actions/reviews";
 import { inputCls, labelCls, btnPrimary, btnGhost } from "@/components/admin/ui-classes";
 import TranslationsPanel from "@/components/admin/TranslationsPanel";
 import type { Database } from "@/lib/supabase/types";
@@ -14,8 +15,18 @@ const initial: ActionState = {};
 
 export default function ReviewForm({ review }: { review: Review | null }) {
   const [state, action, pending] = useActionState(saveReview, initial);
+  const router = useRouter();
   const t = useTranslations("admin.reviews");
   const tc = useTranslations("admin.common");
+
+  async function onDeletePhoto(url: string) {
+    if (!review || !confirm(t("photoDeleteConfirm"))) return;
+    const fd = new FormData();
+    fd.set("id", review.id);
+    fd.set("url", url);
+    await deleteReviewPhoto(fd);
+    router.refresh();
+  }
 
   return (
     <form action={action} className="max-w-2xl space-y-6">
@@ -32,6 +43,34 @@ export default function ReviewForm({ review }: { review: Review | null }) {
               </>
             )}
           </p>
+        )}
+
+        {review && (review.photo_urls ?? []).length > 0 && (
+          <div>
+            <span className={labelCls}>{t("photos")}</span>
+            <div className="flex flex-wrap gap-2">
+              {(review.photo_urls ?? []).map((url) => (
+                <div key={url} className="relative">
+                  <a href={url} target="_blank" rel="noopener noreferrer">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- Admin-Thumbnail, Muster wie GalleryUpload */}
+                    <img
+                      src={url}
+                      alt=""
+                      className="h-20 w-20 rounded-lg border border-border object-cover"
+                    />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => onDeletePhoto(url)}
+                    aria-label={t("photoDelete")}
+                    className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-xs leading-none text-white shadow"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>

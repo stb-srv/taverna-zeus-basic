@@ -183,7 +183,7 @@ export async function getPublishedReviews() {
   const { data, error } = await supabase
     .from("reviews")
     .select(
-      "id, author_name, rating, review_text_de, review_text_en, review_text_i18n, review_date, source, is_published, sort_order, created_at",
+      "id, author_name, rating, review_text_de, review_text_en, review_text_i18n, review_date, source, is_published, sort_order, created_at, photo_urls",
     )
     .eq("is_published", true)
     .order("sort_order", { ascending: true })

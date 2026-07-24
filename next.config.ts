@@ -12,6 +12,14 @@ const supabaseHostname = supabaseUrl ? new URL(supabaseUrl).hostname : undefined
 const nextConfig: NextConfig = {
   // Emit a self-contained server bundle (.next/standalone) for the Docker image.
   output: "standalone",
+  experimental: {
+    serverActions: {
+      // Bewertungsfotos laufen als multipart durch submitReview (max. 5 × 2 MB
+      // + Textfelder). Gilt global für alle Server Actions — unkritisch, die
+      // Spam-Guards laufen unabhängig davon.
+      bodySizeLimit: "12mb",
+    },
+  },
   images: {
     remotePatterns: supabaseHostname
       ? [
