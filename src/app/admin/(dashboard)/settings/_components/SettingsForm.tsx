@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { updateSettings, type ActionState } from "@/app/admin/actions/settings";
 import { SOCIAL_PLATFORMS, type SocialPlatform, type SocialLinks } from "@/lib/social-platforms";
+import { getBerlinToday, isWithinClosureWindow } from "@/lib/closure-window";
 import { inputCls, labelCls, btnPrimary } from "@/components/admin/ui-classes";
 import ImageUpload from "@/components/admin/ImageUpload";
 import TranslationsPanel from "@/components/admin/TranslationsPanel";
@@ -26,6 +27,31 @@ export default function SettingsForm({ settings, activeTab }: { settings: Settin
   const s = settings;
   const t = useTranslations("admin.settings");
   const tc = useTranslations("admin.common");
+
+  // Reaktiver Live-Status des Urlaubs-Banners: zeigt sofort, ob er aktuell
+  // sichtbar ist bzw. wann er automatisch erscheint/verschwindet — verhindert
+  // die Verwechslung zwischen dem im Text genannten Datum und dem „bis\"-Feld.
+  const [closureEnabled, setClosureEnabled] = useState(s?.closure_banner_enabled ?? false);
+  const [closureFrom, setClosureFrom] = useState(s?.closure_banner_from ?? "");
+  const [closureUntil, setClosureUntil] = useState(s?.closure_banner_until ?? "");
+
+  function formatDate(iso: string): string {
+    const [y, m, d] = iso.split("-");
+    return d && m && y ? `${d}.${m}.${y}` : iso;
+  }
+
+  function closureStatus(): { text: string; active: boolean } {
+    if (!closureEnabled) return { text: t("closureStatusDisabled"), active: false };
+    if (!closureFrom || !closureUntil) return { text: t("closureStatusIncomplete"), active: false };
+    const today = getBerlinToday();
+    if (today < closureFrom)
+      return { text: t("closureStatusScheduled", { date: formatDate(closureFrom) }), active: false };
+    if (isWithinClosureWindow(today, closureFrom, closureUntil))
+      return { text: t("closureStatusVisible", { date: formatDate(closureUntil) }), active: true };
+    return { text: t("closureStatusExpired"), active: false };
+  }
+
+  const closure = closureStatus();
 
   return (
     <form action={action} className="max-w-2xl space-y-8">
@@ -136,7 +162,8 @@ export default function SettingsForm({ settings, activeTab }: { settings: Settin
             <input
               type="checkbox"
               name="closure_banner_enabled"
-              defaultChecked={s?.closure_banner_enabled ?? false}
+              checked={closureEnabled}
+              onChange={(e) => setClosureEnabled(e.target.checked)}
             />
             {t("closureBannerEnabled")}
           </label>
@@ -146,7 +173,8 @@ export default function SettingsForm({ settings, activeTab }: { settings: Settin
               <input
                 type="date"
                 name="closure_banner_from"
-                defaultValue={s?.closure_banner_from ?? ""}
+                value={closureFrom}
+                onChange={(e) => setClosureFrom(e.target.value)}
                 className={inputCls}
               />
             </div>
@@ -155,11 +183,19 @@ export default function SettingsForm({ settings, activeTab }: { settings: Settin
               <input
                 type="date"
                 name="closure_banner_until"
-                defaultValue={s?.closure_banner_until ?? ""}
+                value={closureUntil}
+                onChange={(e) => setClosureUntil(e.target.value)}
                 className={inputCls}
               />
             </div>
           </div>
+          <p
+            className={`rounded-lg px-3 py-2 text-xs ${
+              closure.active ? "bg-primary/10 text-primary" : "bg-accent-soft text-muted"
+            }`}
+          >
+            {closure.text}
+          </p>
           <div>
             <label className={labelCls}>{t("closureBannerMessageDe")}</label>
             <textarea
