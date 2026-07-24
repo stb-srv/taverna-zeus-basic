@@ -74,4 +74,20 @@ describe("queries — Supabase-outage fallback", () => {
     nextResult = { data: null, error: { message: "down" } };
     expect(await getOpeningHours()).toEqual(hours);
   });
+
+  it("returns published reviews and caches them", async () => {
+    const { getPublishedReviews } = await import("@/lib/queries");
+    const reviews = [{ id: "1", author_name: "Steven B.", rating: 5 }];
+    nextResult = { data: reviews, error: null };
+    expect(await getPublishedReviews()).toEqual(reviews);
+
+    nextResult = { data: null, error: { message: "down" } };
+    expect(await getPublishedReviews()).toEqual(reviews);
+  });
+
+  it("falls back to an empty review list on an outage with no cache", async () => {
+    const { getPublishedReviews } = await import("@/lib/queries");
+    nextResult = { data: null, error: { message: "connection refused" } };
+    expect(await getPublishedReviews()).toEqual([]);
+  });
 });

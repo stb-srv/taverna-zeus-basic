@@ -535,8 +535,11 @@ export type Database = {
         Row: {
           author_name: string
           created_at: string
+          email: string | null
+          first_name: string | null
           id: string
           is_published: boolean
+          last_name: string | null
           rating: number
           review_date: string | null
           review_text_de: string | null
@@ -548,8 +551,11 @@ export type Database = {
         Insert: {
           author_name: string
           created_at?: string
+          email?: string | null
+          first_name?: string | null
           id?: string
           is_published?: boolean
+          last_name?: string | null
           rating: number
           review_date?: string | null
           review_text_de?: string | null
@@ -561,8 +567,11 @@ export type Database = {
         Update: {
           author_name?: string
           created_at?: string
+          email?: string | null
+          first_name?: string | null
           id?: string
           is_published?: boolean
+          last_name?: string | null
           rating?: number
           review_date?: string | null
           review_text_de?: string | null

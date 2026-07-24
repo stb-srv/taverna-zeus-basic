@@ -6,6 +6,7 @@ const STATIC_ROUTES: { path: string; priority: number; changeFrequency: "weekly"
   { path: "", priority: 1, changeFrequency: "weekly" },
   { path: "/menu", priority: 0.7, changeFrequency: "monthly" },
   { path: "/location", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/bewertungen", priority: 0.5, changeFrequency: "weekly" },
   { path: "/datenschutz", priority: 0.3, changeFrequency: "monthly" },
   { path: "/impressum", priority: 0.3, changeFrequency: "monthly" },
 ];

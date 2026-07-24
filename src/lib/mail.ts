@@ -99,6 +99,40 @@ export async function sendContactNotification(msg: ContactMessage): Promise<void
   }
 }
 
+type ReviewSubmission = {
+  firstName: string;
+  lastName: string | null;
+  email: string;
+  rating: number;
+  text: string;
+  locale: string | null;
+};
+
+/**
+ * Best-effort SMTP notification for a new public review awaiting moderation.
+ * Same contract as sendContactNotification: never throws, silently skips
+ * when no SMTP config exists — the review is already stored (unpublished)
+ * by the time this runs.
+ */
+export async function sendReviewNotification(review: ReviewSubmission): Promise<void> {
+  try {
+    const result = await resolveSmtpConfig();
+    if (!result.ok) return;
+
+    await transportFor(result.config).sendMail({
+      from: result.config.from ?? result.config.user ?? result.config.notifyEmail,
+      to: result.config.notifyEmail,
+      replyTo: review.email,
+      subject: `Neue Bewertung wartet auf Freischaltung: ${review.rating}★ von ${review.firstName}`,
+      text:
+        `Name: ${review.firstName} ${review.lastName ?? ""}`.trimEnd() +
+        `\nE-Mail: ${review.email}\nSterne: ${review.rating}/5\nSprache: ${review.locale ?? "-"}\n\n${review.text}\n\nFreischalten unter /admin/reviews`,
+    });
+  } catch (e) {
+    console.error("[reviews] SMTP-Benachrichtigung fehlgeschlagen:", e);
+  }
+}
+
 /** Sends a real test email using the current config (DB, falling back to env). Used by the admin "test" button — unlike sendContactNotification, this reports the specific failure reason back to the caller instead of swallowing it. */
 export async function sendTestEmail(): Promise<{ ok: true } | { ok: false; error: string }> {
   try {

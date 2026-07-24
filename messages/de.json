@@ -3,6 +3,7 @@
     "home": "Startseite",
     "menu": "Speisekarte",
     "location": "Standort",
+    "reviews": "Bewertungen",
     "impressum": "Impressum",
     "datenschutz": "Datenschutz"
   },
@@ -51,6 +52,26 @@
     "contactErrorRateLimited": "Zu viele Nachrichten in kurzer Zeit — bitte versuche es später erneut.",
     "contactErrorGeneric": "Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut.",
     "reservationNotice": "Tischreservierungen sind ausschließlich telefonisch möglich."
+  },
+  "reviews": {
+    "title": "Bewertungen",
+    "intro": "Das sagen unsere Gäste — und wir freuen uns auf Ihre Meinung.",
+    "statsCount": "{count, plural, =0 {Noch keine Bewertungen} =1 {1 Bewertung} other {# Bewertungen}}",
+    "noReviews": "Noch keine Bewertungen — seien Sie die erste Person, die eine schreibt!",
+    "formHeading": "Bewertung schreiben",
+    "firstName": "Vorname",
+    "lastName": "Nachname (optional)",
+    "email": "E-Mail",
+    "emailNotice": "Ihre E-Mail-Adresse wird nicht veröffentlicht.",
+    "rating": "Sterne",
+    "reviewText": "Ihre Bewertung",
+    "submit": "Bewertung absenden",
+    "submitting": "Wird gesendet …",
+    "success": "Vielen Dank für Ihre Bewertung! Sie wird nach einer kurzen Prüfung veröffentlicht.",
+    "errorRequired": "Bitte Vorname und Bewertungstext ausfüllen.",
+    "errorEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
+    "errorRateLimited": "Zu viele Bewertungen in kurzer Zeit — bitte versuchen Sie es später erneut.",
+    "errorGeneric": "Bewertung konnte nicht gesendet werden. Bitte versuchen Sie es später erneut."
   },
   "hours": {
     "closed": "Geschlossen",
@@ -408,6 +429,9 @@
       "source": "Quelle",
       "reviewTextDe": "Bewertungstext (DE)",
       "published": "veröffentlicht",
+      "pending": "wartet auf Freischaltung",
+      "approve": "Freischalten",
+      "submitterEmail": "E-Mail (nicht öffentlich)",
       "sortOrder": "Reihenfolge",
       "deleteConfirm": "Bewertung wirklich löschen?"
     },

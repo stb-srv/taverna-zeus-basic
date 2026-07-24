@@ -177,11 +177,17 @@ export async function getPage(slug: string) {
 /** Published reviews in sort order — sole source for both the on-site display and the JSON-LD aggregateRating. */
 export async function getPublishedReviews() {
   const supabase = await createClient();
+  // Explizite Spaltenliste statt "*": anon hat per Spalten-Grants keinen
+  // Zugriff auf email/first_name/last_name (siehe Migration
+  // 20260723_review_submissions.sql) — ein select("*") würde fehlschlagen.
   const { data, error } = await supabase
     .from("reviews")
-    .select("*")
+    .select(
+      "id, author_name, rating, review_text_de, review_text_en, review_text_i18n, review_date, source, is_published, sort_order, created_at",
+    )
     .eq("is_published", true)
-    .order("sort_order", { ascending: true });
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false });
   if (!error) {
     await writeDiskCache(NAMESPACE, "published_reviews", data);
     return data ?? [];

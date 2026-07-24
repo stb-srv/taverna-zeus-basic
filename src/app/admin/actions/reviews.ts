@@ -55,6 +55,34 @@ export async function saveReview(_prev: ActionState, fd: FormData): Promise<Acti
   redirect("/admin/reviews");
 }
 
+/**
+ * Publishes a pending public submission and fills the machine translations
+ * (deferred until approval so spam never hits LibreTranslate). Note: the
+ * text is treated as German — non-German submissions should be edited/
+ * translated in the review form before approving.
+ */
+export async function approveReview(fd: FormData) {
+  const supabase = await guard();
+  const id = str(fd, "id");
+
+  const { data } = await supabase
+    .from("reviews")
+    .select("review_text_de, review_text_i18n")
+    .eq("id", id)
+    .single();
+  await supabase.from("reviews").update({ is_published: true }).eq("id", id);
+  if (data) {
+    await fillTranslations(supabase, "reviews", id, {
+      review_text: {
+        i18n: (data.review_text_i18n as Record<string, string>) ?? {},
+        source: data.review_text_de ?? "",
+      },
+    });
+  }
+  revalidatePublic();
+  revalidatePath("/admin/reviews");
+}
+
 export async function deleteReview(fd: FormData) {
   const supabase = await guard();
   await supabase.from("reviews").delete().eq("id", str(fd, "id"));

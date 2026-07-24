@@ -10,6 +10,7 @@ const links = [
   { href: "/", key: "home" },
   { href: "/menu", key: "menu" },
   { href: "/location", key: "location" },
+  { href: "/bewertungen", key: "reviews" },
 ] as const;
 
 type NavPage = { slug: string; title: string };

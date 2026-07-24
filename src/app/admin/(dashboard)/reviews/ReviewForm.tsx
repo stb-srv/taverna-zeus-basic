@@ -22,6 +22,17 @@ export default function ReviewForm({ review }: { review: Review | null }) {
       {review && <input type="hidden" name="id" value={review.id} />}
 
       <section className="card-soft space-y-4 p-6 hover:translate-y-0">
+        {review?.email && (
+          <p className="rounded-lg bg-accent-soft px-3 py-2 text-xs text-muted">
+            {t("submitterEmail")}: {review.email}
+            {review.first_name && (
+              <>
+                {" — "}
+                {review.first_name} {review.last_name ?? ""}
+              </>
+            )}
+          </p>
+        )}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelCls}>{t("authorName")}</label>

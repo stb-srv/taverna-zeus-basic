@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnGhost } from "@/components/admin/ui-classes";
+import { approveReview } from "@/app/admin/actions/reviews";
 import DeleteReviewButton from "./DeleteReviewButton";
 
 export default async function ReviewsAdminPage() {
@@ -32,12 +33,24 @@ export default async function ReviewsAdminPage() {
                 {"☆".repeat(5 - r.rating)}
               </span>
               {r.review_date && <span className="ml-2 text-xs text-muted">{r.review_date}</span>}
-              {r.is_published && (
+              {r.is_published ? (
                 <span className="ml-2 rounded bg-accent-soft px-1.5 py-0.5 text-xs text-muted">
                   {t("published")}
                 </span>
+              ) : (
+                <span className="ml-2 rounded bg-gold/15 px-1.5 py-0.5 text-xs text-muted">
+                  {t("pending")}
+                </span>
               )}
             </span>
+            {!r.is_published && (
+              <form action={approveReview}>
+                <input type="hidden" name="id" value={r.id} />
+                <button type="submit" className={btnGhost}>
+                  {t("approve")}
+                </button>
+              </form>
+            )}
             <Link href={`/admin/reviews/${r.id}`} className={btnGhost}>
               {tc("edit")}
             </Link>

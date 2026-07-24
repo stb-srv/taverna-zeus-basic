@@ -1,50 +1,17 @@
 "use server";
 
-import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { sendContactNotification } from "@/lib/mail";
 import { str, strOrNull } from "@/lib/form-data";
+import { MIN_FILL_TIME_MS, createRateLimiter, getClientIp, logSpamBlock } from "@/lib/spam-guard";
 import type { Locale } from "@/i18n/routing";
 
 export type ContactState = { ok?: boolean; error?: string };
 
-// Bots that fill the honeypot or submit faster than a human ever could get a
-// silent "success" — never reveal that they were detected.
-const MIN_FILL_TIME_MS = 2500;
-
-// In-memory per-instance limiter. Valid because this app runs as a single
-// long-lived Node process (Docker `output: "standalone"`, one Coolify
-// container) — resets on redeploy/restart and does not coordinate across
-// replicas if ever scaled horizontally, which is an accepted tradeoff here.
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 3;
-const hits = new Map<string, number[]>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > RATE_LIMIT_MAX;
-}
-
-async function getClientIp(): Promise<string> {
-  const h = await headers();
-  // Trusts the reverse proxy (Coolify/Traefik) to overwrite rather than
-  // append-trust this header from the client — otherwise spoofable.
-  return h.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-}
-
-/** Best-effort record of a triggered bot trap, so /admin/messages can show how often it fires. Never throws. */
-async function logSpamBlock(reason: "honeypot" | "too_fast", ip: string, locale: string): Promise<void> {
-  try {
-    const supabase = await createClient();
-    await supabase.from("spam_blocks").insert({ reason, ip, locale });
-  } catch (e) {
-    console.error("[contact] Spam-Log fehlgeschlagen:", e);
-  }
-}
+const isRateLimited = createRateLimiter(RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
 
 export async function submitContactMessage(
   _prev: ContactState,
