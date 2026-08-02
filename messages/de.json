@@ -127,7 +127,7 @@
       "description": "Beschreibung"
     },
     "nav": {
-      "brand": "Meraki CMS",
+      "brand": "Taverna Zeus",
       "brandSubtitle": "Taverna Zeus",
       "groupGeneral": "Allgemein",
       "groupContent": "Inhalte",
@@ -146,7 +146,7 @@
       "languageLabel": "Admin-Sprache"
     },
     "login": {
-      "title": "Meraki CMS",
+      "title": "Taverna Zeus",
       "subtitle": "Bitte anmelden, um Inhalte zu verwalten.",
       "email": "E-Mail",
       "password": "Passwort",

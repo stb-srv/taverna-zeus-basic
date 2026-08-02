@@ -10,7 +10,7 @@ import { EnabledLocalesProvider } from "@/components/admin/EnabledLocalesContext
 import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "Meraki CMS · Admin",
+  title: "Taverna Zeus · Admin",
   robots: { index: false, follow: false },
 };
 

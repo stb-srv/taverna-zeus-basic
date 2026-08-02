@@ -63,7 +63,7 @@ async function loadImage(url: string): Promise<Uint8Array | null> {
   return null;
 }
 
-const README = `Speisekarten-Export — Taverna Zeus (Meraki CMS)
+const README = `Speisekarten-Export — Taverna Zeus
 
 Inhalt dieses Archivs:
   menu.json     Die vollständige Speisekarte (Kategorien, Speisen, Preise,
