@@ -10,8 +10,12 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseHostname = supabaseUrl ? new URL(supabaseUrl).hostname : undefined;
 
 const nextConfig: NextConfig = {
-  // Emit a self-contained server bundle (.next/standalone) for the Docker image.
-  output: "standalone",
+  // Emit a self-contained server bundle (.next/standalone) for the Docker
+  // image (see Dockerfile, DEPLOY.md). Vercel builds its own equivalent
+  // automatically and errors on `next-server.js.nft.json` during trace
+  // collection if this is left set — VERCEL is set by Vercel's build
+  // environment, so this only applies to the Coolify/Docker path.
+  output: process.env.VERCEL ? undefined : "standalone",
   experimental: {
     serverActions: {
       // Bewertungsfotos laufen als multipart durch submitReview (max. 5 × 2 MB
