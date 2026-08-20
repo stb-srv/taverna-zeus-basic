@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { submitReview, type ReviewState } from "../actions/review";
 import { compressImage } from "./compress-image";
@@ -26,7 +26,9 @@ export default function ReviewSubmitForm({ locale }: { locale: string }) {
   const [compressing, setCompressing] = useState(false);
   const [photoError, setPhotoError] = useState<string | null>(null);
   const photosRef = useRef(photos);
-  photosRef.current = photos;
+  useEffect(() => {
+    photosRef.current = photos;
+  }, [photos]);
   const t = useTranslations("reviews");
 
   async function onPhotosSelected(e: React.ChangeEvent<HTMLInputElement>) {
