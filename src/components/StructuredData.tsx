@@ -3,6 +3,7 @@ import { getSettings, getOpeningHours, getPublishedReviews, computeReviewStats }
 import { localized } from "@/i18n/localized-content";
 import { SOCIAL_PLATFORMS } from "@/lib/social-platforms";
 import { schemaOrgDayName } from "@/lib/schema-day";
+import { jsonForScript } from "@/lib/json-ld";
 
 /** Sitewide schema.org `Restaurant` JSON-LD (address, hours, aggregateRating, reviews). Self-fetching. */
 export default async function StructuredData({ locale }: { locale: Locale }) {
@@ -70,5 +71,5 @@ export default async function StructuredData({ locale }: { locale: Locale }) {
     });
   }
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonForScript(data) }} />;
 }
