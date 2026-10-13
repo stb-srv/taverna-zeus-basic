@@ -7,7 +7,7 @@ import { logout } from "../../actions/admins";
 /** Idle timeout before automatic logout, and how long before that to warn. */
 const TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
 const WARN_BEFORE_MS = 20 * 1000; // show the warning 20s before
-const STORAGE_KEY = "meraki:last-activity";
+const STORAGE_KEY = "taverna:last-activity";
 
 /**
  * Logs the admin out after {@link TIMEOUT_MS} of inactivity. A warning dialog

@@ -13,6 +13,12 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 3;
 const isRateLimited = createRateLimiter(RATE_LIMIT_MAX, RATE_LIMIT_WINDOW_MS);
 
+// Obergrenzen gegen Missbrauch der Tabelle; Formulartexte sind kurz.
+const MAX_NAME_LENGTH = 200;
+const MAX_EMAIL_LENGTH = 254;
+const MAX_PHONE_LENGTH = 50;
+const MAX_MESSAGE_LENGTH = 5000;
+
 export async function submitContactMessage(
   _prev: ContactState,
   fd: FormData,
@@ -47,6 +53,14 @@ export async function submitContactMessage(
 
   if (!name || !message) return { error: t("contactErrorRequired") };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: t("contactErrorEmail") };
+  if (
+    name.length > MAX_NAME_LENGTH ||
+    email.length > MAX_EMAIL_LENGTH ||
+    (phone?.length ?? 0) > MAX_PHONE_LENGTH ||
+    message.length > MAX_MESSAGE_LENGTH
+  ) {
+    return { error: t("contactErrorGeneric") };
+  }
 
   try {
     const supabase = await createClient();
