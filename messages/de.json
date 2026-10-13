@@ -111,6 +111,11 @@
     "rights": "Alle Rechte vorbehalten.",
     "legal": "Rechtliches"
   },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "text": "Diese Seite existiert nicht oder wurde verschoben. Vielleicht finden Sie, wonach Sie suchen, über die Startseite.",
+    "cta": "Zur Startseite"
+  },
   "admin": {
     "common": {
       "save": "Speichern",
