@@ -4,31 +4,10 @@ import { zipSync, strToU8 } from "fflate";
 import { createClient } from "@/lib/supabase/server";
 import { getUser } from "@/lib/supabase/auth";
 import { collectMenu, imageFileName } from "@/lib/menu-transfer";
+import { isBlockedHost } from "@/lib/ssrf";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-/** Rejects hosts that resolve into private/loopback/link-local ranges (SSRF guard). */
-function isBlockedHost(hostname: string): boolean {
-  const h = hostname.toLowerCase();
-  if (h === "localhost" || h === "0.0.0.0" || h.endsWith(".localhost") || h.endsWith(".internal")) {
-    return true;
-  }
-  // IPv4 literals in private / loopback / link-local ranges.
-  const m = h.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (m) {
-    const [a, b] = [Number(m[1]), Number(m[2])];
-    if (a === 127 || a === 10 || a === 0) return true; // loopback / private / this-host
-    if (a === 169 && b === 254) return true; // link-local incl. cloud metadata 169.254.169.254
-    if (a === 172 && b >= 16 && b <= 31) return true; // private
-    if (a === 192 && b === 168) return true; // private
-  }
-  // IPv6 loopback / unique-local / link-local.
-  if (h === "::1" || h.startsWith("[::1]") || h.startsWith("fd") || h.startsWith("fe80")) {
-    return true;
-  }
-  return false;
-}
 
 /**
  * Loads the bytes of an image, whether it is a local `/images/…` path or a

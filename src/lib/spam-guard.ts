@@ -41,6 +41,12 @@ export function createRateLimiter(max: number, windowMs: number): (ip: string) =
     const recent = (hits.get(ip) ?? []).filter((t) => now - t < windowMs);
     recent.push(now);
     hits.set(ip, recent);
+    // Keys für IPs, die nicht mehr vorkommen, sonst wächst die Map unbegrenzt.
+    if (hits.size > 1000) {
+      for (const [key, times] of hits) {
+        if (times.every((t) => now - t >= windowMs)) hits.delete(key);
+      }
+    }
     return recent.length > max;
   };
 }

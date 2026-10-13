@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { requireUser } from "@/lib/supabase/auth";
+import { redirect } from "next/navigation";
+import { requireAdmin, requireUser } from "@/lib/supabase/auth";
 import { logout } from "../actions/admins";
 import Sidebar from "./_components/Sidebar";
 import IdleLogout from "./_components/IdleLogout";
@@ -8,6 +9,12 @@ import AdminLanguageSwitcher from "@/components/admin/AdminLanguageSwitcher";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
+  // Eingeloggt reicht nicht: nur Einträge der admins-Allowlist sehen den Bereich.
+  try {
+    await requireAdmin();
+  } catch {
+    redirect("/admin/login");
+  }
   const initial = (user.email ?? "?").charAt(0).toUpperCase();
   const t = await getTranslations("admin.nav");
 
